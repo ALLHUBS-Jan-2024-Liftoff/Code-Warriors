@@ -1,46 +1,66 @@
 package com.example.Backend.controller;
 
-import com.example.Backend.model.Product;
-import com.example.Backend.service.ProductService;
+import com.example.Backend.dto.ProductDto;
+import com.example.Backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
+
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/product")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
+    //Create product
+    @PostMapping(value = "/add" )
+    public ResponseEntity<String> createProduct(@RequestBody ProductDto productDto) throws IOException {
 
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+
+        String message = this.productService.addNewProduct(productDto);
+
+        return new ResponseEntity<String>(message,HttpStatusCode.valueOf(200));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        return productService.getProductById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    //Get product by Id
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable int productId) {
+
+        ProductDto product = productService.getProductById(productId);
+
+        return new ResponseEntity<>(product, HttpStatusCode.valueOf(200));
     }
 
-    @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    //Get All Products
+    @GetMapping("/")
+    public ResponseEntity<List<ProductDto>> getAllProducts(){
+
+        List<ProductDto> products = productService.getAllProducts();
+
+        return new ResponseEntity<>(products,HttpStatusCode.valueOf(200));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
-        Product updatedProduct = productService.updateProduct(id, productDetails);
-        return ResponseEntity.ok(updatedProduct);
+
+
+    //Update Product
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto, @PathVariable Integer productId) throws IOException {
+      
+        ProductDto save = productService.updateProduct(productId,productDto);
+
+        return new ResponseEntity<ProductDto>(save,HttpStatusCode.valueOf(200));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+
+    //Delete Product
+    @DeleteMapping(value = "/del/{productId}",produces = "application/json")
+    public ResponseEntity<String> deleteProduct(@PathVariable Integer productId){
+        this.productService.deleteProduct(productId);
+        return new ResponseEntity<String>("Product deleted",HttpStatusCode.valueOf(200));
     }
 }
