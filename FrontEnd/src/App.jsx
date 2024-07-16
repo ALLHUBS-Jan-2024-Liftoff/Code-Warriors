@@ -1,41 +1,33 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
+import RootLayout from './_root/RootLayout'
+import AdminLayout from './_admin/AdminLayout'
+import Results from './_root/pages/Results';
+import Product from './_root/pages/Product';
+import Orders from './_admin/pages/Orders'
+import AllProducts from './_admin/pages/AllProducts'
+import ProductDetails from './_admin/pages/ProductDetails'
+import Analytics from './_admin/pages/Analytics'
+import Cart from './_root/pages/Cart';
+import Hero from './_root/pages/Hero';
 
 function App() {
-  const [data, setData] = useState([]);
-
-    useEffect(() => {
-        fetch('http://localhost:8080/api/testdata')
-            .then(response => response.json())
-            .then(data => setData(data))
-            .catch(error => console.error('Error fetching data:', error));
-    }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Best Group Ever!!!</h1>
-      <div className="App">
-            <h1>Test Data</h1>
-            <ul>
-                {data.map((item, index) => (
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
-        </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+        <Routes>
+          <Route element={<RootLayout/>}>
+            <Route index element={<Hero />} />
+            <Route path='/results' element={<Results />} />
+            <Route path='/product' element={<Product />} />
+            <Route path='/cart' element={<Cart />} />
+          </Route>
+          <Route path='/admin' element={<AdminLayout/>}>
+            <Route index element={<Orders />} />
+            <Route path='all_products' element={<AllProducts />} />
+            <Route path='product_details' element={<ProductDetails />} />
+            <Route path='analytics' element={<Analytics />} />
+          </Route>
+        </Routes>
   )
 }
 
