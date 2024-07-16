@@ -56,7 +56,7 @@ const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/products');
+        const response = await axios.get('http://localhost:8080/product/');
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching the products:', error);
@@ -133,7 +133,7 @@ const [products, setProducts] = useState([]);
                     <TableHead>Status</TableHead>
                     <TableHead className="hidden md:table-cell">Price</TableHead>
                     <TableHead className="hidden md:table-cell">Total Sales</TableHead>
-                    <TableHead className="hidden md:table-cell">Created at</TableHead>
+                    <TableHead className="hidden md:table-cell">Description</TableHead>
                     <TableHead>
                         <span className="sr-only">Actions</span>
                     </TableHead>
@@ -164,7 +164,7 @@ const [products, setProducts] = useState([]);
                         {item.quantity}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                        {new Date(item.date).toLocaleString()} // Format date if needed
+                        {item.description}
                     </TableCell>
                     <TableCell>
                         <DropdownMenu>

@@ -17,6 +17,7 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
     //Create product
     @PostMapping(value = "/add" )
     public ResponseEntity<String> createProduct(@RequestBody ProductDto productDto) throws IOException {
