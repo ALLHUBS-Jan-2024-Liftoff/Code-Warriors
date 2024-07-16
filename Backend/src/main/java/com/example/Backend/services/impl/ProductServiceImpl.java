@@ -1,6 +1,6 @@
 package com.example.Backend.services.impl;
 
-import com.example.Backend.Dto.ProductDto;
+import com.example.Backend.dto.ProductDto;
 import com.example.Backend.entity.Product;
 import com.example.Backend.repositories.ProductRepo;
 import com.example.Backend.services.ProductService;
@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
     //Update
     @Override
-    public ProductDto UpdateProduct(int ProductId, ProductDto productDto) {
+    public ProductDto updateProduct(int ProductId, ProductDto productDto) {
 
         Product newProduct = this.productRepo.findById(ProductId).orElseThrow();
         newProduct.setProductId(ProductId);
@@ -88,9 +88,8 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public String deleteProduct(int productId) {
+    public void deleteProduct(int productId) {
         this.productRepo.deleteById(productId);
-        return "Product Deleted Successfully";
     }
 
 

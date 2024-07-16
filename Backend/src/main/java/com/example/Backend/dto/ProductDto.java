@@ -1,4 +1,4 @@
-package com.example.Backend.Dto;
+package com.example.Backend.dto;
 
 import com.example.Backend.entity.ProductStatus;
 import jakarta.persistence.EnumType;
@@ -12,10 +12,10 @@ import lombok.*;
 @Data
 @ToString
 public class ProductDto {
-    private int ProductId;
-    private String ProductName;
-    private String Description;
-    private Double Price;
+    private int productId;
+    private String productName;
+    private String description;
+    private Double price;
     private Integer quantity;
     @Enumerated(EnumType.STRING)
     private ProductStatus status;

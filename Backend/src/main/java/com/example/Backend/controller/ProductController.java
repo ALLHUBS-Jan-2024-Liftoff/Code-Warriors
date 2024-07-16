@@ -1,24 +1,17 @@
 package com.example.Backend.controller;
 
-import com.example.Backend.Dto.ProductDto;
-import com.example.Backend.entity.Product;
+import com.example.Backend.dto.ProductDto;
 import com.example.Backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 
 
 @RestController
-@CrossOrigin
 @RequestMapping("/product")
 public class ProductController {
 
@@ -27,7 +20,7 @@ public class ProductController {
 
     //Create product
     @PostMapping(value = "/add" )
-    public ResponseEntity<String> CreateProduct(@RequestBody ProductDto productDto) throws IOException {
+    public ResponseEntity<String> createProduct(@RequestBody ProductDto productDto) throws IOException {
 
 
         String message = this.productService.addNewProduct(productDto);
@@ -37,16 +30,18 @@ public class ProductController {
 
     //Get product by Id
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductDto> GetProductById(@PathVariable int productId) {
-        ProductDto product = this.productService.getProductById(productId);
+    public ResponseEntity<ProductDto> getProductById(@PathVariable int productId) {
+
+        ProductDto product = productService.getProductById(productId);
 
         return new ResponseEntity<>(product, HttpStatusCode.valueOf(200));
     }
 
     //Get All Products
     @GetMapping("/")
-    public ResponseEntity<List<ProductDto>> getAll(){
-        List<ProductDto> products = this.productService.getAllProducts();
+    public ResponseEntity<List<ProductDto>> getAllProducts(){
+
+        List<ProductDto> products = productService.getAllProducts();
 
         return new ResponseEntity<>(products,HttpStatusCode.valueOf(200));
     }
@@ -55,9 +50,9 @@ public class ProductController {
 
     //Update Product
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductDto> UpdateProduct(@RequestBody ProductDto productDto, @PathVariable Integer productId) throws IOException {
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto, @PathVariable Integer productId) throws IOException {
       
-        ProductDto save = this.productService.UpdateProduct(productId,productDto);
+        ProductDto save = productService.updateProduct(productId,productDto);
 
         return new ResponseEntity<ProductDto>(save,HttpStatusCode.valueOf(200));
     }
@@ -65,7 +60,7 @@ public class ProductController {
 
     //Delete Product
     @DeleteMapping(value = "/del/{productId}",produces = "application/json")
-    public ResponseEntity<String> Delete(@PathVariable Integer productId){
+    public ResponseEntity<String> deleteProduct(@PathVariable Integer productId){
         this.productService.deleteProduct(productId);
         return new ResponseEntity<String>("Product deleted",HttpStatusCode.valueOf(200));
     }

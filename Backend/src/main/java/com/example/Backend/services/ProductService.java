@@ -1,19 +1,17 @@
 package com.example.Backend.services;
 
-import com.example.Backend.Dto.ProductDto;
-import com.example.Backend.entity.Product;
+import com.example.Backend.dto.ProductDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
 
     String addNewProduct(ProductDto productDto);
     List<ProductDto> getAllProducts();
-    String deleteProduct(int productId);
+    void deleteProduct(int productId);
     ProductDto getProductById(int productId);
     String updatePrice(int productId, Double price);
 
-    ProductDto UpdateProduct(int ProductId, ProductDto productDto);
+    ProductDto updateProduct(int ProductId, ProductDto productDto);
 
 }
