@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
   File,
   ListFilter,
@@ -50,15 +51,20 @@ const handleRowClick = () => {
     navigate('/admin/product_details');
 };
 
-const testData = Array.from({ length: 10 }, (_, index) => ({
-    id: index,
-    name: 'Laser Lemonade Machine',
-    status: 'Draft',
-    price: '$499.99',
-    quantity: 25,
-    date: '2023-07-12 10:42 AM',
-    imageSrc: '/placeholder.svg'
-    }));
+const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/products');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching the products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -125,29 +131,23 @@ const testData = Array.from({ length: 10 }, (_, index) => ({
                     </TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                        Price
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                        Total Sales
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                        Created at
-                    </TableHead>
+                    <TableHead className="hidden md:table-cell">Price</TableHead>
+                    <TableHead className="hidden md:table-cell">Total Sales</TableHead>
+                    <TableHead className="hidden md:table-cell">Created at</TableHead>
                     <TableHead>
                         <span className="sr-only">Actions</span>
                     </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                {testData.map((item) => (
-                    <TableRow onClick={handleRowClick} key={item.id} className="hover:bg-gray-100 cursor-pointer">
+                {products.map((item) => (
+                    <TableRow onClick={() => handleRowClick(item)} key={item.id} className="hover:bg-gray-100 cursor-pointer">
                     <TableCell className="hidden sm:table-cell">
                         <img
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src={item.imageSrc}
+                        src={item.imageSrc || '/placeholder.svg'} // Use placeholder if imageSrc is not available
                         width="64"
                         />
                     </TableCell>
@@ -158,13 +158,13 @@ const testData = Array.from({ length: 10 }, (_, index) => ({
                         <Badge variant="outline">{item.status}</Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                        {item.price}
+                        ${item.price}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
                         {item.quantity}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                        {item.date}
+                        {new Date(item.date).toLocaleString()} // Format date if needed
                     </TableCell>
                     <TableCell>
                         <DropdownMenu>
