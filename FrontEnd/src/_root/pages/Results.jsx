@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card"
 import { NavLink } from 'react-router-dom'
 import { Label } from "@/components/ui/label"
+import SideBar from '@/components/shared/Sidebar'
 
 const ListPage = () => {
 
@@ -78,26 +79,30 @@ const products = [
 ];
 
   return (
-    <div className='h-full grid grid-cols-5 gap-6 p-4'>
-      {products.map(product => (
-        <Card key={product.id} className="w-[250px] h-96">
-          <CardContent>
-            <img 
-              src={product.imageUrl} 
-              alt={product.name} 
-              className="w-full h-48 object-contain my-4"
-            />
-            <p className='text-lg font-medium'>{product.name}</p>
-            <p className='text-2xl font-bold'>{product.price}</p>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <NavLink  to="/product">
-              <Button className='w-full h-8'>Add to cart</Button>
-            </NavLink>
-          </CardFooter>
-        </Card>
-      ))}
+    <div className='flex'>
+      <SideBar />
+      <div className='h-full grid grid-cols-5 gap-6 p-4'>
+        {products.map(product => (
+          <Card key={product.id} className="w-[250px] h-96">
+            <CardContent>
+              <img 
+                src={product.imageUrl} 
+                alt={product.name} 
+                className="w-full h-48 object-contain my-4"
+              />
+              <p className='text-lg font-medium'>{product.name}</p>
+              <p className='text-2xl font-bold'>{product.price}</p>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <NavLink  to="/product">
+                <Button className='w-full h-8'>Add to cart</Button>
+              </NavLink>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
     </div>
+    
   )
 }
 

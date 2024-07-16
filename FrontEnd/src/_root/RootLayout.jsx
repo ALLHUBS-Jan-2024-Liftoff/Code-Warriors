@@ -6,10 +6,9 @@ import Sidebar from '../components/shared/Sidebar'
 const RootLayout = () => {
   
   return (
-    <div className='h-screen flex flex-col'>
+    <div className='vh-[100%] flex flex-col bg-secondary'>
         <Topbar />
-        <div className='flex flex-1 pt-16'>
-          <Sidebar />
+        <div className='flex flex-1 my-16'>
           <Outlet />
         </div>
     </div>

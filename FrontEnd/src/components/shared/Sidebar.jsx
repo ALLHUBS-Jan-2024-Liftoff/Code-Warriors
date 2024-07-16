@@ -1,40 +1,59 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Separator } from '../ui/separator'
+import { Link } from 'react-router-dom';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  CreditCard,
+  File,
+  Home,
+  LineChart,
+  ListFilter,
+  MoreVertical,
+  Package,
+  Package2,
+  PanelLeft,
+  Search,
+  Settings,
+  ShoppingCart,
+  Truck,
+  Users2,
+} from "lucide-react"
 
 
 const SideBar = () => {
 
   return (
-    <nav className="h-full w-1/6 pt-6 pl-4">
-      <div className="w-5/6">
-        <ul className="flex flex-col gap-4 pb-4">
-            <NavLink  to="/">
-            <p className="text-lg font-bold">
-                Browse All
-            </p>
-            </NavLink>
-            <NavLink  to="/create">
-            <p className="text-lg font-bold">
-                Notifications
-            </p>
-            </NavLink>
-        </ul>
-        <Separator />
-        <div>
-          <h1 className="text-lg font-bold">Categories</h1>
-          <div className='flex flex-col gap-2'>
-            <div className='bg-secondary p-2 rounded-lg font-semibold text-lg'>Laptops</div>
-            <div className='bg-secondary p-2 rounded-lg font-semibold text-lg'>Computers</div>
-            <div className='bg-secondary p-2 rounded-lg font-semibold text-lg'>Phones</div>
-            <div className='bg-secondary p-2 rounded-lg font-semibold text-lg'>TVs</div>
-            <div className='bg-secondary p-2 rounded-lg font-semibold text-lg'>Audio</div>
-            <div className='bg-secondary p-2 rounded-lg font-semibold text-lg'>Video Games</div>
-            <div className='bg-secondary p-2 rounded-lg font-semibold text-lg'>Cameras</div>
-          </div>
+    <aside className="w-64 flex-col border-r bg-background sm:flex">
+      <nav className="grid items-start gap-4 pt-8 px-2 text-sm font-medium lg:px-4">
+        <div className='border-b h-48'>
+          <Link
+              to=""
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-base text-muted-foreground transition-all hover:text-primary"
+            >
+              Category
+          </Link>
         </div>
-      </div>
-    </nav>
+        <div className='border-b h-48'>
+          <Link
+              to=""
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-base text-muted-foreground transition-all hover:text-primary"
+            >
+              Price
+          </Link>
+        </div>
+        <div className='border-b h-48'>
+          <Link
+              to=''
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-base text-muted-foreground transition-all hover:text-primary"
+            >
+              Brand
+          </Link>
+        </div>
+        </nav>
+    </aside>
     
   )
 }
