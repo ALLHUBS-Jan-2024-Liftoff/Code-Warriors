@@ -51,6 +51,10 @@ const handleRowClick = () => {
     navigate('/admin/product_details');
 };
 
+const handleAddProductClick = () => {
+    navigate('/admin/create_product');
+};
+
 const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -106,7 +110,7 @@ const [products, setProducts] = useState([]);
                 Export
                 </span>
             </Button>
-            <Button size="sm" className="h-8 gap-1">
+            <Button onClick={handleAddProductClick} size="sm" className="h-8 gap-1">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Add Product
@@ -147,7 +151,7 @@ const [products, setProducts] = useState([]);
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src={item.imageSrc || '/placeholder.svg'} // Use placeholder if imageSrc is not available
+                        src={item.imageUrl || '/placeholder.svg'} 
                         width="64"
                         />
                     </TableCell>

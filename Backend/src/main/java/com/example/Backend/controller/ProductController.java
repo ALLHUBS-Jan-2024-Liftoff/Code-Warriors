@@ -25,7 +25,7 @@ public class ProductController {
 
         String message = this.productService.addNewProduct(productDto);
 
-        return new ResponseEntity<String>(message,HttpStatusCode.valueOf(200));
+        return new ResponseEntity<String>(message, HttpStatusCode.valueOf(200));
     }
 
     //Get product by Id

@@ -86,7 +86,7 @@ export default function AdminLayout() {
     };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-muted/40">
+    <div className="flex min-h-screen flex-grow w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-40 flex-col border-r bg-background sm:flex">
       <nav className="grid items-start gap-4 pt-8 px-2 text-sm font-medium lg:px-4">
               <Link
@@ -180,14 +180,16 @@ export default function AdminLayout() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="relative ml-auto flex items-center gap-2 flex-1 md:grow-0">
+          <div className="ml-auto flex items-center gap-2 flex-1 md:grow-0">
             <Button onClick={handleGoToStore} size='sm' >Go to store</Button>
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-            />
+            <div className='relative'>
+              <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search..."
+                className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+              />
+            </div>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
