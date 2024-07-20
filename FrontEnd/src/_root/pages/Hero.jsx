@@ -52,21 +52,28 @@ const Hero = () => {
 
   return (
     <div className="w-full h-full flex flex-col items-center">
-        <div className="w-3/4 flex flex-col gap-4 px-32 pt-4">
-            <div>
-                <h1 className='text-5xl font-semibold'>Devices you can rely on.</h1>
-                <h2 className='text-2xl font-semibold text-muted-foreground'>Explore cutting edge technology.</h2>
+        <div className="w-full flex flex-col gap-4">
+              <div className='px-2 py-14 text-center'>
+                  <h1 className='text-5xl font-semibold'>Devices you can rely on.</h1>
+                  <h2 className='text-4xl font-semibold text-muted-foreground'>Explore cutting edge technology.</h2>
+              </div>
+              <div className='flex gap-2 px-2'>
+              <Card className="border-none rounded-none relative w-full h-[500px] bg-[url('/eCommerce_images/macbook2.jpg')] bg-cover bg-[left_0%_top_30%]">
+                  <h1 className='text-5xl text-background font-semibold pt-3 text-center'>MacBook Pro</h1>
+                  <Button className='bg-background text-foreground absolute bottom-12 right-8 hover:text-background'>Shop</Button>
+              </Card>
+              <Card className="border-none flex flex-col justify-end rounded-none relative w-full h-[500px] bg-[url('/eCommerce_images/sony_camera.jpg')] bg-cover bg-[left_0%_top_55%]">
+                  <h1 className='text-5xl text-background font-semibold pb-8 text-center'>Sony Alpha Collection</h1>
+                  <Button className='bg-background text-foreground absolute bottom-12 right-8 hover:text-background'>Shop</Button>
+              </Card>
             </div>
-            <Card className="relative w-full h-96 bg-[url('/hero_section_img.webp')] bg-cover bg-[left_0%_top_55%]">
-                <Button className='absolute bottom-12 right-8'>Shop now</Button>
-            </Card>
-            <div>
-                <h1 className='text-2xl font-semibold pb-4'>Shop by category</h1>
-                <div className='grid grid-cols-3 gap-5'>
+            <div className='px-2'>
+                <h1 className='text-5xl font-semibold pt-8 pb-12 text-center'>Shop by category</h1>
+                <div className='grid grid-cols-3 gap-4'>
                 {categories.map((category, index) => (
-                    <Card key={index}>
+                    <Card className='shadow-sm border-none rounded-[30px] hover:scale-102 transition-transform duration-500 ease-in-out' key={index}>
                     <CardHeader>
-                        <CardTitle>{category.category}</CardTitle>
+                        <CardTitle className='text-center'>{category.category}</CardTitle>
                     </CardHeader>
                     
                     <CardContent>
@@ -76,7 +83,7 @@ const Hero = () => {
                     className="w-full h-48 object-contain my-4"
                 />
                     </CardContent>
-                    <CardFooter className='flex justify-center pb-2'>
+                    <CardFooter className='flex justify-center pb-4'>
                         <Button variant='secondary'>Shop now</Button>
                     </CardFooter>
                     </Card>

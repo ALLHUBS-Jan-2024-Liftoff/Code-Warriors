@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Input } from '../ui/input'
-import { Search, ShoppingCart } from "lucide-react"
+import { Search, ShoppingCart, Store } from "lucide-react"
 import { Button } from '../ui/button'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faBell } from "@fortawesome/free-solid-svg-icons";
@@ -36,30 +36,20 @@ const handleGoToAdmin = () => {
 };
 
   return (
-    <div className='fixed z-50 top-0 bg-background flex items-center justify-between w-full h-16 px-6'>
-        <h1 onClick={handleGoToHero} className='text-2xl font-bold text-primary'>Digital Delights</h1>
-        <div className='w-1/2 flex items-center'>
-          <Select>
-            <SelectTrigger className="w-[195px]">
-              <SelectValue  placeholder="Shop by category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-          <div className="relative py-2 w-full flex justify-center items-center">
-              <Search className="absolute left-4 top-6 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search" className="pl-8 h-12 w-full mx-2"/>
-              <Button onClick={handleGoToResults}>Search</Button>
-              <Button onClick={handleGoToAdmin} className='ml-2'>Admin</Button>
+    <div className='fixed z-50 top-0 bg-background flex items-center justify-center w-full h-16 px-6'>
+          <div className='flex items-center gap-8'>
+            <Store onClick={handleGoToHero} className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
+            <ul className='flex gap-6 text-sm text-muted-foreground'>
+              <li className='hover:text-foreground hover:scale-102 transition-transform'>Laptops</li>
+              <li className='hover:text-foreground hover:scale-102 transition-transform'>Phones</li>
+              <li className='hover:text-foreground hover:scale-102 transition-transform'>Cameras</li>
+              <li className='hover:text-foreground hover:scale-102 transition-transform'>Computers</li>
+              <li className='hover:text-foreground hover:scale-102 transition-transform'>Headphones</li>
+              <li className='hover:text-foreground hover:scale-102 transition-transform'>Accessories</li>
+            </ul>
+            <Search onClick={handleGoToResults} className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
+            <ShoppingCart className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
           </div>
-        </div>
-        <div className='flex gap-8'>
-          <FontAwesomeIcon size='md' className='text-muted-foreground' icon={faBell} />
-          <ShoppingCart className="h-5 w-5 text-muted-foreground"/>
-        </div>
     </div>
   )
 }
