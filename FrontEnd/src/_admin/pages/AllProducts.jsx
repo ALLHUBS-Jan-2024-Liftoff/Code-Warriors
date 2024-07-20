@@ -47,8 +47,8 @@ const AllProducts = () => {
 
 const navigate = useNavigate();
 
-const handleRowClick = () => {
-    navigate('/admin/product_details');
+const handleEditProductClick = (item) => {
+    navigate('/admin/edit_product', { state: { product: item } });
 };
 
 const handleAddProductClick = () => {
@@ -69,6 +69,16 @@ const [products, setProducts] = useState([]);
 
     fetchProducts();
   }, []);
+
+  const deleteProduct = async (productId) => {
+    try {
+      const response = await axios.delete(`http://localhost:8080/product/del/${productId}`);
+      setProducts((prevProducts) => prevProducts.filter(product => product.productId !== productId));
+    } catch (error) {
+      console.error('Error deleting the products:', error);
+    }
+  };
+
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -145,7 +155,7 @@ const [products, setProducts] = useState([]);
                 </TableHeader>
                 <TableBody>
                 {products.map((item) => (
-                    <TableRow onClick={() => handleRowClick(item)} key={item.id} className="hover:bg-gray-100 cursor-pointer">
+                    <TableRow key={item.productId} className="hover:bg-gray-100 cursor-pointer">
                     <TableCell className="hidden sm:table-cell">
                         <img
                         alt="Product image"
@@ -156,7 +166,7 @@ const [products, setProducts] = useState([]);
                         />
                     </TableCell>
                     <TableCell className="font-medium">
-                        {item.name}
+                        {item.productName}
                     </TableCell>
                     <TableCell>
                         <Badge variant="outline">{item.status}</Badge>
@@ -184,8 +194,8 @@ const [products, setProducts] = useState([]);
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleEditProductClick(item)}>Edit</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => deleteProduct(item.productId)}>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                         </DropdownMenu>
                     </TableCell>
