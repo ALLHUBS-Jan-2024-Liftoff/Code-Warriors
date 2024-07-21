@@ -10,6 +10,8 @@ import ProductDetails from './_admin/pages/ProductDetails'
 import Analytics from './_admin/pages/Analytics'
 import Cart from './_root/pages/Cart';
 import Hero from './_root/pages/Hero';
+import CreateProduct from './_admin/pages/CreateProduct';
+import EditProduct from './_admin/pages/EditProduct';
 
 function App() {
 
@@ -24,7 +26,8 @@ function App() {
           <Route path='/admin' element={<AdminLayout/>}>
             <Route index element={<Orders />} />
             <Route path='all_products' element={<AllProducts />} />
-            <Route path='product_details' element={<ProductDetails />} />
+            <Route path='create_product' element={<CreateProduct />} />
+            <Route path='edit_product' element={<EditProduct />} />
             <Route path='analytics' element={<Analytics />} />
           </Route>
         </Routes>

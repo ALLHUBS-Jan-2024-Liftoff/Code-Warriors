@@ -25,7 +25,7 @@ public class ProductController {
 
         String message = this.productService.addNewProduct(productDto);
 
-        return new ResponseEntity<String>(message,HttpStatusCode.valueOf(200));
+        return new ResponseEntity<String>(message, HttpStatusCode.valueOf(200));
     }
 
     //Get product by Id
@@ -59,7 +59,7 @@ public class ProductController {
 
 
     //Delete Product
-    @DeleteMapping(value = "/del/{productId}",produces = "application/json")
+    @DeleteMapping(value = "/del/{productId}", produces = "application/json")
     public ResponseEntity<String> deleteProduct(@PathVariable Integer productId){
         this.productService.deleteProduct(productId);
         return new ResponseEntity<String>("Product deleted",HttpStatusCode.valueOf(200));
