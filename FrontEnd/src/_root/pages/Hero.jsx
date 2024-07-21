@@ -8,6 +8,7 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+import FlipWords from "@/components/ui/flip-words"
 
 const Hero = () => {
 
@@ -50,12 +51,17 @@ const Hero = () => {
         }
       ];
 
+    const words = ["innovative.", "powerful.", "sleek.", "cutting-edge."];
+
   return (
     <div className="w-full h-full flex flex-col items-center">
         <div className="w-full flex flex-col gap-4">
-              <div className='px-2 py-14 text-center'>
-                  <h1 className='text-5xl font-semibold'>Devices you can rely on.</h1>
-                  <h2 className='text-4xl font-semibold text-muted-foreground'>Explore cutting edge technology.</h2>
+              <div className='w-full flex justify-center px-2 py-14'>
+                  <div className='w-[33%]'>
+                    <h1 className="text-5xl font-semibold whitespace-nowrap">
+                    Technology that is<FlipWords words={words} duration={4000} className='text-muted-foreground'/>
+                    </h1>
+                  </div>
               </div>
               <div className='flex gap-2 px-2'>
               <Card className="border-none rounded-none relative w-full h-[500px] bg-[url('/eCommerce_images/macbook2.jpg')] bg-cover bg-[left_0%_top_30%]">

@@ -48,7 +48,7 @@ const handleGoToAdmin = () => {
               <li className='hover:text-foreground hover:scale-102 transition-transform'>Accessories</li>
             </ul>
             <Search onClick={handleGoToResults} className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
-            <ShoppingCart className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
+            <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
           </div>
     </div>
   )
