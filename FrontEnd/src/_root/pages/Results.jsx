@@ -79,11 +79,11 @@ const products = [
 ];
 
   return (
-    <div className='flex'>
+    <div className='flex w-full'>
       <SideBar />
-      <div className='h-full grid grid-cols-5 gap-6 p-4'>
+      <div className='h-full w-full grid grid-cols-5 gap-6 p-4'>
         {products.map(product => (
-          <Card key={product.id} className="w-[250px] h-96">
+          <Card key={product.id} className="h-96">
             <CardContent>
               <img 
                 src={product.imageUrl} 

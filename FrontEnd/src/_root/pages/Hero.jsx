@@ -155,7 +155,7 @@ const Hero = () => {
                 </Card>
               </div>
           </div>
-            <div className='px-2 bg-secondary py-8'>
+            <div className='px-2 bg-secondary py-10'>
                 <h1 ref={h1Ref} className={`text-5xl font-bold pb-12 text-center 
                 transition-all ease-in duration-1000 transform ${isHeaderVisible ? "opacity-100" : "opacity-0"}`}>
                 Shop by category</h1>
