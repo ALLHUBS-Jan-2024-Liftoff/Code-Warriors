@@ -35,6 +35,8 @@ const handleGoToAdmin = () => {
     navigate('/admin');
 };
 
+
+
   return (
     <div className='fixed z-50 top-0 bg-background flex items-center justify-between w-full h-16 px-6'>
         <h1 onClick={handleGoToHero} className='text-2xl font-bold text-primary'>Digital Delights</h1>
@@ -58,7 +60,8 @@ const handleGoToAdmin = () => {
         </div>
         <div className='flex gap-8'>
           <FontAwesomeIcon size='md' className='text-muted-foreground' icon={faBell} />
-          <ShoppingCart className="h-5 w-5 text-muted-foreground"/>
+          
+          <ShoppingCart onClick={handleGoToCart} className="h-5 w-5 text-muted-foreground"/>
         </div>
     </div>
   )
