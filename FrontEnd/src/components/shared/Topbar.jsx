@@ -36,19 +36,19 @@ const handleGoToAdmin = () => {
 };
 
   return (
-    <div className='fixed z-50 top-0 bg-background flex items-center justify-center w-full h-16 px-6'>
+    <div className='fixed z-50 top-0 bg-background flex items-center justify-center w-full h-16 px-6 bg-secondary'>
           <div className='flex items-center gap-8'>
-            <Store onClick={handleGoToHero} className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
-            <ul className='flex gap-6 text-sm text-muted-foreground'>
-              <li className='hover:text-foreground hover:scale-102 transition-transform'>Laptops</li>
-              <li className='hover:text-foreground hover:scale-102 transition-transform'>Phones</li>
-              <li className='hover:text-foreground hover:scale-102 transition-transform'>Cameras</li>
-              <li className='hover:text-foreground hover:scale-102 transition-transform'>Computers</li>
-              <li className='hover:text-foreground hover:scale-102 transition-transform'>Headphones</li>
-              <li className='hover:text-foreground hover:scale-102 transition-transform'>Accessories</li>
+            <Store onClick={handleGoToHero} className="h-4 w-4 hover:text-foreground hover:scale-102 transition-transform"/>
+            <ul className='flex gap-6 text-sm'>
+              <li className='hover:scale-103'>Laptops</li>
+              <li className='hover:scale-103'>Phones</li>
+              <li className='hover:scale-103'>Cameras</li>
+              <li className='hover:scale-103'>Computers</li>
+              <li className='hover:scale-103'>Headphones</li>
+              <li className='hover:scale-103'>Accessories</li>
             </ul>
-            <Search onClick={handleGoToResults} className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
-            <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 text-muted-foreground hover:text-foreground hover:scale-102 transition-transform"/>
+            <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102"/>
+            <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 hover:scale-102"/>
           </div>
     </div>
   )

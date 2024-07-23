@@ -51,7 +51,7 @@ const Hero = () => {
         }
       ];
 
-    const words = ["innovative.", "powerful.", "sleek.", "cutting-edge."];
+    const words = ["innovative.", "powerful.", "cutting-edge."];
 
     const [isHeaderVisible, setIsHeaderVisible] = useState(false);
     const [headerAnimated, setHeaderAnimated] = useState(false); // Flag to animate header only once
@@ -121,11 +121,11 @@ const Hero = () => {
   return (
     <div className="bg-background w-full h-full flex flex-col items-center">
         <div className="w-full flex flex-col gap-4">
-          <div className='h-screen'>
+          <div className='h-[88vh]'>
             <div className='w-full flex justify-center px-2 py-4'>
                   <div className='w-[40%]'>
-                    <h1 className="text-5xl font-semibold whitespace-nowrap">
-                    Technology that is<FlipWords words={words} duration={4000} className='text-blue-500'/>
+                    <h1 className="text-6xl font-semibold whitespace-nowrap">
+                    Technology that is<FlipWords words={words} duration={2750} className='text-blue-500'/>
                     </h1>
                   </div>
               </div>
@@ -138,7 +138,7 @@ const Hero = () => {
                               alt={'No picture'} 
                               className="w-full h-20 object-contain my-4"
                           />
-                          <p className='font-semibold text-center'>{category.category}</p>
+                          <p className='hover:underline font-semibold text-center'>{category.category}</p>
                         </div>
                           
                       ) : null
@@ -155,18 +155,17 @@ const Hero = () => {
                 </Card>
               </div>
           </div>
-            <div className='px-2'>
-                <h1 ref={h1Ref} className={`text-5xl font-semibold pb-12 text-center 
+            <div className='px-2 bg-secondary py-8'>
+                <h1 ref={h1Ref} className={`text-5xl font-bold pb-12 text-center 
                 transition-all ease-in duration-1000 transform ${isHeaderVisible ? "opacity-100" : "opacity-0"}`}>
                 Shop by category</h1>
                 <div className='grid grid-cols-3 gap-4'>
                 {categories.map((category, index) => {
-
                   return (
                     <Card
                       key={index}
                       ref={(el) => (itemRefs.current[index] = el)}
-                      className={`shadow-md hover:scale-102 transition-all ease-in-out duration-1000 transform ${
+                      className={`shadow-md hover:scale-102 transition-all ease-in-out duration-300 transform ${
                         visibleItems[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                       }`}
                       style={{ transitionDelay: visibleItems[index] ? transitionDelays[index] : '0ms' }}
@@ -190,7 +189,7 @@ const Hero = () => {
                 </div>
             </div>
             <div>
-                <h1 className='text-2xl text-center font-semibold pb-4'>Recommended for you</h1>
+                <h1 className='text-3xl text-center font-bold pb-4'>Recommended for you</h1>
                 <div className='grid grid-cols-5 gap-2'>
                 {categories.map((category, index) => (
                     index !== 5 ? (
