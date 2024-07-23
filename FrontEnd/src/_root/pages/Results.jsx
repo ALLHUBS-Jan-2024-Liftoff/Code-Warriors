@@ -89,6 +89,9 @@ function fetchData() {
   })
 }
 
+useEffect(() => {
+  fetchData();
+}, [])
 
   return (
     <div className='flex'>
