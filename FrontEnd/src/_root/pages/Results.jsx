@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -81,6 +82,12 @@ const products = [
 
 const [data, setData] = useState([])
 
+function fetchData() {
+  axios.get('http://localhost:8080/product/').then((response) => {
+    setData(response.data)
+    console.log(response.data)
+  })
+}
 
 
   return (
