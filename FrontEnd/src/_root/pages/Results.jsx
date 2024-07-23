@@ -78,10 +78,15 @@ const products = [
   },
 ];
 
+
+const [data, setData] = useState([])
+
+
+
   return (
     <div className='flex'>
       <SideBar />
-      <div className='h-full grid grid-cols-5 gap-6 p-4'>
+      <div className='h-full w-full grid grid-cols-5 gap-6 p-4'>
         {products.map(product => (
           <Card key={product.id} className="w-[250px] h-96">
             <CardContent>
