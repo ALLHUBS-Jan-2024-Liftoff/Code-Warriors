@@ -1,7 +1,6 @@
 package com.example.Backend.services.impl;
 
 import com.example.Backend.dto.CartDto;
-import com.example.Backend.dto.ProductDto;
 import com.example.Backend.entity.Cart;
 import com.example.Backend.entity.CartItem;
 import com.example.Backend.entity.User;
@@ -11,11 +10,9 @@ import com.example.Backend.services.CartItemService;
 import com.example.Backend.services.CartService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,8 +118,8 @@ public class CartServiceImpl implements CartService {
         for (CartItem cartItem: cart.getCartItems()){
             CartDto cartDto1 = new CartDto();
             cartDto1.setProductId(cartItem.getCartProduct().getProductId());
-            double itemPrice = cartItem.getCartProduct().getPrice() * cartItem.getCartItemQuantity();
-            cartDto1.setPrice( itemPrice);
+            //double itemPrice = cartItem.getCartProduct().getPrice() * cartItem.getCartItemQuantity();
+            cartDto1.setPrice( cartItem.getCartProduct().getPrice());
             cartDto1.setQuantity(cartItem.getCartItemQuantity());
             cartDto1.setProductName(cartItem.getCartProduct().getProductName());
             cartList.add(cartDto1);
