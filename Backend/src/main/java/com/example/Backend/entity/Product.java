@@ -34,4 +34,10 @@ public class Product {
     private ProductStatus status;
 
 
+    @OneToOne(mappedBy = "cartProduct")
+    private CartItem cartItem;
+
+
+
+
 }
