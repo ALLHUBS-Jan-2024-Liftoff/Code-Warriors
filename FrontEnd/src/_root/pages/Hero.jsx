@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import React from 'react'
+import React, { useEffect, useRef, useState }from 'react'
 import {
     Card,
     CardContent,
@@ -8,13 +8,14 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+import FlipWords from "@/components/ui/flip-words"
 
 const Hero = () => {
 
     const categories = [
         {
           "category": "Laptops",
-          "img": "macbook_img.jpg",
+          "img": "https://pngimg.com/uploads/macbook/macbook_PNG51.png",
           "productName": "MacBook Pro",
           "price": "$1299"
         },
@@ -32,13 +33,13 @@ const Hero = () => {
         },
         {
           "category": "Audio",
-          "img": "headphones_img.jpg",
+          "img": "https://www.bose.com.au/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-B02.png/jcr:content/renditions/cq5dam.web.1000.1000.png",
           "productName": "Bose Quiet Comfort II",
           "price": "$299"
         },
         {
           "category": "Cameras",
-          "img": "camera_img.jpg",
+          "img": "https://static.bhphotovideo.com/explora/sites/default/files/video/a7iv.png",
           "productName": "Canon DSLR",
           "price": "$499"
         },
@@ -50,41 +51,145 @@ const Hero = () => {
         }
       ];
 
+    const words = ["innovative.", "powerful.", "cutting-edge."];
+
+    const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+    const [headerAnimated, setHeaderAnimated] = useState(false); // Flag to animate header only once
+    const [visibleItems, setVisibleItems] = useState(Array(categories.length).fill(false));
+    const h1Ref = useRef(null);
+    const itemRefs = useRef([]);
+  
+    useEffect(() => {
+      // Observer for the header
+      const headerObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !headerAnimated) {
+            setIsHeaderVisible(true);
+            setHeaderAnimated(true);
+          }
+        },
+        { threshold: 0.1 }
+      );
+  
+      if (h1Ref.current) {
+        headerObserver.observe(h1Ref.current);
+      }
+  
+      return () => {
+        if (h1Ref.current) {
+          headerObserver.unobserve(h1Ref.current);
+        }
+      };
+    }, [headerAnimated]);
+  
+    useEffect(() => {
+      // Observer for the grid items
+      itemRefs.current = itemRefs.current.slice(0, categories.length);
+  
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = itemRefs.current.indexOf(entry.target);
+              if (index !== -1) {
+                setVisibleItems((prevVisibleItems) => {
+                  const newVisibleItems = [...prevVisibleItems];
+                  newVisibleItems[index] = true;
+                  return newVisibleItems;
+                });
+                observer.unobserve(entry.target); // Unobserve after first intersection
+              }
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+  
+      itemRefs.current.forEach((ref) => {
+        if (ref) observer.observe(ref);
+      });
+  
+      return () => {
+        itemRefs.current.forEach((ref) => {
+          if (ref) observer.unobserve(ref);
+        });
+      };
+    }, [categories.length]);
+
+    const transitionDelays = ['0ms', '100ms', '200ms', '0ms', '100ms', '200ms'];
+
   return (
     <div className="w-full h-full flex flex-col items-center">
-        <div className="w-3/4 flex flex-col gap-4 px-32 pt-4">
-            <div>
-                <h1 className='text-5xl font-semibold'>Devices you can rely on.</h1>
-                <h2 className='text-2xl font-semibold text-muted-foreground'>Explore cutting edge technology.</h2>
-            </div>
-            <Card className="relative w-full h-96 bg-[url('/hero_section_img.webp')] bg-cover bg-[left_0%_top_55%]">
-                <Button className='absolute bottom-12 right-8'>Shop now</Button>
-            </Card>
-            <div>
-                <h1 className='text-2xl font-semibold pb-4'>Shop by category</h1>
-                <div className='grid grid-cols-3 gap-5'>
+        <div className="w-full flex flex-col gap-4">
+          <div className='h-[88vh]'>
+            <div className='w-full flex justify-center px-2 py-4'>
+                  <div className='w-[40%]'>
+                    <h1 className="text-6xl font-semibold whitespace-nowrap">
+                    Technology that is<FlipWords words={words} duration={2750} className='text-blue-500'/>
+                    </h1>
+                  </div>
+              </div>
+              <div className='w-1/2 m-auto grid grid-cols-5 pb-4'>
                 {categories.map((category, index) => (
-                    <Card key={index}>
-                    <CardHeader>
-                        <CardTitle>{category.category}</CardTitle>
-                    </CardHeader>
-                    
-                    <CardContent>
-                    <img 
-                    src={category.img}
-                    alt={'No picture'} 
-                    className="w-full h-48 object-contain my-4"
-                />
-                    </CardContent>
-                    <CardFooter className='flex justify-center pb-2'>
-                        <Button variant='secondary'>Shop now</Button>
-                    </CardFooter>
+                      index !== 5 ? (
+                        <div>
+                          <img 
+                              src={category.img}
+                              alt={'No picture'} 
+                              className="w-full h-20 object-contain my-4"
+                          />
+                          <p className='hover:underline font-semibold text-center'>{category.category}</p>
+                        </div>
+                          
+                      ) : null
+                  ))}
+              </div>
+              <div className='flex'>
+                <Card className="shadow-none border-none rounded-none relative w-full h-[450px] bg-[url('/eCommerce_images/ipad.jpg')] bg-cover bg-[left_0%_top_30%]">
+                    <h1 className='text-5xl font-semibold pt-3 text-center'>iPad Pro</h1>
+                    <Button className='absolute bottom-12 right-8'>Shop</Button>
+                </Card>
+                <Card className="border-none flex flex-col justify-end rounded-none relative w-full h-[450px] bg-[url('/eCommerce_images/sony_camera.jpg')] bg-cover bg-[left_0%_top_55%]">
+                    <h1 className='text-5xl text-background font-semibold pb-8 text-center'>Sony Alpha Collection</h1>
+                    <Button className='bg-background text-foreground absolute bottom-12 right-8 hover:text-background'>Shop</Button>
+                </Card>
+              </div>
+          </div>
+            <div className='px-2 bg-secondary py-10'>
+                <h1 ref={h1Ref} className={`text-5xl font-bold pb-12 text-center 
+                transition-all ease-in duration-1000 transform ${isHeaderVisible ? "opacity-100" : "opacity-0"}`}>
+                Shop by category</h1>
+                <div className='grid grid-cols-3 gap-4'>
+                {categories.map((category, index) => {
+                  return (
+                    <Card
+                      key={index}
+                      ref={(el) => (itemRefs.current[index] = el)}
+                      className={`shadow-md hover:scale-102 transition-all ease-in-out duration-300 transform ${
+                        visibleItems[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                      }`}
+                      style={{ transitionDelay: visibleItems[index] ? transitionDelays[index] : '0ms' }}
+                    >
+                      <CardHeader>
+                        <CardTitle className="text-center">{category.category}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <img
+                          src={category.img}
+                          alt="No picture"
+                          className="w-full h-48 object-contain my-4"
+                        />
+                      </CardContent>
+                      <CardFooter className="flex justify-center pb-4">
+                        <Button variant="secondary">Shop</Button>
+                      </CardFooter>
                     </Card>
-                ))}
+                  );
+                })}
                 </div>
             </div>
             <div>
-                <h1 className='text-2xl font-semibold pb-4'>Recommedned for you</h1>
+                <h1 className='text-3xl text-center font-bold pb-4'>Recommended for you</h1>
                 <div className='grid grid-cols-5 gap-2'>
                 {categories.map((category, index) => (
                     index !== 5 ? (
