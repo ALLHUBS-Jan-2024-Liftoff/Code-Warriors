@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -78,19 +79,33 @@ const products = [
   },
 ];
 
+
+const [data, setData] = useState([])
+
+function fetchData() {
+  axios.get('http://localhost:8080/product/').then((response) => {
+    setData(response.data)
+    console.log(response.data)
+  })
+}
+
+useEffect(() => {
+  fetchData();
+}, [])
+
   return (
     <div className='flex w-full'>
       <SideBar />
       <div className='h-full w-full grid grid-cols-5 gap-6 p-4'>
-        {products.map(product => (
-          <Card key={product.id} className="h-96">
+        {data.map(product => (
+          <Card key={product.productId} className="w-[250px] h-96">
             <CardContent>
               <img 
                 src={product.imageUrl} 
-                alt={product.name} 
+                alt={product.productName} 
                 className="w-full h-48 object-contain my-4"
               />
-              <p className='text-lg font-medium'>{product.name}</p>
+              <p className='text-lg font-medium'>{product.description}</p>
               <p className='text-2xl font-bold'>{product.price}</p>
             </CardContent>
             <CardFooter className="flex justify-between">

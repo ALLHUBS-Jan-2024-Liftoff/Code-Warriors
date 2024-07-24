@@ -35,6 +35,8 @@ const handleGoToAdmin = () => {
     navigate('/admin');
 };
 
+
+
   return (
     <div className='fixed z-50 top-0 bg-background flex items-center justify-center w-full h-16 px-6 bg-secondary'>
           <div className='flex items-center gap-8'>
