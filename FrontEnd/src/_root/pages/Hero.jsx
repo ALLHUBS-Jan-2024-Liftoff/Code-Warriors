@@ -119,7 +119,7 @@ const Hero = () => {
     const transitionDelays = ['0ms', '100ms', '200ms', '0ms', '100ms', '200ms'];
 
   return (
-    <div className="bg-background w-full h-full flex flex-col items-center">
+    <div className="w-full h-full flex flex-col items-center">
         <div className="w-full flex flex-col gap-4">
           <div className='h-[88vh]'>
             <div className='w-full flex justify-center px-2 py-4'>
