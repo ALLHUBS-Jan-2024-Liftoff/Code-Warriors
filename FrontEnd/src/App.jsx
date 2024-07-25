@@ -12,6 +12,11 @@ import Cart from './_root/pages/Cart';
 import Hero from './_root/pages/Hero';
 import CreateProduct from './_admin/pages/CreateProduct';
 import EditProduct from './_admin/pages/EditProduct';
+import AdminSignIn from './_auth/AdminSignIn';
+import AdminSignUp from './_auth/AdminSignUp';
+import UserSignIn from './_auth/UserSignIn';
+import UserSignUp from './_auth/UserSignUp';
+
 
 function App() {
 
@@ -30,6 +35,10 @@ function App() {
             <Route path='edit_product' element={<EditProduct />} />
             <Route path='analytics' element={<Analytics />} />
           </Route>
+          <Route path='admin_sign_in' element={<AdminSignIn />} />
+          <Route path='admin_sign_up' element={<AdminSignUp />} />
+          <Route path='user_sign_in' element={<UserSignIn />} />
+          <Route path='user_sign_up' element={<UserSignUp />} />
         </Routes>
   )
 }
