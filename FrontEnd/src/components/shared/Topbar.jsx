@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Store, Search, ShoppingCart } from 'lucide-react'; // replace with actual imports
+import { Store, Search, ShoppingCart, UserRound } from 'lucide-react'; // replace with actual imports
 import NavDropdown from '../ui/navbar-dropdown'; // import the Dropdown component
 import { AnimatePresence } from 'framer-motion';
 import { motion } from 'framer-motion';
@@ -18,6 +18,9 @@ const Topbar = () => {
 
   const handleGoToHero = () => {
     navigate('/');
+  };
+  const handleGoToAdmin = () => {
+    navigate('/admin');
   };
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -107,6 +110,7 @@ const Topbar = () => {
         </ul>
         <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102" />
         <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 hover:scale-102" />
+        <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
       </div>
       <AnimatePresence>
         {dropdownVisible && (
