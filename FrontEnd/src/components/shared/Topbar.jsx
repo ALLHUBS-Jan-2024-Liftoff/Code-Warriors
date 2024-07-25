@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Store, Search, ShoppingCart } from 'lucide-react'; // replace with actual imports
 import NavDropdown from '../ui/navbar-dropdown'; // import the Dropdown component
@@ -22,16 +22,25 @@ const Topbar = () => {
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [dropdownItems, setDropdownItems] = useState([])
+  const timeoutRef = useRef(null);
 
   const handleMouseEnter = (items) => {
-    setDropdownItems(items)
+    clearTimeout(timeoutRef.current);
+    setDropdownItems(items);
     setDropdownVisible(true);
   };
 
   const handleMouseLeave = () => {
-    setDropdownItems([])
-    setDropdownVisible(false);
+    timeoutRef.current = setTimeout(() => {
+      setDropdownVisible(false);
+    }, 400); // Adjust the delay as needed
   };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const laptopItems = [
     'MacBook Air',
@@ -40,8 +49,6 @@ const Topbar = () => {
     'HP Envy 13',
     'Chromebook Pixelbook',
     'Dell XPS 13',
-    'Asus ZenBook',
-    'Lenovo ThinkPad X1 Carbon'
   ];
   
   const phoneItems = [
@@ -51,8 +58,6 @@ const Topbar = () => {
     'Samsung Galaxy Note 20',
     'Google Pixel 6',
     'OnePlus 9',
-    'Sony Xperia 1 III',
-    'Motorola Moto G Power'
   ];
   
   const cameraItems = [
@@ -70,8 +75,6 @@ const Topbar = () => {
     'Lenovo IdeaCentre',
     'Asus ROG Strix',
     'Apple iMac',
-    'Acer Predator Orion 3000',
-    'MSI Trident 3'
   ];
   
   const headphoneItems = [
@@ -80,8 +83,6 @@ const Topbar = () => {
     'Apple AirPods Pro',
     'Sony WH-1000XM4',
     'Sennheiser HD 450BT',
-    'Jabra Elite 85h',
-    'Anker Soundcore Life Q20'
   ];
   
   const accessoryItems = [
@@ -90,8 +91,6 @@ const Topbar = () => {
     'Wireless Mice',
     'Laptop Stands',
     'Bluetooth Keyboards',
-    'External Hard Drives',
-    'Portable Power Banks'
   ];
 
   return (

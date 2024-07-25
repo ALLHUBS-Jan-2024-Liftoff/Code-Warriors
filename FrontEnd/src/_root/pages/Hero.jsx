@@ -132,7 +132,7 @@ const Hero = () => {
               <div className='w-1/2 m-auto grid grid-cols-5 pb-4'>
                 {categories.map((category, index) => (
                       index !== 5 ? (
-                        <div>
+                        <div key={category.img}>
                           <img 
                               src={category.img}
                               alt={'No picture'} 
