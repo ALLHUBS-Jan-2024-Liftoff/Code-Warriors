@@ -1,3 +1,6 @@
+package com.example.Backend.server;
+
+
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.PaymentIntent;
