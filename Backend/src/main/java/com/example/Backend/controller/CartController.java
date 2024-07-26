@@ -31,7 +31,7 @@ public class CartController {
     }
 
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/delete/{productId}")
     public ResponseEntity<List<CartDto>> removeProductFromCart( @RequestHeader("userId") int userId, @PathVariable("productId") int productId) {
 
         return new ResponseEntity<>(cartService.removeProductFromCart(productId, userId),HttpStatus.OK);

@@ -17,7 +17,7 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartItemId;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Product cartProduct;
 
     private Integer cartItemQuantity;
