@@ -13,11 +13,17 @@ import lombok.*;
 @ToString
 public class ProductDto {
     private int productId;
+
     private String productName;
+
     private String description;
+
     private Double price;
+
     private Integer quantity;
+
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
+
     private String ImageUrl;
 }
