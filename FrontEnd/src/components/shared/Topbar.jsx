@@ -4,6 +4,7 @@ import { Store, Search, ShoppingCart, UserRound } from 'lucide-react'; // replac
 import NavDropdown from '../ui/navbar-dropdown'; // import the Dropdown component
 import { AnimatePresence } from 'framer-motion';
 import { motion } from 'framer-motion';
+import { Button } from '../ui/button';
 
 const Topbar = () => {
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ const Topbar = () => {
   };
   const handleGoToAdmin = () => {
     navigate('/admin');
+  };
+
+  const handleGoToAdminSignin = () => {
+    navigate('/admin_sign_in');
   };
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -111,6 +116,7 @@ const Topbar = () => {
         <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102" />
         <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 hover:scale-102" />
         <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
+        <Button size="sm" onClick={handleGoToAdminSignin}>Admin Sign in</Button>
       </div>
       <AnimatePresence>
         {dropdownVisible && (

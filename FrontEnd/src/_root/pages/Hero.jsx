@@ -125,7 +125,7 @@ const Hero = () => {
             <div className='w-full flex justify-center px-2 py-4'>
                   <div className='w-[40%]'>
                     <h1 className="text-6xl font-semibold whitespace-nowrap">
-                    Technology that is<FlipWords words={words} duration={2750} className='text-blue-500'/>
+                    Technology that is<FlipWords words={words} duration={2750} className='text-muted-foreground'/>
                     </h1>
                   </div>
               </div>

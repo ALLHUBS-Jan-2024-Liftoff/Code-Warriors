@@ -76,8 +76,12 @@ import {
   } from "@/components/ui/tooltip"
 import { Outlet } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from '../context/AuthContext';
 
 export default function AdminLayout() {
+
+    let { logoutUser } = useContext(AuthContext)
 
     const navigate = useNavigate();
 
@@ -200,10 +204,10 @@ export default function AdminLayout() {
               >
                 <img
                   src="/placeholder-user.jpg"
-                  width={36}
-                  height={36}
+                  width={56}
+                  height={56}
                   alt="Avatar"
-                  className="overflow-hidden rounded-full"
+                  className="object-cover"
                 />
               </Button>
             </DropdownMenuTrigger>
@@ -213,7 +217,7 @@ export default function AdminLayout() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={logoutUser}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
