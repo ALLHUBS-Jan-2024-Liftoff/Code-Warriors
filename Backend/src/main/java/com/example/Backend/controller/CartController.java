@@ -3,6 +3,7 @@ package com.example.Backend.controller;
 import com.example.Backend.dto.CartDto;
 import com.example.Backend.entity.Cart;
 import com.example.Backend.entity.CartItem;
+import com.example.Backend.services.CartItemService;
 import com.example.Backend.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private CartItemService cartItemService;
 
     @PostMapping("/addProduct")
     public ResponseEntity <List<CartDto>> addProductToCart(@RequestBody CartDto cartDto,@RequestHeader("userId")int userId) {
@@ -43,8 +47,17 @@ public class CartController {
         return new ResponseEntity<>(cartService.clearCart(userId), HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/total/{userId}")
+    public ResponseEntity<Double> getCartTotal(@PathVariable("userId") int userId) {
 
+        return new ResponseEntity<>(cartService.getCartTotal(userId),HttpStatus.ACCEPTED);
+    }
 
+    @PutMapping("/updateQuantity/{productId}")
+    public ResponseEntity<String> updateCartItemQuantity(@RequestHeader("userId") int userId, @PathVariable("productId") int productId, @RequestHeader("quantity") int quantity) {
+
+        return new ResponseEntity<>(cartItemService.updateCartItemQuantity(userId,productId,quantity),HttpStatus.ACCEPTED);
+    }
 
 
 }

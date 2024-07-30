@@ -9,7 +9,6 @@ import com.example.Backend.repositories.CartRepo;
 import com.example.Backend.repositories.UserRepo;
 import com.example.Backend.services.CartItemService;
 import com.example.Backend.services.CartService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,58 +29,16 @@ public class CartServiceImpl implements CartService {
     private CartItemRepo cartItemRepo;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private CartItemService cartItemService;
 
 
     @Override
     public List<CartDto> addProductToCart(CartDto cartDto, int userId) {
-        List<CartItem> cartItems = new ArrayList<>();
 
         User existingUser = getCurrentUser( userRepo, userId);
-        System.out.println("User Id+++++"+existingUser.getUserId());
-        Cart userCart= existingUser.getCart();
-
-        if(userCart!=null){
-            cartItems = userCart.getCartItems();
-
-        }
-
         CartItem currentCartItem = cartItemService.createItemForCart(cartDto);
-
-        double itemPrice= currentCartItem.getCartProduct().getPrice() * currentCartItem.getCartItemQuantity();
-
-
-        if(cartItems.isEmpty()) {
-
-            System.out.println(":::::New User entry:::");
-            userCart = new Cart();
-            userCart.setCartTotal(itemPrice);
-            System.out.println(":::::Cart Item Id:::"+currentCartItem.getCartItemId());
-            cartItems.add(currentCartItem);
-
-        }else {
-            boolean flag = false;
-            for(CartItem c: cartItems) {
-                if(c.getCartProduct().getProductId() == cartDto.getProductId()) {
-                    c.setCartItemQuantity(c.getCartItemQuantity() + cartDto.getQuantity());
-                    userCart.setCartTotal(userCart.getCartTotal() + itemPrice);
-                    flag = true;
-                }
-            }
-            if(!flag) {
-                cartItems.add(currentCartItem);
-
-                userCart.setCartTotal(userCart.getCartTotal() +itemPrice);
-            }
-        }
-        userCart.setCartItems(cartItems);
-        userCart.setUser(existingUser);
-        currentCartItem.setCart(userCart);
+        Cart userCart = setProductInUserCart(existingUser,currentCartItem,cartDto);
         Cart cart = cartRepo.save(userCart);
-
         return getCartDtoList(cart);
     }
 
@@ -152,7 +109,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private static Cart updateCartTotal(Cart existingUserCart, CartItem cartItem){
-        // cartItem to be update or delete
+        // cart total to be update on delete product
        double cartItemTotal=  cartItem.getCartProduct().getPrice() * cartItem.getCartItemQuantity();
 
         existingUserCart.setCartTotal(existingUserCart.getCartTotal() - cartItemTotal);
@@ -179,24 +136,70 @@ public class CartServiceImpl implements CartService {
 
         Cart existingUserCart = existingUser.getCart();
 
-        if(existingUserCart.getCartItems().isEmpty()) {
+        Cart cart = cartRepo.findById(existingUserCart.getId())
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-            throw new RuntimeException("Cart already empty");
+        cartItemRepo.deleteAll(cart.getCartItems());
+        cart.getCartItems().clear();
+        cart.setCartTotal(0.0);
+        cartRepo.save(cart);
+         return "Cart cleared";
+    }
 
-        }else{
+    private Cart setProductInUserCart(User existingUser, CartItem currentCartItem,CartDto cartDto){
+        List<CartItem> cartItems = new ArrayList<>();
+        Cart userCart= existingUser.getCart();
+        if(userCart!=null){
+            cartItems = userCart.getCartItems();
 
-            //cartRepo.deleteById(userId);
-            cartRepo.deleteById(existingUserCart.getId());
         }
 
-      // List<CartItem> emptyCart = new ArrayList<>();
+        double itemPrice= currentCartItem.getCartProduct().getPrice() * currentCartItem.getCartItemQuantity();
 
-        existingUserCart.setCartItems(null);
+        if(userCart!=null && !cartItems.isEmpty()){
 
-        existingUserCart.setCartTotal(0.0);
+            boolean flag = false;
+            /* Updating quantity if same product is added to userCart*/
+            for(CartItem c: cartItems) {
+                if(c.getCartProduct().getProductId() == cartDto.getProductId()) {
+                    c.setCartItemQuantity(c.getCartItemQuantity() + cartDto.getQuantity());
+                    userCart.setCartTotal(userCart.getCartTotal() + itemPrice);
+                    flag = true;
+                }
+            }
+            /* Adding new product to cart*/
+            if(!flag) {
+                cartItems.add(currentCartItem);
+                userCart.setCartTotal(userCart.getCartTotal() +itemPrice);
+            }
 
-         cartRepo.save(existingUserCart);
-         return "Cart cleared";
+        }else{
+            /* When New user enters or Existing user with cart id and no CartItems! */
+            userCart = new Cart();
+            userCart.setCartTotal(itemPrice);
+            cartItems.add(currentCartItem);
+        }
+
+        userCart.setCartItems(cartItems);
+        userCart.setUser(existingUser);
+        currentCartItem.setCart(userCart);
+        return userCart;
+    }
+
+    @Override
+    public Double getCartTotal(int userId){
+        User existingUser = getCurrentUser( userRepo, userId);
+        if(existingUser.getCart() != null) {
+
+            Integer cartId = existingUser.getCart().getId();
+            Optional<Cart> optCart = cartRepo.findById(cartId);
+            Cart userCart = optCart.get();
+            return userCart.getCartTotal();
+
+        }else{
+            return 0.0;
+        }
+
     }
 
 

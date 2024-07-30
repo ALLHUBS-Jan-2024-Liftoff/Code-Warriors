@@ -17,4 +17,6 @@ public interface CartService {
 
     String clearCart(int userId);
 
+    Double getCartTotal(int userId);
+
 }
