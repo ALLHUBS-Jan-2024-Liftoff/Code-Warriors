@@ -5,13 +5,31 @@ import NavDropdown from '../ui/navbar-dropdown'; // import the Dropdown componen
 import { AnimatePresence } from 'framer-motion';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useContext } from 'react';
+import AuthContext from '../../context/AuthContext';
 
 const Topbar = () => {
   const navigate = useNavigate();
 
+  let { user, logoutUser } = useContext(AuthContext)
+
   const handleGoToCart = () => {
-    navigate('/cart');
-  };
+    if(user) {
+      navigate('/cart');
+    } else {
+      navigate('/user_auth')
+    }
+    }
+    
 
   const handleGoToResults = () => {
     navigate('/results');
@@ -22,10 +40,6 @@ const Topbar = () => {
   };
   const handleGoToAdmin = () => {
     navigate('/admin');
-  };
-
-  const handleGoToAdminSignin = () => {
-    navigate('/admin_sign_in');
   };
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -41,7 +55,7 @@ const Topbar = () => {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setDropdownVisible(false);
-    }, 400); // Adjust the delay as needed
+    }, 200); // Adjust the delay as needed
   };
 
   useEffect(() => {
@@ -116,7 +130,31 @@ const Topbar = () => {
         <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102" />
         <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 hover:scale-102" />
         <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
-        <Button size="sm" onClick={handleGoToAdminSignin}>Admin Sign in</Button>
+        {user &&
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="overflow-hidden rounded-full"
+              >
+                <img
+                  src="/placeholder-user.jpg"
+                  width={56}
+                  height={56}
+                  alt="Avatar"
+                  className="object-cover"
+                />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={logoutUser}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          }
       </div>
       <AnimatePresence>
         {dropdownVisible && (

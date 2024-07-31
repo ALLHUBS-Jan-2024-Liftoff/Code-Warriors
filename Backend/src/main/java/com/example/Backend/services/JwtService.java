@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class JwtService {
@@ -92,8 +94,15 @@ public class JwtService {
     }
 
     private String generateToken(User user, long expireTime) {
+
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
+        claims.put("userId", user.getUserId());
+
         String token = Jwts
                 .builder()
+                .setClaims(claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expireTime ))

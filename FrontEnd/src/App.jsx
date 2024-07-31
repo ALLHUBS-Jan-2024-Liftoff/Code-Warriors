@@ -14,8 +14,10 @@ import CreateProduct from './_admin/pages/CreateProduct';
 import EditProduct from './_admin/pages/EditProduct';
 import AdminSignIn from './_auth/AdminSignIn';
 import AdminSignUp from './_auth/AdminSignUp';
-import UserSignIn from './_auth/UserSignIn';
-import UserSignUp from './_auth/UserSignUp';
+import UserAuthPage from './_auth/UserAuthPage';
+import AdminAuthPage from './_auth/AdminAuthPage';
+import AdminPrivateRoute from './utils/AdminPrivateRoute';
+import UserPrivateRoute from './utils/UserPrivateRoute';
 
 
 function App() {
@@ -26,19 +28,21 @@ function App() {
             <Route index element={<Hero />} />
             <Route path='/results' element={<Results />} />
             <Route path='/product' element={<Product />} />
-            <Route path='/cart' element={<Cart />} />
+            <Route element={<UserPrivateRoute />}>
+              <Route path='/cart' element={<Cart />} />
+            </Route>
           </Route>
-          <Route path='/admin' element={<AdminLayout/>}>
-            <Route index element={<Orders />} />
-            <Route path='all_products' element={<AllProducts />} />
-            <Route path='create_product' element={<CreateProduct />} />
-            <Route path='edit_product' element={<EditProduct />} />
-            <Route path='analytics' element={<Analytics />} />
+          <Route element={<AdminPrivateRoute />}>
+            <Route path='/admin' element={<AdminLayout/>}>
+              <Route index element={<Orders />} />
+              <Route path='all_products' element={<AllProducts />} />
+              <Route path='create_product' element={<CreateProduct />} />
+              <Route path='edit_product' element={<EditProduct />} />
+              <Route path='analytics' element={<Analytics />} />
+            </Route>
           </Route>
-          <Route path='admin_sign_in' element={<AdminSignIn />} />
-          <Route path='admin_sign_up' element={<AdminSignUp />} />
-          <Route path='user_sign_in' element={<UserSignIn />} />
-          <Route path='user_sign_up' element={<UserSignUp />} />
+          <Route path='admin_auth' element={<AdminAuthPage />} />
+          <Route path='user_auth' element={<UserAuthPage />} />
         </Routes>
   )
 }
