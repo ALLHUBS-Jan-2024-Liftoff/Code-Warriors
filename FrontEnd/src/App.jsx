@@ -12,8 +12,6 @@ import Cart from './_root/pages/Cart';
 import Hero from './_root/pages/Hero';
 import CreateProduct from './_admin/pages/CreateProduct';
 import EditProduct from './_admin/pages/EditProduct';
-import AdminSignIn from './_auth/AdminSignIn';
-import AdminSignUp from './_auth/AdminSignUp';
 import UserAuthPage from './_auth/UserAuthPage';
 import AdminAuthPage from './_auth/AdminAuthPage';
 import AdminPrivateRoute from './utils/AdminPrivateRoute';
