@@ -13,6 +13,7 @@ import Hero from './_root/pages/Hero';
 import CreateProduct from './_admin/pages/CreateProduct';
 import EditProduct from './_admin/pages/EditProduct';
 
+
 function App() {
 
   return (
@@ -20,8 +21,8 @@ function App() {
           <Route element={<RootLayout/>}>
             <Route index element={<Hero />} />
             <Route path='/results' element={<Results />} />
-            <Route path='/product' element={<Product />} />
-            <Route path='/cart' element={<Cart />} />
+            <Route path='/product' element={<Product />} />            
+            <Route path='/cart' element={<Cart />} />            
           </Route>
           <Route path='/admin' element={<AdminLayout/>}>
             <Route index element={<Orders />} />

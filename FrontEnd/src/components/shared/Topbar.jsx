@@ -4,10 +4,14 @@ import { Store, Search, ShoppingCart, UserRound } from 'lucide-react'; // replac
 import NavDropdown from '../ui/navbar-dropdown'; // import the Dropdown component
 import { AnimatePresence } from 'framer-motion';
 import { motion } from 'framer-motion';
+import CartIcon from '../ui/CartIcon';
 
 const Topbar = () => {
+
+  
   const navigate = useNavigate();
 
+  
   const handleGoToCart = () => {
     navigate('/cart');
   };
@@ -26,6 +30,8 @@ const Topbar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [dropdownItems, setDropdownItems] = useState([])
   const timeoutRef = useRef(null);
+
+  
 
   const handleMouseEnter = (items) => {
     clearTimeout(timeoutRef.current);
@@ -96,6 +102,8 @@ const Topbar = () => {
     'Bluetooth Keyboards',
   ];
 
+  
+
   return (
     <div className="fixed z-50 top-0 bg-background flex items-center justify-center w-full h-12 px-6 bg-secondary">
       <div className="flex items-center gap-8">
@@ -109,7 +117,7 @@ const Topbar = () => {
           <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(accessoryItems)}>Accessories</li>
         </ul>
         <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102" />
-        <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 hover:scale-102" />
+        <CartIcon onClick={handleGoToCart} className="h-4 w-4 hover:scale-102" />        
         <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
       </div>
       <AnimatePresence>
