@@ -19,23 +19,16 @@ public class Review {
     @Lob
     private String description;
 
-    @Lob
-    @Column(columnDefinition = "Longblob")
-
-    // For storing the image
-    private byte[] img;
-
-
     // Creating relationship of this review with the user
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "user_id", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
 
     // Creating relationship of this review with the product
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "product_id", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 }

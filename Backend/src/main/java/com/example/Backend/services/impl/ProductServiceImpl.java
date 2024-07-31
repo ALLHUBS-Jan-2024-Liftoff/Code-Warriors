@@ -1,18 +1,13 @@
 package com.example.Backend.services.impl;
 
-import com.example.Backend.dto.OrderedProductResponseDto;
 import com.example.Backend.dto.ProductDto;
-import com.example.Backend.entity.CartItem;
 import com.example.Backend.entity.Product;
 import com.example.Backend.repositories.ProductRepo;
 import com.example.Backend.services.ProductService;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,9 +23,9 @@ public class ProductServiceImpl implements ProductService {
     // Create
 
     @Override
-    public String addNewProduct(ProductDto productDto) {
+    public  String addNewProduct(ProductDto productDto){
 
-        Product product = this.modelMapper.map(productDto, Product.class);
+        Product product=this.modelMapper.map(productDto,Product.class);
 
         this.productRepo.save(product);
 
@@ -55,16 +50,16 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDto getProductById(int productId) {
+    public  ProductDto  getProductById(int productId) {
         Product product = this.productRepo.findById(productId).orElseThrow();
 
-        return this.modelMapper.map(product, ProductDto.class);
+        return this.modelMapper.map(product,ProductDto.class);
     }
 
     @Override
     public String updatePrice(int productId, Double price) {
         Optional<Product> opt = productRepo.findById(productId);
-        if (opt.isPresent()) {
+        if(opt.isPresent()){
             opt.get().setPrice(price);
             productRepo.save(opt.get());
             return "Product Price Updated";
@@ -88,13 +83,15 @@ public class ProductServiceImpl implements ProductService {
         productRepo.save(newProduct);
 
 
-        return this.modelMapper.map(newProduct, ProductDto.class);
+        return this.modelMapper.map(newProduct,ProductDto.class);
     }
+
 
     @Override
     public void deleteProduct(int productId) {
         this.productRepo.deleteById(productId);
     }
+
 
 
 }

@@ -1,47 +1,39 @@
 package com.example.Backend.services.impl;
 
-import com.example.Backend.dto.OrderedProductResponseDto;
-import com.example.Backend.dto.ProductDto;
-import com.example.Backend.entity.CartItem;
-import com.example.Backend.repositories.OrderRepository;
-import com.example.Backend.services.ReviewService;
+import com.example.Backend.dto.ReviewDto;
+import com.example.Backend.entity.Review;
+import com.example.Backend.repositories.ReviewRepo;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Order;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.Backend.services.ReviewService;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImp implements ReviewService {
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private ReviewRepo reviewRepo;
 
-    private final OrderRepository orderRepository;
+    @Override
+    public void CreateReview(ReviewDto reviewDto) {
+        Review review = this.modelMapper.map(reviewDto,Review.class);
 
-    public OrderedProductResponseDto getOrderedProductDetailsByOrderId(Long orderId) {
+        this.reviewRepo.save(review);
+    }
 
-        Optional<Order> optionalOrder = orderRepository.findById(orderId); // Correct method name
+    @Override
+    public Optional<Review> GetReviews(ReviewDto review) {
+        Optional<Review> byId = this.reviewRepo.findById(review.getProduct().getProductId());
+        return byId;
+    }
 
-        OrderedProductResponseDto orderedProductResponseDto = new OrderedProductResponseDto();
-        if (optionalOrder.isPresent()) {
-            orderedProductResponseDto.setOrderAmount(optionalOrder.get().getAmount());
-            List<ProductDto> productDtoList = new ArrayList<>();
+    @Override
+    public void DeleteReview(ReviewDto review) {
 
-            for (CartItem cartItems : optionalOrder.get().getCartItems()) {
-
-                ProductDto productDto = new ProductDto();
-                productDto.setId(cartItems.getProduct().getId());
-                productDto.setName(cartItems.getProduct().getName());
-                productDto.setPrice(cartItems.getPrice());
-                productDto.setQuantity(cartItems.getQuantity());
-                productDto.setByteImg(cartItems.getProduct().getImg());
-
-                productDtoList.add(productDto);
-            }
-            orderedProductResponseDto.setProductDtoList(productDtoList);
-        }
-        return orderedProductResponseDto;
     }
 }
 
