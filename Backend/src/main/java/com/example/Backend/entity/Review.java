@@ -15,6 +15,7 @@ public class Review {
 
     private Long rating;
 
+    // @Lob is to annotate it as a large object removing restrictions of how long the text can be
     @Lob
     private String description;
 
@@ -32,7 +33,7 @@ public class Review {
     private User user;
 
 
-    // Creating relationship of the review with the product
+    // Creating relationship of this review with the product
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
