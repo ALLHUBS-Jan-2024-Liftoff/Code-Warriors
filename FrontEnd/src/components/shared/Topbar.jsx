@@ -18,21 +18,25 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useContext } from 'react';
 import AuthContext from '../../context/AuthContext';
+import { CartContext } from './CartContext';
 
 const Topbar = () => {
 
   
   const navigate = useNavigate();
 
+  const { fetchProducts } = useContext(CartContext);
+
   let { user, logoutUser } = useContext(AuthContext)
 
   const handleGoToCart = () => {
+    
     if(user) {
       navigate('/cart');
     } else {
       navigate('/user_auth')
     }
-    }
+  }
     
 
   const handleGoToResults = () => {
@@ -45,6 +49,11 @@ const Topbar = () => {
   const handleGoToAdmin = () => {
     navigate('/admin');
   };
+
+  function handleLogoutUser() {
+    logoutUser();
+    fetchProducts();
+  }
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [dropdownItems, setDropdownItems] = useState([])
@@ -136,7 +145,7 @@ const Topbar = () => {
           <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(accessoryItems)}>Accessories</li>
         </ul>
         <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102" />
-        <CartIcon onClick={handleGoToCart} className="h-4 w-4 hover:scale-102" />        
+        <CartIcon handleGoToCart={handleGoToCart} className="h-4 w-4 hover:scale-102" />        
         <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
         {user &&
         <DropdownMenu>
@@ -159,7 +168,7 @@ const Topbar = () => {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={logoutUser}>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogoutUser}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           }

@@ -32,9 +32,9 @@ public class CartItemServiceImpl implements CartItemService {
         Product existingProduct = productRepo.findById(cartDto.getProductId()).orElseThrow( ()
                 -> new RuntimeException("Product Not found"));
 
-        if(existingProduct.getStatus().equals(ProductStatus.OUTOFSTOCK) || existingProduct.getQuantity() == 0) {
-            throw new RuntimeException("Product OUT OF STOCK");
-        }
+        //if(existingProduct.getStatus().equals(ProductStatus.OUTOFSTOCK) || existingProduct.getQuantity() == 0) {
+        //    throw new RuntimeException("Product OUT OF STOCK");
+        //}
 
         CartItem newItem = new CartItem();
 

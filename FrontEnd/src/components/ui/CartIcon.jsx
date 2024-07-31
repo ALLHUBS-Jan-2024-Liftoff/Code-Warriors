@@ -2,18 +2,18 @@ import React, { useContext } from 'react';
 import { CartContext } from '../shared/CartContext';
 import { ShoppingCart } from 'lucide-react';
 
-const CartIcon = () => {
+const CartIcon = ({handleGoToCart}) => {
   const { cartCount, isCountRed } = useContext(CartContext);
 
   return (
     <div className="relative">
-      <ShoppingCart className="text-2xl" />
+      <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 hover:scale-102" />
       <span
-        className={`absolute top-5 right-5 bg-red-500 text-white rounded-full px-2 py-1 text-xs ${
+        className={`absolute flex items-center justify-center bottom-2 left-4 bg-red-500 text-white rounded-full h-4 w-4 text-[0.6rem] ${
           isCountRed ? 'animate-pulse' : ''
         }`}
       >
-        {cartCount}
+        <p>{cartCount}</p>
       </span>
     </div>
   );

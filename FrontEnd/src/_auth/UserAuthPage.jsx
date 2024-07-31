@@ -19,18 +19,27 @@ import {
 import { useNavigate } from 'react-router-dom';
 import {useContext} from 'react'
 import AuthContext from '../context/AuthContext'
+import { CartContext } from '../components/shared/CartContext';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+
 
 export default function UserAuthPage() {
 
   const navigate = useNavigate();
 
+  const { addToCart, fetchProducts } = useContext(CartContext);
+
   const handleGoToHero = () => {
+    const pendingCartItem = localStorage.getItem('pendingCartItem');
+    if (pendingCartItem) {
+      localStorage.removeItem('pendingCartItem');
+    }
     navigate('/');
   };
   const handleGoToCart= () => {
     navigate('/cart');
+    
   };
 
   let {loginUser, setAuthTokens, setUser} = useContext(AuthContext)
@@ -47,9 +56,20 @@ export default function UserAuthPage() {
       const data = response.data;
       console.log(data)
       if (data) {
+
         localStorage.setItem('authTokens', JSON.stringify(data));
         setAuthTokens(data);
         setUser(jwtDecode(data.access_token));
+
+        const pendingCartItem = localStorage.getItem('pendingCartItem');
+
+        if (pendingCartItem) {
+          const { product, quantity } = JSON.parse(pendingCartItem);
+          addToCart(product, quantity);
+          localStorage.removeItem('pendingCartItem');
+        } else {
+          fetchProducts();
+        }
       } else {
         alert('Something went wrong!');
       }
@@ -61,6 +81,17 @@ export default function UserAuthPage() {
   const handleLoginSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submit action
     await loginUser(event);
+
+    const pendingCartItem = localStorage.getItem('pendingCartItem');
+
+    if (pendingCartItem) {
+      const { product, quantity } = JSON.parse(pendingCartItem);
+      addToCart(product, quantity);
+      localStorage.removeItem('pendingCartItem');
+    } else {
+      fetchProducts();
+    }
+
     handleGoToCart();
   };
 

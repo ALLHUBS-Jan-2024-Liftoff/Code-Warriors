@@ -156,7 +156,7 @@ public class CartServiceImpl implements CartService {
 
         double itemPrice= currentCartItem.getCartProduct().getPrice() * currentCartItem.getCartItemQuantity();
 
-        if(userCart!=null && !cartItems.isEmpty()){
+        if(userCart!=null){
 
             boolean flag = false;
             /* Updating quantity if same product is added to userCart*/

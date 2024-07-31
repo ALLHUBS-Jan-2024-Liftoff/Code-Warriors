@@ -26,11 +26,27 @@ import {
 } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import apiClient from '@/services/apiClient';
+import { useContext } from 'react';
+import { CartContext } from '@/components/shared/CartContext';
 
 const Cart = () => {
 
-  const [products, setProducts] = useState([]);
-  const[cartTotal, setCartTotal] = useState(0.0);
+  const { products, setProducts, cartTotal, setCartTotal, fetchProducts } = useContext(CartContext);
+  
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  // useEffect to calculate the total price whenever the products state changes
+  useEffect(() => {
+    const calculateTotalPrice = () => {
+      return products.reduce((total, product) => {
+        return total + (product.price * product.quantity);
+      }, 0).toFixed(2); // Round to 2 decimal places
+    };
+
+    setTotalPrice(calculateTotalPrice());
+  }, [products]);
+  
   const [updateDone, setUpdateDone] = useState(false);   
   
   const handleMinus = (productId) => {
@@ -56,17 +72,11 @@ const Cart = () => {
 
   };
 
-
-
   const deleteProduct = async (productId) => {
     try {        
         const [response1, response2] = await Promise.all([
-        axios.delete(`http://localhost:8080/cart/delete/${productId}`, {
-          headers: {
-            'userId': 1
-          }       
-        }), 
-        axios.get('http://localhost:8080/cart/total/1'),  
+        apiClient.delete(`cart/delete/${productId}`), 
+        apiClient.get('cart/total'),  
       ]);     
       setProducts((prevProducts) => prevProducts.filter(product => product.productId !== productId));
       setCartTotal(response2.data);     
@@ -78,21 +88,13 @@ const Cart = () => {
   };
 
     
- const updateQuantity = async (productId,quantityToUpdate) => {
+ const updateQuantity = async (productId, quantityToUpdate) => {
+
       try{
             const [response1, response2] = await Promise.all([
-            axios.put(`http://localhost:8080/cart/updateQuantity/${productId}`,{
-              'userId': 1,
-              'quantity': quantityToUpdate  
-            },{ 
-              headers:{
-                'userId': 1,
-                'quantity': quantityToUpdate  
-              }                         
-            }), 
-            axios.get('http://localhost:8080/cart/total/1'), 
+            apiClient.put(`cart/updateQuantity/${productId}`, { quantity: quantityToUpdate }), 
+            apiClient.get('cart/total'), 
           ]);        
-        
           setCartTotal(response2.data);
           setUpdateDone(prev => !prev);
               
@@ -101,25 +103,6 @@ const Cart = () => {
       }
 
  };
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const [response1, response2] = await Promise.all([
-          axios.get('http://localhost:8080/cart/1'),  // Replace with your first API URL
-          axios.get('http://localhost:8080/cart/total/1'),  // Replace with your second API URL
-        ]);
-       
-        setProducts(response1.data); 
-        setCartTotal(response2.data); 
-        
-      } catch (error) {
-        console.error('Error fetching the products:', error);
-      }
-    };
-
-    fetchProducts();
-  }, [updateDone]);
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -149,7 +132,7 @@ const Cart = () => {
                 <TableBody>
                   
                 {products.map((item,index) => (
-                    <TableRow  className="hover:bg-gray-100 cursor-pointer">
+                    <TableRow key={item.productId} className="hover:bg-gray-100 cursor-pointer">
                     
                     <TableCell className="font-medium">
                      {index+1}
@@ -164,16 +147,16 @@ const Cart = () => {
 
                     <TableCell className="hidden md:table-cell">                      
                           
-                    <div class="flex flex-row h-10 w-20 rounded-lg relative bg-transparent mt-1">
+                    <div className="flex flex-row h-10 w-20 rounded-lg relative bg-transparent mt-1">
 
                        <Button onClick={() => handleMinus(item.productId)} 
-                       class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                       className="p-0 rounded-none bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
                          −
                        </Button>
-                      <Input type="number" class="outline-none focus:outline-none text-center w-full bg-gray-200 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-800  outline-none" 
+                      <div className="rounded-none px-1 outline-none focus:outline-none text-center w-full bg-gray-200 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center justify-center text-gray-800  outline-none" 
                       name="quantity" 
-                       value={item.quantity} ></Input>
-                        <Button onClick={() => handlePlus(item.productId)} class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                       >{item.quantity}</div>
+                        <Button onClick={() => handlePlus(item.productId)} className="p-0 rounded-none bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
                          +
                          </Button>   
                     </div>                                 
@@ -202,7 +185,7 @@ const Cart = () => {
 
             <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                   <div className="flex items-center justify-center font-medium text-gray-900" >
-                    <p>Total : ${cartTotal}</p>                   
+                    <p>Total : ${totalPrice}</p>                   
                   </div>
                   <p className="flex items-center justify-center mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                   <div className="mt-6">
