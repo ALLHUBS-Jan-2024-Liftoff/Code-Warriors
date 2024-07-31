@@ -4,13 +4,40 @@ import { Store, Search, ShoppingCart, UserRound } from 'lucide-react'; // replac
 import NavDropdown from '../ui/navbar-dropdown'; // import the Dropdown component
 import { AnimatePresence } from 'framer-motion';
 import { motion } from 'framer-motion';
+import CartIcon from '../ui/CartIcon';
+
+import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useContext } from 'react';
+import AuthContext from '../../context/AuthContext';
+import { CartContext } from './CartContext';
 
 const Topbar = () => {
+
+  
   const navigate = useNavigate();
 
+  const { fetchProducts } = useContext(CartContext);
+
+  let { user, logoutUser } = useContext(AuthContext)
+
   const handleGoToCart = () => {
-    navigate('/cart');
-  };
+    
+    if(user) {
+      navigate('/cart');
+    } else {
+      navigate('/user_auth')
+    }
+  }
+    
 
   const handleGoToResults = () => {
     navigate('/results');
@@ -23,9 +50,16 @@ const Topbar = () => {
     navigate('/admin');
   };
 
+  function handleLogoutUser() {
+    logoutUser();
+    fetchProducts();
+  }
+
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [dropdownItems, setDropdownItems] = useState([])
   const timeoutRef = useRef(null);
+
+  
 
   const handleMouseEnter = (items) => {
     clearTimeout(timeoutRef.current);
@@ -36,7 +70,7 @@ const Topbar = () => {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setDropdownVisible(false);
-    }, 400); // Adjust the delay as needed
+    }, 200); // Adjust the delay as needed
   };
 
   useEffect(() => {
@@ -96,6 +130,8 @@ const Topbar = () => {
     'Bluetooth Keyboards',
   ];
 
+  
+
   return (
     <div className="fixed z-50 top-0 bg-background flex items-center justify-center w-full h-12 px-6 bg-secondary">
       <div className="flex items-center gap-8">
@@ -109,8 +145,33 @@ const Topbar = () => {
           <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(accessoryItems)}>Accessories</li>
         </ul>
         <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102" />
-        <ShoppingCart onClick={handleGoToCart} className="h-4 w-4 hover:scale-102" />
+        <CartIcon handleGoToCart={handleGoToCart} className="h-4 w-4 hover:scale-102" />        
         <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
+        {user &&
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="overflow-hidden rounded-full"
+              >
+                <img
+                  src="/placeholder-user.jpg"
+                  width={56}
+                  height={56}
+                  alt="Avatar"
+                  className="object-cover"
+                />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogoutUser}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          }
       </div>
       <AnimatePresence>
         {dropdownVisible && (
