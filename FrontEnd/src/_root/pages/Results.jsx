@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
 import { CartContext } from "@/components/shared/CartContext"
-
 import axios from 'axios'
 import { Button } from "@/components/ui/button"
 import {
@@ -16,10 +15,21 @@ import { Label } from "@/components/ui/label"
 import SideBar from '@/components/shared/Sidebar'
 import AuthContext from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const ListPage = () => {
 
 const navigate = useNavigate();
+
+function goToProductDetails(productId) {
+  navigate(`/product/${productId}`)
+}
 
 let { user } = useContext(AuthContext)
 
@@ -71,37 +81,41 @@ useEffect(() => {
 }, [data]);
 
   return (
-    <div className='flex w-full'>
-      <SideBar />
-      <div className='h-full w-full grid grid-cols-4 gap-6 p-4'>
-        {data.map(product => (
-          <Card key={product.productId} className="h-96 flex flex-col">
-            <CardContent>
-              <img 
-                src={product.imageUrl} 
-                alt={product.productName} 
-                className="w-full h-24 object-contain my-4"
-              />
-              <p className='text-lg font-medium'>{product.description}</p>
-              <p className='text-xl font-bold'>Price: {product.price}</p>
-              <div key={product.productId} style={{ marginBottom: '1rem' }}>
-              <label htmlFor={`quantity-${product.productId}`}>Quantity:</label>
-                  <select
-                    id={`quantity-${product.productId}`}
-                    value={quantities[product.productId]}
-                    onChange={(e) => handleChange(product.productId, e)}>
-                    {quantityOptions.map(quantity => (
-                      <option key={quantity} value={quantity}>
-                        {quantity}
-                      </option>
-                    ))}
-                  </select>
-                <p>Selected Quantity: {quantities[product.productId]}</p>
-              </div>                 
-            </CardContent>
-            <Button className='mt-auto mb-4 w-3/4 mx-auto h-8' onClick = {() => handleAddToCart(product , quantities[product.productId] )}>Add to cart</Button>
-          </Card>
-        ))}
+    <div className='flex flex-col w-full'>
+      <div className='w-full h-14 flex items-center pl-6'>
+        <h1 className='text-xl font-semibold'><span className='text-muted-foreground'>Search results for </span>"Laptop"</h1>
+      </div>
+      <div className='flex w-full'>
+        <SideBar />
+        <div className='h-full w-full grid grid-cols-3 gap-6 p-4 pt-0'>
+          {data.map(product => (
+            <Card key={product.productId} className="h-[62vh] flex flex-col">
+              <CardContent className='pb-2'>
+                <img 
+                  src={product.imageUrl} 
+                  alt={product.productName} 
+                  className="w-full h-56 object-contain my-4"
+                />
+                <p className='text-xl font-semibold'>{product.productName}</p>
+                <p className='text-lg font-semibold'>${product.price}</p>
+                <div key={product.productId} style={{ marginBottom: '1rem' }}>
+                  <Select onChange={(e) => handleChange(product.productId, e)}>
+                    <SelectTrigger className="w-[120px] ml-auto">
+                      <SelectValue placeholder="Quantity: 1" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {quantityOptions.map(quantity => (
+                        <SelectItem key={quantity} value={quantity}>{quantity}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>                 
+              </CardContent>
+              <Button className='mb-2 w-3/4 mx-auto h-8' onClick = {() => handleAddToCart(product , quantities[product.productId] )}>Add to cart</Button>
+              <Button variant="secondary" className='border border-2 mb-2 w-3/4 mx-auto h-8' onClick={() => goToProductDetails(product.productId)}>View item</Button>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
     

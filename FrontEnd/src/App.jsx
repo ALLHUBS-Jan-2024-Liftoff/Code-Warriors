@@ -26,7 +26,7 @@ function App() {
           <Route element={<RootLayout/>}>
             <Route index element={<Hero />} />
             <Route path='/results' element={<Results />} />
-            <Route path='/product' element={<Product />} />
+            <Route path='/product/:productId' element={<Product />} />
             <Route element={<UserPrivateRoute />}>
               <Route path='/cart' element={<Cart />} />
             </Route>
