@@ -22,6 +22,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+
 
 const ListPage = () => {
 
@@ -81,7 +91,7 @@ useEffect(() => {
 }, [data]);
 
   return (
-    <div className='flex flex-col w-full'>
+    <div className='flex flex-col items-center w-full'>
       <div className='w-full h-14 flex items-center pl-6'>
         <h1 className='text-xl font-semibold'><span className='text-muted-foreground'>Search results for </span>"Laptop"</h1>
       </div>
@@ -89,7 +99,7 @@ useEffect(() => {
         <SideBar />
         <div className='h-full w-full grid grid-cols-3 gap-6 p-4 pt-0'>
           {data.map(product => (
-            <Card key={product.productId} className="h-[62vh] flex flex-col">
+            <Card key={product.productId} className="h-[62vh] flex flex-col rounded-xs">
               <CardContent className='pb-2'>
                 <img 
                   src={product.imageUrl} 
@@ -115,8 +125,31 @@ useEffect(() => {
               <Button variant="secondary" className='border border-2 mb-2 w-3/4 mx-auto h-8' onClick={() => goToProductDetails(product.productId)}>View item</Button>
             </Card>
           ))}
+          
         </div>
       </div>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">2</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">3</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
     
   )
