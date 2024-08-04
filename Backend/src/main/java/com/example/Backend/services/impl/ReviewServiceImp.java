@@ -32,8 +32,8 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public void DeleteReview(ReviewDto review) {
-
+    public void DeleteReview(Long reviewID) {
+        this.reviewRepo.deleteById(Math.toIntExact(reviewID));
     }
 }
 
