@@ -1,14 +1,21 @@
 package com.example.Backend.services;
 
-import com.example.Backend.entity.Cart;
-import com.example.Backend.entity.UserOrder;
+import com.example.Backend.dto.AddressDto;
+import com.example.Backend.dto.OrderDetailsDto;
+import com.example.Backend.dto.OrderDto;
 
-import java.util.Optional;
+import java.util.List;
 
 
 public interface OrderService {
 
-    UserOrder createOrder(int userId, Cart cart);
+    Integer createOrder(int userId);
 
-    Optional<UserOrder> getOrder(int id);
+    List<OrderDto> getOrder(int id);
+
+    String updateAddressForOrder(AddressDto addressDto, int orderId);
+
+    AddressDto getAddressForOrderId(int orderId);
+
+    OrderDetailsDto  getOrdersByTrackingId(String orderId);
 }

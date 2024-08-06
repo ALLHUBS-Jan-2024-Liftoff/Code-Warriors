@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   Card,
@@ -30,11 +31,16 @@ import apiClient from '@/services/apiClient';
 import { useContext } from 'react';
 import { CartContext } from '@/components/shared/CartContext';
 
+
 const Cart = () => {
 
   const { products, setProducts, cartTotal, setCartTotal, fetchProducts } = useContext(CartContext);
+
+  const navigate = useNavigate();
+  
   
   const [totalPrice, setTotalPrice] = useState(0);
+  
 
   // useEffect to calculate the total price whenever the products state changes
   useEffect(() => {
@@ -47,7 +53,23 @@ const Cart = () => {
     setTotalPrice(calculateTotalPrice());
   }, [products]);
   
-  const [updateDone, setUpdateDone] = useState(false);   
+  const [updateDone, setUpdateDone] = useState(false);  
+  
+  const handleGoToOrderSummary = async() =>{
+    try {
+      const [response1] = await Promise.all([
+        apiClient.post('orders/create'),  // Replace with your first API URL
+      ]);
+      const orderId = response1.data;      
+      navigate(`/orderSummary/${orderId}`);
+               
+    } catch (error) {
+      console.error('Error fetching the products:', error);
+    }
+  };
+
+ 
+
   
   const handleMinus = (productId) => {
     
@@ -71,13 +93,14 @@ const Cart = () => {
     updateQuantity(updatedItem.productId,updatedItem.quantity );
 
   };
-
+  
   const deleteProduct = async (productId) => {
-    try {        
+    try { 
         const [response1, response2] = await Promise.all([
         apiClient.delete(`cart/delete/${productId}`), 
         apiClient.get('cart/total'),  
-      ]);     
+      ]);  
+      
       setProducts((prevProducts) => prevProducts.filter(product => product.productId !== productId));
       setCartTotal(response2.data);     
       setUpdateDone(prev => !prev);
@@ -190,7 +213,7 @@ const Cart = () => {
                   <p className="flex items-center justify-center mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                   <div className="mt-6">
                     <a
-                      href="#" 
+                      href="#" onClick = {handleGoToOrderSummary}
                       className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                     >
                       Proceed To Checkout
