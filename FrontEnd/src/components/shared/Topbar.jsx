@@ -70,7 +70,7 @@ const Topbar = () => {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setDropdownVisible(false);
-    }, 200); // Adjust the delay as needed
+    }, 100); // Adjust the delay as needed
   };
 
   useEffect(() => {
@@ -133,10 +133,10 @@ const Topbar = () => {
   
 
   return (
-    <div className="fixed z-50 top-0 bg-background flex items-center justify-center w-full h-12 px-6 bg-secondary">
+    <div className="fixed z-50 top-0 bg-background flex items-center justify-center w-full h-14 px-6 bg-secondary">
       <div className="flex items-center gap-8">
         <Store onClick={handleGoToHero} className="h-4 w-4 hover:text-foreground hover:scale-102 transition-transform" />
-        <ul className="flex gap-6 text-sm">
+        <ul className="flex gap-6 text-sm font-semibold">
           <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(laptopItems)}>Laptops</li>
           <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(phoneItems)}>Phones</li>
           <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(cameraItems)}>Cameras</li>

@@ -1,12 +1,53 @@
 import { Button } from '@/components/ui/button'
-import React from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from "@/components/ui/breadcrumb"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { NavLink } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import axios from 'axios';
+import AuthContext from '../../context/AuthContext';
+import { CartContext } from "@/components/shared/CartContext"
+import { useNavigate } from 'react-router-dom';
 
 const ProductDetails = () => {
+
+const { productId } = useParams()
+
+const [product, setProduct] = useState({})
+
+useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/product/${productId}`);
+        setProduct(response.data);
+        console.log(response.data)
+      } catch (error) {
+        console.error('Error fetching the products:', error);
+      }
+    };
+
+    fetchProduct();
+  }, []);
+
+  
+let { user } = useContext(AuthContext)
+
+const { addToCart } = useContext(CartContext);
+
+const navigate = useNavigate();
+
+function handleAddToCart(product) {
+    if(user) {
+      addToCart(product, 1)
+      navigate('/cart')
+    } else {
+      let quantity = 1
+      localStorage.setItem('pendingCartItem', JSON.stringify({ product, quantity }));
+      navigate('/user_auth')
+    }
+  }
 
 const products = [
     {
@@ -63,25 +104,29 @@ const products = [
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                    <BreadcrumbLink className='text-primary' href="/components">Components</BreadcrumbLink>
+                    <BreadcrumbLink className='text-primary' href="/results">Results</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                    <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+                    <BreadcrumbPage>{product?.productName}</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
+            {product.imageUrl ?
             <img 
-                src='https://i5.walmartimages.com/asr/e5577ed9-bbb3-405b-8ae2-7adab5ecd608_1.8554861ff8b294cc2b1038b59c950879.jpeg' 
+                src={product.imageUrl} 
                 alt={'No picture'} 
                 className="w-full h-96 object-contain my-4"
-            />
+            /> :
+            <div className="w-full h-96 object-contain my-4"></div>
+            }
         </div>
         
         <div className='col-span-1 h-full flex flex-col pt-32'>
-            <p className='text-primary'>Apple</p>
-            <h1 className='text-2xl font-bold pb-4'>Apple - MacBook Pro 14" Laptop - M3 Pro chip - 18GB Memory - 14-core GPU - 512GB SSD - Space Black</h1>
-            <Button><FontAwesomeIcon className='mr-1' icon={faCartShopping} />Add to Cart</Button>
+            <p className='text-primary'></p>
+            <h1 className='text-2xl font-bold pb-2'>{product?.productName}</h1>
+            <p className='pb-2 text-base font-semibold'>{product?.description}</p>
+            <Button className='w-2/3 mt-12 flex items-center justify-center p-8 rounded-full text-lg' onClick = {() => handleAddToCart(product)} ><FontAwesomeIcon className='mr-2' icon={faCartShopping} />Add to Cart</Button>
         </div>
         <div className='col-span-3 w-full'>
             <h1 className='text-2xl font-semibold'>Recommended</h1>
