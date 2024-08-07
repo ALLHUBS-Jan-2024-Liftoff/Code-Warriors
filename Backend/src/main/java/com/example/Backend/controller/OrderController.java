@@ -31,7 +31,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<List<OrderDto>> getOrder(@PathVariable("id") int id) {
-        System.out.println("id:::"+id);
+
 
         return new ResponseEntity<>(orderService.getOrder(id), HttpStatus.OK);
     }

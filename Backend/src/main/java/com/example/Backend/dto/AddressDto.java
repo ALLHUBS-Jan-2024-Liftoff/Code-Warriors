@@ -9,14 +9,10 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class AddressDto {
 
-    private Long id;
+    private AddressDetailsDto shippingAddress;
+    private AddressDetailsDto billingAddress;
 
-    private String fullName;
-    private String addressLine;
-    private String city;
-    private String state;
-    private String zipCode;
-    private String country;
 }

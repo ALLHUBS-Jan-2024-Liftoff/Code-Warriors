@@ -37,7 +37,7 @@ const OrderConfirmation = () => {
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-lg sm:p-20">
           <div className="max-w-md mx-auto">
             <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-900">Order Confirmed! Tracking Id: {orderTrackingId}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Order Confirmed! Your Tracking Id: {orderTrackingId}</h1>
               <p className="mt-2 text-gray-600">Thank you for your purchase!! Your order has been successfully placed.</p>
               
               <div className="mt-6">

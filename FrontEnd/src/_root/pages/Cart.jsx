@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import {
   Card,
   CardContent,
@@ -26,7 +25,6 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import apiClient from '@/services/apiClient';
 import { useContext } from 'react';
 import { CartContext } from '@/components/shared/CartContext';
@@ -58,7 +56,8 @@ const Cart = () => {
   const handleGoToOrderSummary = async() =>{
     try {
       const [response1] = await Promise.all([
-        apiClient.post('orders/create'),  // Replace with your first API URL
+        apiClient.post('orders/create'), 
+        apiClient.delete('cart/clear')
       ]);
       const orderId = response1.data;      
       navigate(`/orderSummary/${orderId}`);
@@ -117,7 +116,7 @@ const Cart = () => {
             const [response1, response2] = await Promise.all([
             apiClient.put(`cart/updateQuantity/${productId}`, { quantity: quantityToUpdate }), 
             apiClient.get('cart/total'), 
-          ]);        
+          ]);       
           setCartTotal(response2.data);
           setUpdateDone(prev => !prev);
               

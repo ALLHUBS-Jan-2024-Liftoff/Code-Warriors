@@ -18,7 +18,7 @@ const OrderDetails = () => {
         const [response1] = await Promise.all([
         apiClient.get(`orders/track/${orderTrackingId}`),        
       ]); 
-      setShippingAddress(response1.data.addressDto);
+      setShippingAddress(response1.data.addressDto.shippingAddress);
       setOrderDetails(response1.data.orderDto);
       const formattedDate = format(new Date(response1.data.orderDate), 'MM/dd/yyyy');
       setOrderDate(formattedDate);
@@ -77,9 +77,8 @@ const OrderDetails = () => {
               {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zipCode}
             </div>
             <div>{shippingAddress.country}</div>
+          </div>            
           </div>
-        </div>
-        
         <div className="mt-4">
           <Link to="/" className="text-blue-200 hover:text-blue-100 underline">
             Back to Home

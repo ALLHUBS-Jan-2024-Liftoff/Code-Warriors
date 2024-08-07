@@ -1,5 +1,6 @@
 package com.example.Backend.services.impl;
 
+import com.example.Backend.dto.AddressDetailsDto;
 import com.example.Backend.dto.AddressDto;
 import com.example.Backend.dto.OrderDetailsDto;
 import com.example.Backend.dto.OrderDto;
@@ -42,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
         if(cart != null){
             List<OrderItem> orderItemsList = new ArrayList<>();
             for (CartItem cartItem : cart.getCartItems()) {
+
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrder(order);
                 orderItem.setProduct(cartItem.getCartProduct());
@@ -68,18 +70,17 @@ public class OrderServiceImpl implements OrderService {
 
     public static String generateOrderId() {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
-        return "ORD-" + uuid.substring(0, 6); // e.g., ORD-1A2B3C
+        return "ORD" + uuid.substring(0, 6); // e.g., ORD1A2B3C
     }
 
 
     public static List<OrderDto> getOrderDtoList( UserOrder order){
 
         List<OrderDto> orderDtoList = new ArrayList<>();
-        System.out.println("order items::::"+order.getOrderItems().size());
 
         for (OrderItem orderItem: order.getOrderItems()){
             OrderDto orderDto = new OrderDto();
-           orderDto.setOrderId(order.getOrderId());
+            orderDto.setOrderId(order.getOrderId());
             orderDto.setPrice(orderItem.getPrice());
             orderDto.setQuantity(orderItem.getQuantity());
             orderDto.setProductName(orderItem.getProduct().getProductName());
@@ -96,20 +97,17 @@ public class OrderServiceImpl implements OrderService {
 
         Optional<UserOrder> userOrder = orderRepo.findById(orderId);
         UserOrder order = userOrder.get();
-        OrderAddress orderAddress = new OrderAddress();
-        orderAddress.setFullName(addressDto.getFullName());
-        orderAddress.setAddressLine(addressDto.getAddressLine());
-        orderAddress.setCity(addressDto.getCity());
-        orderAddress.setState(addressDto.getState());
-        orderAddress.setZipCode(addressDto.getZipCode());
-        orderAddress.setCountry(addressDto.getCountry());
 
-        order.setOrderAddress(orderAddress);
+        order.setShippingAddress(mapToEntity(addressDto.getShippingAddress()));
+        order.setBillingAddress(mapToEntity(addressDto.getBillingAddress()));
+
         order.setOrderId(generateOrderId());
+
         order.setOrderStatus(OrderStatus.NEW);
+
         order.setOrderDate(new Date());
 
-        orderRepo.save(order);
+        orderRepo.saveAndFlush(order);
 
         return "Successfully Updated";
 
@@ -120,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
 
         Optional<UserOrder> userOrder = orderRepo.findById(orderId);
         UserOrder order = userOrder.get();
-        int orderAddressId = order.getOrderAddress().getId();
+        int orderAddressId = order.getShippingAddress().getId();
 
         Optional<OrderAddress> address = addressRepo.findById(orderAddressId);
         OrderAddress orderAddress = address.get();
@@ -129,35 +127,54 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    public static AddressDto getAddressDto(UserOrder order){
+    public  AddressDto getAddressDto(UserOrder order){
 
         AddressDto addressDto = new AddressDto();
-        OrderAddress orderAddress = order.getOrderAddress();
-        addressDto.setFullName(orderAddress.getFullName());
-        addressDto.setAddressLine(orderAddress.getAddressLine());
-        addressDto.setState(orderAddress.getState());
-        addressDto.setCity(orderAddress.getCity());
-        addressDto.setZipCode(orderAddress.getZipCode());
-        addressDto.setCountry(orderAddress.getCountry());
+        addressDto.setShippingAddress(addressEntityToDto(order.getShippingAddress()));
+        addressDto.setBillingAddress(addressEntityToDto(order.getBillingAddress()));
         return addressDto;
     }
 
     @Override
     public OrderDetailsDto getOrdersByTrackingId(String orderId){
 
-        System.out.println(orderId);
-
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 
         UserOrder order = orderRepo.findOrdersByOrderId(orderId);
 
-        List<OrderDto> orderDtoList = getOrderDtoList(order);
-        AddressDto addressDto = getAddressDto(order);
-        orderDetailsDto.setAddressDto(addressDto);
-        orderDetailsDto.setOrderDto(orderDtoList);
-        orderDetailsDto.setOrderDate(order.getOrderDate());
+        if(order != null){
 
+            List<OrderDto> orderDtoList = getOrderDtoList(order);
+            AddressDto addressDto = getAddressDto(order);
+            orderDetailsDto.setAddressDto(addressDto);
+            orderDetailsDto.setOrderDto(orderDtoList);
+            orderDetailsDto.setOrderDate(order.getOrderDate());
+
+        }
         return orderDetailsDto;
+    }
+
+    private OrderAddress mapToEntity(AddressDetailsDto addressDetailsDto) {
+
+        OrderAddress address = new OrderAddress();
+        address.setFullName(addressDetailsDto.getFullName());
+        address.setAddressLine(addressDetailsDto.getAddressLine());
+        address.setCity(addressDetailsDto.getCity());
+        address.setState(addressDetailsDto.getState());
+        address.setZipCode(addressDetailsDto.getZipCode());
+        address.setCountry(addressDetailsDto.getCountry());
+        return address;
+    }
+
+    private AddressDetailsDto addressEntityToDto(OrderAddress address) {
+        AddressDetailsDto addressDto = new AddressDetailsDto();
+        addressDto.setFullName(address.getFullName());
+        addressDto.setAddressLine(address.getAddressLine());
+        addressDto.setCity(address.getCity());
+        addressDto.setState(address.getState());
+        addressDto.setZipCode(address.getZipCode());
+        addressDto.setCountry(address.getCountry());
+        return addressDto;
     }
 
 }

@@ -36,7 +36,10 @@ public class UserOrder {
     private Date deliveryDate;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private OrderAddress orderAddress;
+    private OrderAddress shippingAddress;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private OrderAddress billingAddress;
 
 
 }

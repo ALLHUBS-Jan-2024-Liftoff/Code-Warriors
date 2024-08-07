@@ -16,65 +16,53 @@ const OrderSummary = () => {
   const navigate = useNavigate();
 
   const [total, setTotal] = useState([]);
-
-   const [shippingAddress, setShippingAddress] = useState({
-    name: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
-    country: '',
-  });
-
-  const [billingAddress, setBillingAddress] = useState({
-    name: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
-  });
-
-  const [isSameAddress, setIsSameAddress] = useState(false);
   
-
+  const [isSameAddress, setIsSameAddress] = useState(false);  
+  
   const [paymentOption, setPaymentOption] = useState('creditCard');
 
-  const handleShippingAddressChange = (e) => {
+  const [addressDto, setAddressDto] = useState({
+    shippingAddress: {
+      fullName: '',
+      addressLine: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: ''
+    },
+    billingAddress: {
+      fullName: '',
+      addressLine: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: ''
+    }
+  });
+
+  const handleInputChange = (e, addressType) => {
     const { name, value } = e.target;
-    setShippingAddress({
-      ...shippingAddress,
-      [name]: value,
-    });
+    setAddressDto(prevState => ({
+      ...prevState,
+      [addressType]: {
+        ...prevState[addressType],
+        [name]: value
+      }
+    }));
   };
 
-  const handleBillingAddressChange = (e) => {
-    const { name, value } = e.target;
-    setBillingAddress({
-      ...billingAddress,
-      [name]: value,
-    });
-  };
 
-  const handleSubmitOrder = (shippingAddress)=>{
-    const addressDto = {
-    fullName: shippingAddress.name,
-    addressLine:shippingAddress.address,
-    city:shippingAddress.city,
-    state:shippingAddress.state,
-    zipCode:shippingAddress.zip,
-    country:shippingAddress.country
-    };
-    updateAddressWithOrderId(addressDto);
-   
-  };
-
+ 
   const updateAddressWithOrderId = async (addressDto) => {
   
     try {
      
-      const response = await apiClient.put(`/orders/updateAddress/${orderId}`, addressDto)
-      navigate(`/order-confirmation/${orderId}`);
-      
+      const response = await apiClient.put(`/orders/updateAddress/${orderId}`, addressDto,{
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      navigate(`/order-confirmation/${orderId}`);      
           
     } catch (error) {
       console.error('Error updating address:', error);
@@ -88,19 +76,21 @@ const OrderSummary = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission
+
+    console.log("address dto in react:::::"+addressDto);
+    updateAddressWithOrderId(addressDto); 
     
-    console.log('Shipping Address:', shippingAddress);
-    console.log('Payment Option:', paymentOption);
   };
-  const handleInputChange = (e, setAddress) => {
-    const { name, value } = e.target;
-    setAddress(prevState => ({ ...prevState, [name]: value }));
-  };
+
   
-  const handleCheckboxChange = () => {
-    setIsSameAddress(prevState => !prevState);
-    if (!isSameAddress) {
-      setBillingAddress({ ...shippingAddress });
+  const handleCheckboxChange = (e) => {
+    const checked = e.target.checked;
+    setIsSameAddress(checked);
+    if (checked) {      
+      setAddressDto(prevState => ({
+        ...prevState,
+        billingAddress: { ...prevState.shippingAddress }
+      }));
     }
   };
   
@@ -174,18 +164,18 @@ useEffect(() => {
         <h3 className="text-xl font-bold mb-2">Shipping Address</h3>
         <input
           type="text"
-          name="name"
-          value={shippingAddress.name}
-          onChange={handleShippingAddressChange}
+          name="fullName"
+          value={addressDto.shippingAddress.fullName}
+          onChange={(e) => handleInputChange(e, 'shippingAddress')}
           placeholder="Name"
           className="w-full p-2 border border-gray-300 rounded mb-4"
           required
         />
         <input
           type="text"
-          name="address"
-          value={shippingAddress.address}
-          onChange={handleShippingAddressChange}
+          name="addressLine"
+          value={addressDto.shippingAddress.addressLine}
+          onChange={(e) => handleInputChange(e, 'shippingAddress')}
           placeholder="Address"
           className="w-full p-2 border border-gray-300 rounded mb-4"
           required
@@ -193,8 +183,8 @@ useEffect(() => {
         <input
           type="text"
           name="city"
-          value={shippingAddress.city}
-          onChange={handleShippingAddressChange}
+          value={addressDto.shippingAddress.city}
+          onChange={(e) => handleInputChange(e, 'shippingAddress')}
           placeholder="City"
           className="w-full p-2 border border-gray-300 rounded mb-4"
           required
@@ -202,17 +192,17 @@ useEffect(() => {
         <input
           type="text"
           name="state"
-          value={shippingAddress.state}
-          onChange={handleShippingAddressChange}
+          value={addressDto.shippingAddress.state}
+          onChange={(e) => handleInputChange(e, 'shippingAddress')}
           placeholder="State"
           className="w-full p-2 border border-gray-300 rounded mb-4"
           required
         />
         <input
           type="text"
-          name="zip"
-          value={shippingAddress.zip}
-          onChange={handleShippingAddressChange}
+          name="zipCode"
+          value={addressDto.shippingAddress.zipCode}
+          onChange={(e) => handleInputChange(e, 'shippingAddress')}
           placeholder="ZIP Code"
           className="w-full p-2 border border-gray-300 rounded mb-4"
           required
@@ -220,8 +210,8 @@ useEffect(() => {
         <input
           type="text"
           name="country"
-          value={shippingAddress.country}
-          onChange={handleShippingAddressChange}
+          value={addressDto.shippingAddress.country}
+          onChange={(e) => handleInputChange(e, 'shippingAddress')}
           placeholder="Country"
           className="w-full p-2 border border-gray-300 rounded mb-4"
           required
@@ -240,44 +230,54 @@ useEffect(() => {
   <>
     <input
       type="text"
-      name="name"
-      value={billingAddress.name}
-      onChange={handleBillingAddressChange}
+      name="fullName"
+      value={addressDto.billingAddress.fullName}
+      onChange={(e) => handleInputChange(e, 'billingAddress')}
       placeholder="Name"
       className="w-full p-2 border border-gray-300 rounded mb-4"
     />
     <input
       type="text"
-      name="address"
-      value={billingAddress.address}
-      onChange={handleBillingAddressChange}
+      name="addressLine"
+      value={addressDto.billingAddress.addressLine}
+      onChange={(e) => handleInputChange(e, 'billingAddress')}
       placeholder="Address"
       className="w-full p-2 border border-gray-300 rounded mb-4"
     />
     <input
       type="text"
       name="city"
-      value={billingAddress.city}
-      onChange={handleBillingAddressChange}
+      value={addressDto.billingAddress.city}
+      onChange={(e) => handleInputChange(e, 'billingAddress')}
       placeholder="City"
       className="w-full p-2 border border-gray-300 rounded mb-4"
     />
     <input
       type="text"
       name="state"
-      value={billingAddress.state}
-      onChange={handleBillingAddressChange}
+      value={addressDto.billingAddress.state}
+      onChange={(e) => handleInputChange(e, 'billingAddress')}
       placeholder="State"
       className="w-full p-2 border border-gray-300 rounded mb-4"
     />
     <input
       type="text"
-      name="zip"
-      value={billingAddress.zip}
-      onChange={handleBillingAddressChange}
+      name="zipCode"
+      value={addressDto.billingAddress.zipCode}
+      onChange={(e) => handleInputChange(e, 'billingAddress')}
       placeholder="Zip Code"
       className="w-full p-2 border border-gray-300 rounded mb-4"
     />
+
+    <input
+          type="text"
+          name="country"
+          value={addressDto.billingAddress.country}
+          onChange={(e) => handleInputChange(e, 'billingAddress')}
+          placeholder="Country"
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+          
+     />
   </>
 )}
 
@@ -314,7 +314,7 @@ useEffect(() => {
           </label>
         </div>
         <button
-          type="submit" onClick={()=>handleSubmitOrder(shippingAddress)}
+          type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-700"
         >
           Submit Order

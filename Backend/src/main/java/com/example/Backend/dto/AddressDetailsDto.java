@@ -1,19 +1,13 @@
-package com.example.Backend.entity;
+package com.example.Backend.dto;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity
 @ToString
 @Data
 @NoArgsConstructor
-public class OrderAddress {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class AddressDetailsDto {
 
     private String fullName;
     private String addressLine;
@@ -21,5 +15,4 @@ public class OrderAddress {
     private String state;
     private String zipCode;
     private String country;
-
 }
