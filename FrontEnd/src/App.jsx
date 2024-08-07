@@ -16,6 +16,9 @@ import UserAuthPage from './_auth/UserAuthPage';
 import AdminAuthPage from './_auth/AdminAuthPage';
 import AdminPrivateRoute from './utils/AdminPrivateRoute';
 import UserPrivateRoute from './utils/UserPrivateRoute';
+import OrderSummary from './_root/pages/OrderSummary';
+import OrderConfirmation from './_root/pages/OrderConfirmation';
+import OrderDetails from './_root/pages/OrderDetails';
 
 
 
@@ -29,6 +32,9 @@ function App() {
             <Route path='/product/:productId' element={<Product />} />
             <Route element={<UserPrivateRoute />}>
               <Route path='/cart' element={<Cart />} />
+              <Route path='/orderSummary/:orderId' element={<OrderSummary/>} />
+              <Route path='/order-confirmation/:orderId' element={<OrderConfirmation/>} />
+              <Route path='/order-details/:orderTrackingId' element={<OrderDetails/>} />
             </Route>
           </Route>
           <Route element={<AdminPrivateRoute />}>

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,16 +23,23 @@ public class UserOrder {
     @ManyToOne
     private User user;
 
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     private Double total;
 
     @OneToMany(mappedBy ="order",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
-    private LocalDateTime orderDate;
+    private Date orderDate;
 
-    private LocalDateTime deliveryDate;
+    private Date deliveryDate;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private OrderAddress shippingAddress;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private OrderAddress billingAddress;
 
 
 }

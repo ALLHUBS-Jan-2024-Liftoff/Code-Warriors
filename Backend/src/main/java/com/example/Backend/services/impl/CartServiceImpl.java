@@ -175,7 +175,9 @@ public class CartServiceImpl implements CartService {
 
         }else{
             /* When New user enters or Existing user with cart id and no CartItems! */
-            userCart = new Cart();
+            if(userCart == null){
+                userCart = new Cart();
+            }
             userCart.setCartTotal(itemPrice);
             cartItems.add(currentCartItem);
         }

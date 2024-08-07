@@ -51,7 +51,7 @@ const quantityOptions = Array.from({ length: 10 }, (_, i) => i + 1);
 function handleAddToCart(product , quantity) {
   if(user) {
     addToCart(product, quantity)
-    navigate('/cart')
+    
   } else {
     localStorage.setItem('pendingCartItem', JSON.stringify({ product, quantity }));
     navigate('/user_auth')
