@@ -45,6 +45,7 @@ public class ProductServiceImpl implements ProductService {
                         dto.getPrice(),
                         dto.getQuantity(),
                         dto.getStatus(),
+                        dto.getCategory(),
                         dto.getImageUrl())).collect(Collectors.toList());
     }
 
@@ -80,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setPrice(productDto.getPrice());
         newProduct.setStatus(productDto.getStatus());
         newProduct.setImageUrl(productDto.getImageUrl());
+        newProduct.setCategory(productDto.getCategory());
         productRepo.save(newProduct);
 
 
@@ -92,6 +94,13 @@ public class ProductServiceImpl implements ProductService {
         this.productRepo.deleteById(productId);
     }
 
+    @Override
+    public List<ProductDto> searchProducts(String keyword) {
+        List<Product> searchResults = this.productRepo.searchProducts(keyword);
+        return searchResults.stream()
+                .map(product -> this.modelMapper.map(product, ProductDto.class))
+                .collect(Collectors.toList());
+    }
 
 
 }

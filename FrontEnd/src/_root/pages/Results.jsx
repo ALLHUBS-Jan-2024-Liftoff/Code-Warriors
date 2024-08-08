@@ -31,9 +31,12 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import { useParams } from 'react-router-dom'
 
 
 const ListPage = () => {
+
+const { searchTerm } = useParams();
 
 const navigate = useNavigate();
 
@@ -57,14 +60,17 @@ function handleAddToCart(product , quantity) {
     navigate('/user_auth')
   }
 }
-
-
 function fetchData() {
-  axios.get('http://localhost:8080/product/').then((response) => {
+  axios.post('http://localhost:8080/product/search', {keyword: searchTerm}).then((response) => {
     setData(response.data)
     console.log(response.data)
   })
 }
+
+useEffect(() => {
+  fetchData();
+}, [])
+
 
 const handleChange = (productId, event) => {
   setQuantities(prevQuantities => ({
@@ -93,7 +99,7 @@ useEffect(() => {
   return (
     <div className='flex flex-col items-center w-full'>
       <div className='w-full h-14 flex items-center pl-6'>
-        <h1 className='text-xl font-semibold'><span className='text-muted-foreground'>Search results for </span>"Laptop"</h1>
+        <h1 className='text-xl font-semibold'><span className='text-muted-foreground'>Search results for </span>"{searchTerm}"</h1>
       </div>
       <div className='flex w-full'>
         <SideBar />

@@ -130,6 +130,8 @@ const Topbar = () => {
     'Bluetooth Keyboards',
   ];
 
+  const searchItemsNull = []
+
   
 
   return (
@@ -144,7 +146,7 @@ const Topbar = () => {
           <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(headphoneItems)}>Headphones</li>
           <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(accessoryItems)}>Accessories</li>
         </ul>
-        <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102" />
+        <Search onMouseEnter={() => handleMouseEnter(searchItemsNull)} className="h-4 w-4 hover:scale-102" />
         <CartIcon handleGoToCart={handleGoToCart} className="h-4 w-4 hover:scale-102" />        
         <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
         {user &&
@@ -184,7 +186,7 @@ const Topbar = () => {
               transition={{ duration: 0.3 }}
             ></motion.div>
             <div onMouseLeave={handleMouseLeave}>
-              <NavDropdown menuItems={dropdownItems} isOpen={dropdownVisible}/>
+              <NavDropdown menuItems={dropdownItems} isOpen={dropdownVisible} setIsOpen={setDropdownItems}/>
             </div>
           </>
         )}

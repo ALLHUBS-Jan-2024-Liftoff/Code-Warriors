@@ -17,15 +17,13 @@ import AdminAuthPage from './_auth/AdminAuthPage';
 import AdminPrivateRoute from './utils/AdminPrivateRoute';
 import UserPrivateRoute from './utils/UserPrivateRoute';
 
-
-
 function App() {
 
   return (
         <Routes>
           <Route element={<RootLayout/>}>
             <Route index element={<Hero />} />
-            <Route path='/results' element={<Results />} />
+            <Route path='/results/:searchTerm' element={<Results />} />
             <Route path='/product/:productId' element={<Product />} />
             <Route element={<UserPrivateRoute />}>
               <Route path='/cart' element={<Cart />} />
