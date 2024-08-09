@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 import axios from 'axios';
 
+
 const ProductDetails = () => {
 
     const products = [
@@ -57,27 +58,33 @@ const ProductDetails = () => {
     ];
 
  
-   const [description, setDescription] = useState("")
+    const [description, setDescription] = useState('');
+    const [reviews, setReviews] = useState([''])
+    ;
 
-   const handleChange = (event) => {
-    setDescription(event.target.value);
-   };
-    function createReview() {
+    const handleChange = (event) => {
+        setDescription(event.target.value);
+    };
 
-            let payload = {
-                description: description,
-                raiting: 5,
-                user: {
-                    userId: 1,
-                },
-                product: {
-                    productId: 1
-                }
-            }
-            axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
-                console.log(response.data);
-        })
-      }
+    const createReview = () => {
+        let payload = {
+            description: description,
+            rating: 5,
+            user: {
+                userId: 1,
+            },
+            product: {
+                productId: 1,
+            },
+        };
+        axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
+            console.log(response.data);
+        });
+    };
+
+    const deleteReview = (reviewId) => {
+        setReviews(reviews.filter(review => review.id !== reviewId));
+    };
 
     return (
         <div className='w-full grid grid-cols-3 px-20'>
@@ -133,38 +140,33 @@ const ProductDetails = () => {
                 </div>
             </div>
 
-
-
             <div className='col-span-3 w-full h-96'>
                 <h1 className='text-2xl font-semibold'>Reviews</h1>
-                <Textarea placeholder="Type your message here."
-                value={description}
-                onChange={handleChange}/>
+                
+                <Textarea
+                    placeholder="Type your message here."
+                    value={description}
+                    onChange={handleChange}
+                />
                 <Button onClick={createReview}>Submit Review</Button>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Nochka</CardTitle>
-                    <CardDescription>Raiting 4/5</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p>This is an awesome product!</p>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Bee Cee</CardTitle>
-                    <CardDescription>Raiting 4/5</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p>Amazing!</p>
-                </CardContent>
-            </Card>
-
-
+                {reviews.map((review) => (
+                    <Card key={review.id}>
+                        <CardHeader>
+                            <CardTitle>{review.title}</CardTitle>
+                            <CardDescription>Rating {review.rating}/5</CardDescription>
+                            
+                        </CardHeader>
+                        <CardContent>
+                            <p>{review.content}</p>
+                        </CardContent>
+                        <CardFooter>
+                            <Button variant="destructive" onClick={() => deleteReview(review.id)}>Delete Review</Button>
+                        </CardFooter>
+                    </Card>
+                ))}
             </div>
-
         </div>
-    )
-}
+    );
+};
 
-export default ProductDetails
+export default ProductDetails;
