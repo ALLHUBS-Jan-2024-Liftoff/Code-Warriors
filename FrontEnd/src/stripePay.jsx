@@ -16,11 +16,19 @@ const CheckoutForm = () => {
     event.preventDefault();
     setProcessing(true);
 
-    const { error, paymentIntent } = await stripe.createPayment({
-      amount: 1000, // amount in cents
-      currency: 'usd',
-      payment_method: elements.getElement(CardElement),
-      confirm: true,
+    // Create payment intent on the backend
+    const paymentIntentResponse = await axios.post('/api/payments/create-payment-intent', {
+      amount: 1000,  
+      currency: 'usd'
+    });
+
+    const { clientSecret } = paymentIntentResponse.data;
+
+    // Confirm the payment on the frontend
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+      }
     });
 
     if (error) {

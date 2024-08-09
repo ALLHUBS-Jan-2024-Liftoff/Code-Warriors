@@ -18,13 +18,13 @@ public class PaymentService {
         chargeParams.put("amount", paymentRequest.getAmount());
         chargeParams.put("currency", paymentRequest.getCurrency());
         chargeParams.put("source", paymentRequest.getSource());
-
         return Charge.create(chargeParams);
     }
 
     public PaymentIntent createPaymentIntent(PaymentRequest paymentRequest) throws StripeException {
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
+
                         .setAmount(paymentRequest.getAmount())
                         .setCurrency(paymentRequest.getCurrency())
                         .addPaymentMethodType("card")
