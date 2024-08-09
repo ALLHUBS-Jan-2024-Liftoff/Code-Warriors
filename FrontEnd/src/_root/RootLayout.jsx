@@ -7,9 +7,9 @@ import '@/index.css';
 const RootLayout = () => {
   
   return (
-    <div className='vh-[100%] flex flex-col'>
+    <div className='h-screen w-full flex flex-col'>
        <Topbar />        
-        <div className='flex w-full flex-1 my-16'>
+        <div className='flex w-full flex-1 min-h-0 overflow-y-auto py-14'>
           <Outlet />
         </div>
     </div>

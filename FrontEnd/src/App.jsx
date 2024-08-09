@@ -20,15 +20,13 @@ import OrderSummary from './_root/pages/OrderSummary';
 import OrderConfirmation from './_root/pages/OrderConfirmation';
 import OrderDetails from './_root/pages/OrderDetails';
 
-
-
 function App() {
 
   return (
         <Routes>
           <Route element={<RootLayout/>}>
             <Route index element={<Hero />} />
-            <Route path='/results' element={<Results />} />
+            <Route path='/results/:searchTerm' element={<Results />} />
             <Route path='/product/:productId' element={<Product />} />
             <Route element={<UserPrivateRoute />}>
               <Route path='/cart' element={<Cart />} />

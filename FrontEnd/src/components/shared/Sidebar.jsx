@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { NavLink } from 'react-router-dom'
 import { Separator } from '../ui/separator'
 import { Link } from 'react-router-dom';
@@ -32,9 +32,26 @@ import { Label } from '../ui/label';
 
 
 
-const SideBar = () => {
+const SideBar = ({ filters, setFilters }) => {
 
-  const items = ["Laptops", "Phones", "Cameras", "Computers", "Headphones", "Accessories"];
+  const items = ["Laptops", "Phones", "Cameras", "Computers", "Headphones", "TVs", "Accessories"];
+  const prices = ["$0 - $99", "$100 - $249", "$250 - $499", "$500 - $1000+"];
+  const brands = ["HP", "Apple", "Dell", "ASUS", "Sony", "Samsung"];
+  const ratings = ["5 Star", "4 Star", "3 Star", "2 Star", "1 Star"];
+
+ const handleCheckboxChange = (category, value) => {
+  setFilters((prevFilters) => {
+    // Ensure that the category is always an array
+    const updatedCategory = prevFilters[category] || [];
+
+    return {
+      ...prevFilters,
+      [category]: updatedCategory.includes(value)
+        ? updatedCategory.filter(item => item !== value)
+        : [...updatedCategory, value]
+    };
+  });
+};
 
   return (
     <aside className="w-64 flex-col border-r bg-background sm:flex">
@@ -44,17 +61,19 @@ const SideBar = () => {
           <AccordionItem value="item-1">
             <AccordionTrigger className='text-base pl-6'>Category</AccordionTrigger>
             <AccordionContent className='flex flex-col gap-2'>
-            {items.map((item, index) => (
-              <div key={index} className="flex items-center space-x-2 pl-6">
-                <Checkbox id={`item-${index}`} className="rounded-xs" />
-                <label
-                  htmlFor={`item-${index}`}
-                  className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {item}
-                </label>
-              </div>
-            ))}
+              {items.map((item, index) => (
+                <div key={index} className="flex items-center space-x-2 pl-6">
+                  <Checkbox
+                    id={`category-${index}`}
+                    className="rounded-xs"
+                    checked={filters.category.includes(item)}
+                    onCheckedChange={() => handleCheckboxChange("category", item)}
+                  />
+                  <label htmlFor={`category-${index}`} className="text-base font-medium">
+                    {item}
+                  </label>
+                </div>
+              ))}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -64,42 +83,19 @@ const SideBar = () => {
           <AccordionItem value="item-1">
             <AccordionTrigger className='text-base pl-6'>Shop by price</AccordionTrigger>
             <AccordionContent className='flex flex-col gap-2'>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                $0 - $25
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                $0 - $25
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                $25 - $50
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                $50 - $100
-              </label>
-            </div>
+              {prices.map((price, index) => (
+                <div key={index} className="flex items-center space-x-2 pl-6">
+                  <Checkbox
+                    id={`price-${index}`}
+                    className="rounded-xs"
+                    checked={filters.price.includes(price)}
+                    onCheckedChange={() => handleCheckboxChange("price", price)}
+                  />
+                  <label htmlFor={`price-${index}`} className="text-base font-medium">
+                    {price}
+                  </label>
+                </div>
+              ))}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -109,43 +105,23 @@ const SideBar = () => {
           <AccordionItem value="item-1">
             <AccordionTrigger className='text-base pl-6'>Brand</AccordionTrigger>
             <AccordionContent className='flex flex-col gap-2'>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                HP
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Apple
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Dell
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                ASUS
-              </label>
-            </div>
-            </AccordionContent>
+                {brands.map((brand, index) => (
+                  <div key={index} className="flex items-center space-x-2 pl-6">
+                    <Checkbox
+                      id={`brand-${index}`}
+                      checked={filters.brand?.includes(brand) || false}
+                      onCheckedChange={() => handleCheckboxChange('brand', brand)}
+                      className="rounded-xs"
+                    />
+                    <label
+                      htmlFor={`brand-${index}`}
+                      className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {brand}
+                    </label>
+                  </div>
+                ))}
+              </AccordionContent>
           </AccordionItem>
         </Accordion>
         </div>
@@ -154,52 +130,23 @@ const SideBar = () => {
           <AccordionItem value="item-1">
             <AccordionTrigger className='text-base pl-6'>Rating</AccordionTrigger>
             <AccordionContent className='flex flex-col gap-2'>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                5 Star
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                4 Star
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                3 Star
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                2 Star
-              </label>
-            </div>
-            <div className="flex items-center space-x-2 pl-6">
-              <Checkbox id="terms" className='rounded-xs'/>
-              <label
-                htmlFor="terms"
-                className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                1 Star
-              </label>
-            </div>
-            </AccordionContent>
+                {ratings.map((rating, index) => (
+                  <div key={index} className="flex items-center space-x-2 pl-6">
+                    <Checkbox
+                      id={`rating-${index}`}
+                      /* checked={filters.ratings?.includes(rating) || false}
+                      onCheckedChange={() => handleCheckboxChange('ratings', rating)} */
+                      className="rounded-xs"
+                    />
+                    <label
+                      htmlFor={`rating-${index}`}
+                      className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {rating}
+                    </label>
+                  </div>
+                ))}
+              </AccordionContent>
           </AccordionItem>
         </Accordion>
         </div>

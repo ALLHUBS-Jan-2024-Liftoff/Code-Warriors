@@ -33,5 +33,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 
+    private String category;
+
+    private String brand;
+
 
 }

@@ -39,15 +39,18 @@ public class ProductServiceImpl implements ProductService {
         List<Product> all = this.productRepo.findAll();
 
         return all.stream().map(
-                dto -> new ProductDto(dto.getProductId(),
+                dto -> new ProductDto(
+                        dto.getProductId(),
                         dto.getProductName(),
                         dto.getDescription(),
                         dto.getPrice(),
                         dto.getQuantity(),
                         dto.getStatus(),
-                        dto.getImageUrl())).collect(Collectors.toList());
+                        dto.getImageUrl(),
+                        dto.getCategory(),
+                        dto.getBrand() 
+                )).collect(Collectors.toList());
     }
-
 
     @Override
     public  ProductDto  getProductById(int productId) {
@@ -80,6 +83,8 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setPrice(productDto.getPrice());
         newProduct.setStatus(productDto.getStatus());
         newProduct.setImageUrl(productDto.getImageUrl());
+        newProduct.setCategory(productDto.getCategory());
+        newProduct.setBrand(productDto.getBrand());
         productRepo.save(newProduct);
 
 
@@ -92,6 +97,13 @@ public class ProductServiceImpl implements ProductService {
         this.productRepo.deleteById(productId);
     }
 
+    @Override
+    public List<ProductDto> searchProducts(String keyword) {
+        List<Product> searchResults = this.productRepo.searchProducts(keyword);
+        return searchResults.stream()
+                .map(product -> this.modelMapper.map(product, ProductDto.class))
+                .collect(Collectors.toList());
+    }
 
 
 }

@@ -53,7 +53,11 @@ const CreateProduct = () => {
         navigate('/admin/all_products');
     };
 
+    const categories = ["Laptops", "Phones", "Cameras", "Computers", "Headphones", "TVs", "Accessories"];
+
     const [productName, setProductName] = useState('');
+    const [brand, setBrand] = useState('');
+    const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('00.00');
     const [quantity, setQuantity] = useState('0');
@@ -63,6 +67,8 @@ const CreateProduct = () => {
     const handleCreateProduct = async () => {
         const formData = {
           productName,
+          brand,
+          category,
           description,
           price,
           quantity,
@@ -114,7 +120,7 @@ const CreateProduct = () => {
                 </CardDescription>
                 </CardHeader>
                 <CardContent>
-                <div className="grid gap-6">
+                <div className="grid gap-3">
                     <div className="grid gap-3">
                     <Label htmlFor="name">Name</Label>
                     <Input
@@ -126,12 +132,22 @@ const CreateProduct = () => {
                     />
                     </div>
                     <div className="grid gap-3">
+                    <Label htmlFor="name">Brand</Label>
+                    <Input
+                        id="name"
+                        type="text"
+                        value={brand}
+                        onChange={(e) => setBrand(e.target.value)}
+                        className="w-full"
+                    />
+                    </div>
+                    <div className="grid gap-3">
                     <Label htmlFor="description">Description</Label>
                     <Textarea
                         id="description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="min-h-32"
+                        className="min-h-24"
                     />
                     </div>
                 </div>
@@ -185,7 +201,7 @@ const CreateProduct = () => {
                 </Table>
                 </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-2">
+            <Card>
                 <CardHeader>
                 <CardTitle>Product Category</CardTitle>
                 </CardHeader>
@@ -193,29 +209,18 @@ const CreateProduct = () => {
                 <div className="grid gap-6 sm:grid-cols-3">
                     <div className="grid gap-3">
                     <Label htmlFor="category">Category</Label>
-                    <Select>
-                        <SelectTrigger
-                        id="category"
-                        aria-label="Select category"
-                        >
-                        <SelectValue placeholder="Select category" />
+                    <Select value={category} onValueChange={setCategory}>
+                        <SelectTrigger id="category" aria-label="Select category">
+                            <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
-                        <SelectItem value="clothing">Clothing</SelectItem>
-                        <SelectItem value="electronics">
-                            Electronics
-                        </SelectItem>
-                        <SelectItem value="accessories">
-                            Accessories
-                        </SelectItem>
+                            {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                                {cat}
+                            </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
-                    </div>
-                    <div className="grid gap-3">
-                    <Label htmlFor="createCategory">
-                        Create Category
-                    </Label>
-                    <Button id="createCategory">Create Category</Button>
                     </div>
                 </div>
                 </CardContent>
