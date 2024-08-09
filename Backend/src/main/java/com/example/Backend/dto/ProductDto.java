@@ -28,4 +28,6 @@ public class ProductDto {
     private String ImageUrl;
 
     private String category;
+
+    private String brand;
 }

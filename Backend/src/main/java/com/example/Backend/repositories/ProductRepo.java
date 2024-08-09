@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product,Integer> {
-    @Query(value = "SELECT * FROM product WHERE MATCH(product_name, description, category) AGAINST(:keyword)", nativeQuery = true)
+    @Query(value = "SELECT * FROM product WHERE MATCH(product_name, description, category, brand) AGAINST(:keyword)", nativeQuery = true)
     List<Product> searchProducts(@Param("keyword") String keyword);
 }

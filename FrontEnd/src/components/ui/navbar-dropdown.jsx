@@ -4,8 +4,17 @@ import { Search } from 'lucide-react';
 import { Input } from './input';
 import { Button } from './button';
 import { useNavigate } from 'react-router-dom';
+import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
 
 const NavDropdown = ({ isOpen, menuItems }) => {
+
+  const placeholders = [
+    'Apple - MacBook Pro 14" Laptop with M2 Pro Chip',
+    "Canon - EOS Rebel T7 DSLR Camera with 18-55mm",
+    "Logitech - Bluetooth Over-Ear Headphones",
+    "Sony - Alpha a6400 Mirrorless Camera",
+    "iPhone 15 Pro",
+  ];
 
   const navigate = useNavigate();
 
@@ -44,18 +53,13 @@ const NavDropdown = ({ isOpen, menuItems }) => {
       className="fixed top-12 left-0 h-[45vh] w-full bg-secondary z-20"
     >
       {menuItems.length === 0 ? (
-        <div className='h-full w-full mt-[2%] ml-[30%]'>
-          <div className='relative flex w-full'>
-          <form onSubmit={handleSearch} className='relative flex w-full'>
-            <Search className="absolute left-2.5 bottom-4 h-4 w-4 text-muted-foreground" />
-            <Input
-              value={searchTerm}
-              onChange={handleSearchChange}
-              type="search"
-              placeholder="Search..."
-              className="w-[400px] focus-visible:ring-0 focus-visible:ring-none focus-visible:ring-offset-0 rounded-lg bg-background text-xl font-semibold h-12 pl-8 md:w-[200px] lg:w-[40%]"
-            />
-          </form>
+        <div className='h-full w-full mt-[2%]'>
+          <div className='relative flex w-full justify-center'>
+          <PlaceholdersAndVanishInput
+            placeholders={placeholders}
+            onChange={handleSearchChange}
+            onSubmit={handleSearch}
+          />
           </div>
         </div>
         

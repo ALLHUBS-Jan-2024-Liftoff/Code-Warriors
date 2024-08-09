@@ -35,5 +35,7 @@ public class Product {
 
     private String category;
 
+    private String brand;
+
 
 }
