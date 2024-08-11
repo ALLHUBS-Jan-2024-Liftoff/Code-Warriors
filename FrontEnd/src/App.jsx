@@ -19,7 +19,10 @@ import UserPrivateRoute from './utils/UserPrivateRoute';
 import OrderSummary from './_root/pages/OrderSummary';
 import OrderConfirmation from './_root/pages/OrderConfirmation';
 import OrderDetails from './_root/pages/OrderDetails';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
+const stripePromise = loadStripe('pk_test_51PZlxZBrshT9nmy8PLGjy8kQ7fOFb2LsYSXIPT9wxenEK4uhenHxbFfhHQrnYg1F9dJLbv0AcsgdA7Ad3kHpo3R00043Fd4Pmn');
 
 
 function App() {
@@ -31,8 +34,10 @@ function App() {
             <Route path='/results' element={<Results />} />
             <Route path='/product/:productId' element={<Product />} />
             <Route element={<UserPrivateRoute />}>
-              <Route path='/cart' element={<Cart />} />
-              <Route path='/orderSummary/:orderId' element={<OrderSummary/>} />
+              <Route path='/cart' element={<Cart />} />    
+                       
+              <Route path='/orderSummary/:orderId' element={<OrderSummary/>}/>
+              
               <Route path='/order-confirmation/:orderId' element={<OrderConfirmation/>} />
               <Route path='/order-details/:orderTrackingId' element={<OrderDetails/>} />
             </Route>

@@ -131,7 +131,7 @@ const Cart = () => {
         <Tabs defaultValue="all">
         
         <TabsContent value="all">
-            <Card x-chunk="dashboard-06-chunk-0">
+            <Card className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%" x-chunk="dashboard-06-chunk-0">
             <CardHeader>
                 <CardTitle>CART SUMMARY</CardTitle>                
             </CardHeader>
@@ -140,11 +140,11 @@ const Cart = () => {
                 <TableHeader>
                     <TableRow>
                     
-                    <TableHead>S.No </TableHead>
-                    <TableHead>Product Name</TableHead>                   
-                    <TableHead>Price</TableHead>
-                    <TableHead className="hidden md:table-cell">Quantity</TableHead>
-                    <TableHead className="hidden md:table-cell">Sub Total</TableHead>
+                    <TableHead className="font-bold text-black">S.No </TableHead>
+                    <TableHead className="font-bold text-black">Product Name</TableHead>                   
+                    <TableHead className="font-bold text-black">Price</TableHead>
+                    <TableHead className="font-bold text-black hidden md:table-cell">Quantity</TableHead>
+                    <TableHead className="font-bold text-black hidden md:table-cell">Sub Total</TableHead>
                     
                     <TableHead>
                         <span className="sr-only">Actions</span>
@@ -185,7 +185,7 @@ const Cart = () => {
                           
                     </TableCell>
 
-                    <TableCell className="hidden md:table-cell">
+                    <TableCell className="font-medium hidden md:table-cell">
                     {item.quantity * item.price}
                     </TableCell>
 
@@ -209,7 +209,7 @@ const Cart = () => {
                   <div className="flex items-center justify-center font-medium text-gray-900" >
                     <p>Total : ${totalPrice}</p>                   
                   </div>
-                  <p className="flex items-center justify-center mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                  <p className="flex items-center justify-center mt-0.5 text-sm text-black-500">Shipping and taxes calculated at checkout.</p>
                   <div className="mt-6">
                     <a
                       href="#" onClick = {handleGoToOrderSummary}

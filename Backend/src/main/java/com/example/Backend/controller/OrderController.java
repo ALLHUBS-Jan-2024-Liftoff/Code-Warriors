@@ -1,11 +1,9 @@
 package com.example.Backend.controller;
 
-import com.example.Backend.dto.AddressDto;
-import com.example.Backend.dto.OrderDetailsDto;
-import com.example.Backend.dto.OrderDto;
-import com.example.Backend.dto.QuantityUpdateDto;
+import com.example.Backend.dto.*;
 import com.example.Backend.entity.Cart;
 import com.example.Backend.entity.OrderItem;
+import com.example.Backend.entity.OrderStatus;
 import com.example.Backend.entity.UserOrder;
 import com.example.Backend.services.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +30,6 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<List<OrderDto>> getOrder(@PathVariable("id") int id) {
 
-
         return new ResponseEntity<>(orderService.getOrder(id), HttpStatus.OK);
     }
 
@@ -52,6 +49,18 @@ public class OrderController {
 
 
         return new ResponseEntity<>(orderService.getOrdersByTrackingId(trackId), HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        return new ResponseEntity<>(orderService.getAllOrdersByAdmin(), HttpStatus.OK);
+    }
+
+
+    @PutMapping("/updateStatus/{orderId}")
+    public ResponseEntity<String> updateStatusForOrderId(HttpServletRequest request, @PathVariable("orderId") String orderId, @RequestBody AdminOrderDto adminOrderDto) {
+
+        return new ResponseEntity<>(orderService.updateStatusForOrderId(orderId, adminOrderDto), HttpStatus.OK);
     }
 
 

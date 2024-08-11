@@ -1,9 +1,6 @@
 package com.example.Backend.services.impl;
 
-import com.example.Backend.dto.AddressDetailsDto;
-import com.example.Backend.dto.AddressDto;
-import com.example.Backend.dto.OrderDetailsDto;
-import com.example.Backend.dto.OrderDto;
+import com.example.Backend.dto.*;
 import com.example.Backend.entity.*;
 import com.example.Backend.repositories.AddressRepo;
 import com.example.Backend.repositories.OrderRepo;
@@ -105,7 +102,12 @@ public class OrderServiceImpl implements OrderService {
 
         order.setOrderStatus(OrderStatus.NEW);
 
+        order.setWorkOrderDate(new Date());
+
         order.setOrderDate(new Date());
+        order.getUser().setUserEmail(addressDto.getContacts().getEmail());
+        order.getUser().setContact(addressDto.getContacts().getPhone());
+       // order.getUser().setAddress(String.valueOf(order.getBillingAddress()));
 
         orderRepo.saveAndFlush(order);
 
@@ -135,6 +137,8 @@ public class OrderServiceImpl implements OrderService {
         return addressDto;
     }
 
+
+
     @Override
     public OrderDetailsDto getOrdersByTrackingId(String orderId){
 
@@ -149,6 +153,11 @@ public class OrderServiceImpl implements OrderService {
             orderDetailsDto.setAddressDto(addressDto);
             orderDetailsDto.setOrderDto(orderDtoList);
             orderDetailsDto.setOrderDate(order.getOrderDate());
+            orderDetailsDto.setCustomerName(order.getUser().getUsername());
+            orderDetailsDto.setTotal(order.getTotal());
+            orderDetailsDto.setEmail(order.getUser().getUserEmail());
+            orderDetailsDto.setPhone(order.getUser().getContact());
+            orderDetailsDto.setStatus(order.getOrderStatus());
 
         }
         return orderDetailsDto;
@@ -175,6 +184,35 @@ public class OrderServiceImpl implements OrderService {
         addressDto.setZipCode(address.getZipCode());
         addressDto.setCountry(address.getCountry());
         return addressDto;
+    }
+
+    @Override
+    public List<OrderDto> getAllOrdersByAdmin(){
+
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        List<UserOrder> orderList = orderRepo.findAll();
+        for (UserOrder order : orderList){
+            OrderDto orderDto = new OrderDto();
+            orderDto.setOrderId(order.getOrderId());
+            orderDto.setOrderStatus(order.getOrderStatus());
+            orderDto.setTotal(order.getTotal());
+            orderDto.setCustomerName(order.getUser().getUsername());
+            orderDto.setOrderDate(order.getOrderDate());
+            orderDto.setWorkOrderDate(order.getWorkOrderDate());
+            orderDtoList.add(orderDto);
+        }
+
+        return orderDtoList;
+    }
+
+   //For Admin page
+    @Override
+   public String updateStatusForOrderId(String orderId, AdminOrderDto adminOrderDto){
+        UserOrder order = orderRepo.findOrdersByOrderId(orderId);
+        order.setOrderStatus(adminOrderDto.getOrderStatus());
+        order.setWorkOrderDate(adminOrderDto.getWorkOrderDate());
+        orderRepo.save(order);
+        return "Status updated successfully";
     }
 
 }
