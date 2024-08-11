@@ -26,4 +26,8 @@ public class ProductDto {
     private ProductStatus status;
 
     private String ImageUrl;
+
+    private String category;
+
+    private String brand;
 }

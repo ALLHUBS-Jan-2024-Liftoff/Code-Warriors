@@ -1,6 +1,7 @@
 package com.example.Backend.controller;
 
 import com.example.Backend.dto.ProductDto;
+import com.example.Backend.entity.SearchRequest;
 import com.example.Backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -63,5 +64,11 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable Integer productId){
         this.productService.deleteProduct(productId);
         return new ResponseEntity<String>("Product deleted",HttpStatusCode.valueOf(200));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<ProductDto>> searchProducts(@RequestBody SearchRequest searchRequest) {
+        List<ProductDto> searchResults = productService.searchProducts(searchRequest.getKeyword());
+        return ResponseEntity.ok(searchResults);
     }
 }

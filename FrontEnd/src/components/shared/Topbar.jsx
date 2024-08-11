@@ -130,6 +130,8 @@ const Topbar = () => {
     'Bluetooth Keyboards',
   ];
 
+  const searchItemsNull = []
+
   
 
   return (
@@ -137,14 +139,62 @@ const Topbar = () => {
       <div className="flex items-center gap-8">
         <Store onClick={handleGoToHero} className="h-4 w-4 hover:text-foreground hover:scale-102 transition-transform" />
         <ul className="flex gap-6 text-sm font-semibold">
-          <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(laptopItems)}>Laptops</li>
-          <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(phoneItems)}>Phones</li>
-          <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(cameraItems)}>Cameras</li>
-          <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(computerItems)}>Computers</li>
-          <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(headphoneItems)}>Headphones</li>
-          <li className="hover:scale-103" onMouseEnter={() => handleMouseEnter(accessoryItems)}>Accessories</li>
+          <li onClick={() => {
+              navigate('/results/all');
+              window.location.reload();
+            }}>
+            All
+          </li>
+
+          <li onClick={() => {
+              navigate('/results/laptops');
+              window.location.reload();
+            }} 
+            onMouseEnter={() => handleMouseEnter(laptopItems)}>
+            Laptops
+          </li>
+
+          <li onClick={() => {
+              navigate('/results/phones');
+              window.location.reload();
+            }} 
+            onMouseEnter={() => handleMouseEnter(phoneItems)}>
+            Phones
+          </li>
+
+          <li onClick={() => {
+              navigate('/results/cameras');
+              window.location.reload();
+            }} 
+            onMouseEnter={() => handleMouseEnter(cameraItems)}>
+            Cameras
+          </li>
+
+          <li onClick={() => {
+              navigate('/results/computers');
+              window.location.reload();
+            }} 
+            onMouseEnter={() => handleMouseEnter(computerItems)}>
+            Computers
+          </li>
+
+          <li onClick={() => {
+              navigate('/results/headphones');
+              window.location.reload();
+            }} 
+            onMouseEnter={() => handleMouseEnter(headphoneItems)}>
+            Headphones
+          </li>
+
+          <li onClick={() => {
+              navigate('/results/accessories');
+              window.location.reload();
+            }} 
+            onMouseEnter={() => handleMouseEnter(accessoryItems)}>
+            Accessories
+          </li>
         </ul>
-        <Search onClick={handleGoToResults} className="h-4 w-4 hover:scale-102" />
+        <Search onMouseEnter={() => handleMouseEnter(searchItemsNull)} className="h-4 w-4 hover:scale-102" />
         <CartIcon handleGoToCart={handleGoToCart} className="h-4 w-4 hover:scale-102" />        
         <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
         {user &&
@@ -184,7 +234,7 @@ const Topbar = () => {
               transition={{ duration: 0.3 }}
             ></motion.div>
             <div onMouseLeave={handleMouseLeave}>
-              <NavDropdown menuItems={dropdownItems} isOpen={dropdownVisible}/>
+              <NavDropdown menuItems={dropdownItems} isOpen={dropdownVisible} setIsOpen={setDropdownItems}/>
             </div>
           </>
         )}
