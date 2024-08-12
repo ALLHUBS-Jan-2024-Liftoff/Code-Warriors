@@ -15,62 +15,6 @@ import { useNavigate } from 'react-router-dom';
 
 const ProductDetails = () => {
 
-const [description, setDescription] = useState('');
-const [reviews, setReviews] = useState([]);
-    
-
-const handleChange = (event) => {
-    setDescription(event.target.value);
-};
-
-useEffect(() => {
-// ⬇ This calls my get request from the server
-    getReview();
-}, []);
-
-const createReview = () => {
-    let payload = {
-        description: description,
-        rating: 5,
-        user: {
-            userId: 1,
-        },
-        product: {
-            productId: 2,
-        },
-    };
-    axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
-        console.log(response.data);
-        window.location.reload();
-    })
-    .catch((error) => {
-        console.error('Error creating review:', error);
-    });
-};
- 
-const deleteReview = (reviewId) => {
-    axios.delete(`http://localhost:8080/api/review/delete?reviewID=${reviewId}`).then((response) => {
-            console.log(response.message);
-            window.location.reload();
-            // Update the state to remove the deleted review
-            //setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
-        })
-        .catch((error) => {
-            console.error(`Error deleting review with ID ${reviewId}:`, error);
-        });
-};
-
-function getReview() {
-    axios.get('http://localhost:8080/api/review/get?productID=2').then((response) => {
-        console.log(response.data)
-
-        setReviews(response.data);
-    })
-    .catch((error) => {
-        console.error(`Error getting reviews:`, error);
-    })
-}
-
 const { productId } = useParams()
 
 const [product, setProduct] = useState({})
@@ -106,6 +50,62 @@ function handleAddToCart(product) {
       navigate('/user_auth')
     }
   }
+
+const [description, setDescription] = useState('');
+const [reviews, setReviews] = useState([]);
+    
+
+const handleChange = (event) => {
+    setDescription(event.target.value);
+};
+
+useEffect(() => {
+// ⬇ This calls my get request from the server
+    getReview();
+}, []);
+
+const createReview = () => {
+    let payload = {
+        description: description,
+        rating: 5,
+        user: {
+            userId: user.userId,
+        },
+        product: {
+            productId: productId,
+        },
+    };
+    axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
+        console.log(response.data);
+        window.location.reload();
+    })
+    .catch((error) => {
+        console.error('Error creating review:', error);
+    });
+};
+ 
+const deleteReview = (reviewId) => {
+    axios.delete(`http://localhost:8080/api/review/delete?reviewID=${reviewId}`).then((response) => {
+            console.log(response.message);
+            window.location.reload();
+            // Update the state to remove the deleted review
+            //setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
+        })
+        .catch((error) => {
+            console.error(`Error deleting review with ID ${reviewId}:`, error);
+        });
+};
+
+function getReview() {
+    axios.get(`http://localhost:8080/api/review/get?productID=${productId}`).then((response) => {
+        console.log(response.data)
+
+        setReviews(response.data);
+    })
+    .catch((error) => {
+        console.error(`Error getting reviews:`, error);
+    })
+}
 
 const products = [
     {
@@ -174,9 +174,9 @@ const products = [
             <img 
                 src={product.imageUrl} 
                 alt={'No picture'} 
-                className="w-full h-96 object-contain my-4"
+                className="w-full h-72 object-contain my-4"
             /> :
-            <div className="w-full h-96 object-contain my-4"></div>
+            <div className="w-full h-72 object-contain my-4"></div>
             }
         </div>
         
@@ -218,7 +218,7 @@ const products = [
                 />
                 <Button onClick={createReview}>Submit Review</Button>
                 {reviews.map((review) => (
-                    <Card>
+                    <Card key={review.id}>
                         <CardHeader>
                             <CardTitle>{review.user?.userName}</CardTitle>
                             <CardDescription>Rating {review.rating}/5</CardDescription>
