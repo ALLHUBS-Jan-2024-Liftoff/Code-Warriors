@@ -86,11 +86,8 @@ const [products, setProducts] = useState([]);
         <div className="flex items-center">
             <TabsList>
             <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="active">Active</TabsTrigger>
-            <TabsTrigger value="draft">Draft</TabsTrigger>
-            <TabsTrigger value="archived" className="hidden sm:flex">
-                Archived
-            </TabsTrigger>
+            <TabsTrigger value="active">Available</TabsTrigger>
+            <TabsTrigger value="draft">Out of Stock</TabsTrigger>
             </TabsList>
             <div className="ml-auto flex items-center gap-2">
             <DropdownMenu>
@@ -114,12 +111,6 @@ const [products, setProducts] = useState([]);
                 </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-            <Button size="sm" variant="outline" className="h-8 gap-1">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Export
-                </span>
-            </Button>
             <Button onClick={handleAddProductClick} size="sm" className="h-8 gap-1">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">

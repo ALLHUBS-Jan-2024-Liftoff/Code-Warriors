@@ -33,11 +33,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 
+    private String category;
 
-    @OneToOne(mappedBy = "cartProduct")
-    private CartItem cartItem;
-
-
+    private String brand;
 
 
 }

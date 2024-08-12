@@ -56,7 +56,11 @@ const EditProduct = () => {
         navigate('/admin/all_products');
     };
 
+    const categories = ["Laptops", "Phones", "Cameras", "Computers", "Headphones", "TVs", "Accessories"];
+
     const [productName, setProductName] = useState('');
+    const [brand, setBrand] = useState('');
+    const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('00.00');
     const [quantity, setQuantity] = useState('0');
@@ -67,6 +71,8 @@ const EditProduct = () => {
         if (product) {
             setProductName(product.productName || '');
             setDescription(product.description || '');
+            setBrand(product.brand || '')
+            setCategory(product.category || '')
             setPrice(product.price || '00.00');
             setQuantity(product.quantity || '0');
             setStatus(product.status || 'AVAILABLE');
@@ -77,6 +83,8 @@ const EditProduct = () => {
     const handleEditProduct = async (productId) => {
         const formData = {
           productId,
+          brand,
+          category,
           productName,
           description,
           price,
@@ -129,7 +137,7 @@ const EditProduct = () => {
                 </CardDescription>
                 </CardHeader>
                 <CardContent>
-                <div className="grid gap-6">
+                <div className="grid gap-3">
                     <div className="grid gap-3">
                     <Label htmlFor="name">Name</Label>
                     <Input
@@ -141,12 +149,22 @@ const EditProduct = () => {
                     />
                     </div>
                     <div className="grid gap-3">
+                        <Label htmlFor="name">Brand</Label>
+                        <Input
+                            id="name"
+                            type="text"
+                            value={brand}
+                            onChange={(e) => setBrand(e.target.value)}
+                            className="w-full"
+                        />
+                    </div>
+                    <div className="grid gap-3">
                     <Label htmlFor="description">Description</Label>
                     <Textarea
                         id="description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="min-h-32"
+                        className="min-h-24"
                     />
                     </div>
                 </div>
@@ -206,29 +224,18 @@ const EditProduct = () => {
                 <div className="grid gap-6 sm:grid-cols-3">
                     <div className="grid gap-3">
                     <Label htmlFor="category">Category</Label>
-                    <Select>
-                        <SelectTrigger
-                        id="category"
-                        aria-label="Select category"
-                        >
-                        <SelectValue placeholder="Select category" />
+                    <Select value={category} onValueChange={setCategory}>
+                        <SelectTrigger id="category" aria-label="Select category">
+                            <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
-                        <SelectItem value="clothing">Clothing</SelectItem>
-                        <SelectItem value="electronics">
-                            Electronics
-                        </SelectItem>
-                        <SelectItem value="accessories">
-                            Accessories
-                        </SelectItem>
+                            {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                                {cat}
+                            </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
-                    </div>
-                    <div className="grid gap-3">
-                    <Label htmlFor="createCategory">
-                        Create Category
-                    </Label>
-                    <Button id="createCategory">Create Category</Button>
                     </div>
                 </div>
                 </CardContent>

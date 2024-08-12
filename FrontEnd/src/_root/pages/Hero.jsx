@@ -121,45 +121,41 @@ const Hero = () => {
   return (
     <div className="w-full h-full flex flex-col items-center">
         <div className="w-full flex flex-col gap-4">
-          <div className='h-[88vh]'>
-            <div className='w-full flex justify-center px-2 py-4'>
-                  <div className='w-[40%]'>
-                    <h1 className="text-6xl font-semibold whitespace-nowrap">
-                    Technology that is<FlipWords words={words} duration={2750} className='text-blue-500'/>
-                    </h1>
+          <div>
+            <div className='w-full flex flex-col items-center justify-center py-8'>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold whitespace-nowrap">
+              Technology that is
+              </h1>
+              <FlipWords words={words} duration={2750} className='mt-1 text-muted-foreground text-4xl md:text-5xl lg:text-6xl font-semibold'/>
+            </div>
+            <div className="flex flex-col lg:flex-row w-full">
+              <Card className="shadow-none border-none rounded-none relative w-full lg:w-1/2 h-[560px] lg:h-[550px] bg-[url('/eCommerce_images/ipad.jpg')] bg-cover bg-center">
+                <div className="absolute inset-0 flex flex-col justify-between p-4">
+                  <h1 className='text-3xl md:text-5xl font-semibold text-center pt-3'>iPad Pro</h1>
+                  <div className="flex justify-end">
+                    <Button className='mb-4 mr-4'>Shop</Button>
                   </div>
-              </div>
-              <div className='w-1/2 m-auto grid grid-cols-5 pb-4'>
-                {categories.map((category, index) => (
-                      index !== 5 ? (
-                        <div key={category.img}>
-                          <img 
-                              src={category.img}
-                              alt={'No picture'} 
-                              className="w-full h-20 object-contain my-4"
-                          />
-                          <p className='hover:underline font-semibold text-center'>{category.category}</p>
-                        </div>
-                          
-                      ) : null
-                  ))}
-              </div>
-              <div className='flex'>
-                <Card className="shadow-none border-none rounded-none relative w-full h-[450px] bg-[url('/eCommerce_images/ipad.jpg')] bg-cover bg-[left_0%_top_30%]">
-                    <h1 className='text-5xl font-semibold pt-3 text-center'>iPad Pro</h1>
-                    <Button className='absolute bottom-12 right-8'>Shop</Button>
-                </Card>
-                <Card className="border-none flex flex-col justify-end rounded-none relative w-full h-[450px] bg-[url('/eCommerce_images/sony_camera.jpg')] bg-cover bg-[left_0%_top_55%]">
-                    <h1 className='text-5xl text-background font-semibold pb-8 text-center'>Sony Alpha Collection</h1>
-                    <Button className='bg-background text-foreground absolute bottom-12 right-8 hover:text-background'>Shop</Button>
-                </Card>
-              </div>
+                </div>
+              </Card>
+              
+              <Card className="hidden lg:block border-none rounded-none relative w-1/2 h-[550px] bg-[url('/eCommerce_images/sony_camera.jpg')] bg-cover bg-center">
+                <div className="absolute inset-0 flex flex-col justify-between p-4">
+                  <div></div> {/* Empty div to push content to bottom */}
+                  <div>
+                    <h1 className='text-3xl md:text-5xl text-background font-semibold text-center mb-4'>Sony Alpha Collection</h1>
+                    <div className="flex justify-end">
+                      <Button className='bg-background text-foreground hover:text-background mb-4 mr-4'>Shop</Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
           </div>
             <div className='px-2 bg-secondary py-10'>
                 <h1 ref={h1Ref} className={`text-5xl font-bold pb-12 text-center 
                 transition-all ease-in duration-1000 transform ${isHeaderVisible ? "opacity-100" : "opacity-0"}`}>
                 Shop by category</h1>
-                <div className='grid grid-cols-3 gap-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 {categories.map((category, index) => {
                   return (
                     <Card
@@ -190,7 +186,7 @@ const Hero = () => {
             </div>
             <div>
                 <h1 className='text-3xl text-center font-bold pb-4'>Recommended for you</h1>
-                <div className='grid grid-cols-5 gap-2'>
+                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2'>
                 {categories.map((category, index) => (
                     index !== 5 ? (
                     <Card key={index}>
