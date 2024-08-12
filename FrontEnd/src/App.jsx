@@ -19,6 +19,8 @@ import UserPrivateRoute from './utils/UserPrivateRoute';
 import OrderSummary from './_root/pages/OrderSummary';
 import OrderConfirmation from './_root/pages/OrderConfirmation';
 import OrderDetails from './_root/pages/OrderDetails';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 function App() {
 
@@ -29,8 +31,10 @@ function App() {
             <Route path='/results/:searchTerm' element={<Results />} />
             <Route path='/product/:productId' element={<Product />} />
             <Route element={<UserPrivateRoute />}>
-              <Route path='/cart' element={<Cart />} />
-              <Route path='/orderSummary/:orderId' element={<OrderSummary/>} />
+              <Route path='/cart' element={<Cart />} />    
+                       
+              <Route path='/orderSummary/:orderId' element={<OrderSummary/>}/>
+              
               <Route path='/order-confirmation/:orderId' element={<OrderConfirmation/>} />
               <Route path='/order-details/:orderTrackingId' element={<OrderDetails/>} />
             </Route>

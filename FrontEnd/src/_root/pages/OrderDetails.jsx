@@ -10,6 +10,7 @@ const OrderDetails = () => {
     const [orderDetails ,setOrderDetails] = useState([]);
     const [shippingAddress ,setShippingAddress] = useState([]);
     const [orderDate, setOrderDate] = useState([]);
+    const [orderStatus, setOrderStatus] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
 
 
@@ -22,6 +23,7 @@ const OrderDetails = () => {
       setOrderDetails(response1.data.orderDto);
       const formattedDate = format(new Date(response1.data.orderDate), 'MM/dd/yyyy');
       setOrderDate(formattedDate);
+      setOrderStatus(response1.data.status);
      } catch (error) {
       console.error('Error fetching the order details:', error);
     }
@@ -49,11 +51,14 @@ const OrderDetails = () => {
         </div>
         
         <div className="mb-4">
-          <span className="font-semibold">Order Date: {orderDate}</span> 
+          <span className="font-bold">Order Date: {orderDate}</span> 
+        </div>
+        <div className="mb-4">
+          <span className="font-bold">Order Status: {orderStatus}</span> 
         </div>
         
         <div className="mb-4">
-          <h3 className="text-xl font-semibold">Items:</h3>
+          <h3 className="font-bold text-2xl">Items:</h3>
           <ul>
             {orderDetails.map((item) => (
               <li key={item.orderId} className="flex justify-between border-b border-white py-2">
