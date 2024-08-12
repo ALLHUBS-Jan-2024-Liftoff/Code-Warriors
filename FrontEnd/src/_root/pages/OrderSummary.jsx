@@ -1,13 +1,18 @@
 import React, { useState,useEffect } from 'react';
 import apiClient from '@/services/apiClient';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
-const stripePromise = loadStripe('your-publishable-key-here'); // Replace with Stripe publishable key
+import PaymentModel from './PaymentModel';
 
 const OrderSummary = () => {
+
+  const [isModelOpen, setIsModelOpen] = useState(false);
+
+  const handleOpenModel = () => setIsModelOpen(true);
+  const handleCloseModel = () => setIsModelOpen(false);
+  const handlePaymentSuccess = () => setPaymentSuccess(true);
 
   const { orderId } = useParams();
   
@@ -15,11 +20,12 @@ const OrderSummary = () => {
 
   const navigate = useNavigate();
 
-  const [total, setTotal] = useState([]);
+  const [total, setTotal] = useState(0);
   
-  const [isSameAddress, setIsSameAddress] = useState(false);  
-  
-  const [paymentOption, setPaymentOption] = useState('creditCard');
+  const [isSameAddress, setIsSameAddress] = useState(false); 
+
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+   
 
   const [addressDto, setAddressDto] = useState({
     shippingAddress: {
@@ -37,6 +43,10 @@ const OrderSummary = () => {
       state: '',
       zipCode: '',
       country: ''
+    },
+    contacts: {
+      email: '',
+      phone: ''
     }
   });
 
@@ -50,7 +60,6 @@ const OrderSummary = () => {
       }
     }));
   };
-
 
  
   const updateAddressWithOrderId = async (addressDto) => {
@@ -69,11 +78,8 @@ const OrderSummary = () => {
     }
    
   };
-  const handlePaymentChange = (e) => {
-    setPaymentOption(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
+ 
+  const handleSubmitOrder = async (e) => {
     e.preventDefault();
     // Handle form submission
 
@@ -109,35 +115,35 @@ const fetchOrderItems = async () => {
  
 };
 
-useEffect(() => {
-  const calculateTotalPrice = () => {
-    return orderItems.reduce((total, orderItems) => {
-      return total + (orderItems.price * orderItems.quantity);
-    }, 0).toFixed(2); // Round to 2 decimal places
-  };
 
+const calculateTotalPrice = () => {
+  return orderItems.reduce((total, orderItems) => {
+    return total + (orderItems.price * orderItems.quantity);
+  }, 0).toFixed(2); // Round to 2 decimal places
+};
+
+
+useEffect(() => { 
+
+  fetchOrderItems();  
   setTotal(calculateTotalPrice());
-}, [orderItems]);
-
-
-useEffect(() => {
-  fetchOrderItems();
-}, [])
-
   
+},[orderItems]);
+
+
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% max-w-4xl mx-auto p-6 border bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
       <div className="mb-6">
-        <table className="min-w-full bg-white">
+        <table className=" bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% min-w-full bg-white">
           <thead>
             <tr>
-              <th className="border-b">Item No</th>
-              <th className="border-b">Item Name</th>
-              <th className="border-b">Price</th>
-              <th className="border-b">Quantity</th>
-              <th className="border-b">Total</th>
+              <th className="py-2 px-4 border-b">Item No</th>
+              <th className="py-2 px-4 border-b">Item Name</th>
+              <th className="py-2 px-4 border-b">Price</th>
+              <th className="py-2 px-4 border-b">Quantity</th>
+              <th className="py-2 px-4 border-b">Total</th>
             </tr>
           </thead>
           <tbody>
@@ -154,13 +160,38 @@ useEffect(() => {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan="3" className="border-b text-right font-bold">Total : </td>
+              <td colSpan="4" className="border-b text-right font-bold">Total : </td>
               <td className="border-b font-bold">${total}</td>
             </tr>
           </tfoot>
         </table>
       </div>
-      <form onSubmit={handleSubmit}>       
+      <form onSubmit={handleSubmitOrder}> 
+        <h3 className="text-xl font-bold mb-2">Contact Information</h3>
+        <div>
+        
+        <input
+          type="email"
+          name="email"
+          value={addressDto.contacts.email}
+          onChange={(e) => handleInputChange(e, 'contacts')}
+          placeholder= "Email"
+          className="w-full p-2 border border-gray-300 rounded mb-4" 
+          required
+        />
+      </div>
+      <div>        
+        <input
+          type="tel"
+          name="phone"
+          value={addressDto.contacts.phone}         
+          onChange={(e) => handleInputChange(e, 'contacts')}
+          placeholder="(123) 456-7890"
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+          required
+        />
+      </div>
+
         <h3 className="text-xl font-bold mb-2">Shipping Address</h3>
         <input
           type="text"
@@ -279,88 +310,44 @@ useEffect(() => {
           
      />
   </>
-)}
-
-        <h3 className="text-xl font-semibold mb-2">Payment Options</h3>
-        <div className="mb-4">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="paymentOption"
-              value="creditCard"
-              checked={paymentOption === 'creditCard'}
-              onChange={handlePaymentChange}
-              className="form-radio"
-            />
-            <span className="ml-2">Credit Card</span>
-          </label>
-        </div>
-        {paymentOption === 'creditCard' && (
-          <Elements stripe={stripePromise}>
-            <CheckoutForm />
-          </Elements>
-        )}
-        <div className="mb-4">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="paymentOption"
-              value="paypal"
-              checked={paymentOption === 'paypal'}
-              onChange={handlePaymentChange}
-              className="form-radio"
-            />
-            <span className="ml-2">PayPal</span>
-          </label>
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-700"
-        >
-          Submit Order
-        </button>
+)}       
+        
       </form>
+      <div className="max-w-4xl mx-auto p-6 border bg-white shadow-md rounded-lg">
+            <h1 className="text-2xl font-bold mb-6">Stripe Payment Option</h1>
+            <div className="mt-6">
+                <button
+                    type="button"
+                    onClick={handleOpenModel}
+                    className="px-4 py-2 text-white font-semibold rounded-lg shadow-md bg-blue-500 hover:bg-blue-600 transition-colors"
+                >
+                    Pay
+                </button>
+            </div>
+            {isModelOpen && (
+                <PaymentModel onClose={handleCloseModel} 
+                onSuccess={handlePaymentSuccess}
+                amount={total}
+                />
+                
+            )}
+            <div className="mt-6">
+              
+                <button
+                    type="button"
+                    disabled={!paymentSuccess}
+                    className={`px-4 py-2 text-white font-semibold rounded-lg shadow-md transition-colors ${
+                        paymentSuccess
+                            ? 'bg-blue-500 hover:bg-blue-600'
+                            : 'bg-gray-300 cursor-not-allowed'
+                    }`}
+                    onClick={handleSubmitOrder}
+                >
+                    Submit Order
+                </button>
+            </div>
+        </div>
     </div>
-  );
-};
-
-const CheckoutForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    const cardElement = elements.getElement(CardElement);
-
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-    });
-
-    if (error) {
-      console.error(error);
-    } else {
-      console.log(paymentMethod);
-      // Process the payment
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <CardElement className="p-2 border border-gray-300 rounded mb-4" />
-      <button
-        type="submit"
-        disabled={!stripe}
-        className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-700"
-      >
-        Pay
-      </button>
-    </form>
   );
 };
 

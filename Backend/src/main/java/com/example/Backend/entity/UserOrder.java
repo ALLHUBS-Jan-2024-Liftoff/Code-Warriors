@@ -33,13 +33,15 @@ public class UserOrder {
 
     private Date orderDate;
 
-    private Date deliveryDate;
+    private Date workOrderDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     private OrderAddress shippingAddress;
 
     @OneToOne(cascade = CascadeType.ALL)
     private OrderAddress billingAddress;
+
+
 
 
 }

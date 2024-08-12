@@ -9,11 +9,11 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+public class PaymentRequest {
 
-public class AddressDto {
+    private Long amount;
+    private String currency;
+    private String paymentMethod;
 
-    private AddressDetailsDto shippingAddress;
-    private AddressDetailsDto billingAddress;
-    private ContactDto contacts;
 
 }
