@@ -57,7 +57,8 @@ const ProductDetails = () => {
     ];
 
     const [description, setDescription] = useState('');
-    const [reviews, setReviews] = useState([{id: 145, title: '', rating: '', content: ''}]);
+    const [reviews, setReviews] = useState([]);
+    
 
 const handleChange = (event) => {
     setDescription(event.target.value);
@@ -76,30 +77,24 @@ const handleChange = (event) => {
                 userId: 1,
             },
             product: {
-                productId: 1,
+                productId: 2,
             },
         };
     
     
         axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
             console.log(response.data);
-            console.log("Hello");
-            // Append the new review to the current list of reviews
-            setReviews((prevReviews) => [...prevReviews, response.data]);
-            setDescription(''); // Clears the textarea after submission
+            window.location.reload();
         })
-            .catch((error) => {
-                console.error('Error creating review:', error);
-            });
+        .catch((error) => {
+            console.error('Error creating review:', error);
+        });
     };
  
     const deleteReview = (reviewId) => {
-        let payload = {
-            "id": reviewId
-        }
-
-        axios.delete('http://localhost:8080/api/review/delete', payload).then((_response) => {
-                console.log(`Review with ID ${reviewId} deleted successfully.`);
+        axios.delete(`http://localhost:8080/api/review/delete?reviewID=${reviewId}`).then((response) => {
+                console.log(response.message);
+                window.location.reload();
                 // Update the state to remove the deleted review
                 //setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
             })
@@ -109,22 +104,10 @@ const handleChange = (event) => {
     };
 
     function getReview() {
-        let config = {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-            }
-          }
-
-        let payload = {
-            "product": {
-                "productId": 2
-            }
-        }
-
-        axios.get('http://localhost:8080/api/review/get', payload, config).then((response) => {
+        axios.get('http://localhost:8080/api/review/get?productID=2').then((response) => {
             console.log(response.data)
-            return response.data
+
+            setReviews(response.data);
         })
         .catch((error) => {
             console.error(`Error getting reviews:`, error);
@@ -194,15 +177,15 @@ const handleChange = (event) => {
                 />
                 <Button onClick={createReview}>Submit Review</Button>
                 {reviews.map((review) => (
-                    <Card key={review.id}>
+                    <Card>
                         <CardHeader>
-                            <CardTitle>{review.user?.name || 'Anonymous'}</CardTitle>
+                            <CardTitle>{review.user?.userName}</CardTitle>
                             <CardDescription>Rating {review.rating}/5</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <p>{review.description}</p>
                         </CardContent>
-                        <Button variant="destructive" onClick={() => deleteReview(review.id)}>Delete Review</Button>
+                        <Button type="button" variant="destructive" onClick={() => deleteReview(review.id)}>Delete Review</Button>
                     </Card>
                 ))}
             </div>

@@ -32,16 +32,16 @@ public class ReviewController {
     }
 
     @GetMapping(value = "/get")
-    public ResponseEntity<List<ReviewDto>> getReviews(@RequestBody ReviewDto reviewDto) throws IOException {
-            return new ResponseEntity<>(this.reviewService.GetReviews(reviewDto.getProduct().getProductId()), HttpStatusCode.valueOf(200));
+    public ResponseEntity<List<ReviewDto>> getReviews(@RequestParam Integer productID) throws IOException {
+            return new ResponseEntity<>(this.reviewService.GetReviews(productID), HttpStatusCode.valueOf(200));
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteReview(@RequestBody ReviewDto reviewDto) throws IOException {
+    public ResponseEntity<String> deleteReview(@RequestParam Long reviewID) throws IOException {
 
         try {
-            this.reviewService.DeleteReview(reviewDto.getId());
-            return new ResponseEntity<String>("Successfully Deleted Review for ID: " + reviewDto.getId(), HttpStatusCode.valueOf(200));
+            this.reviewService.DeleteReview(reviewID);
+            return new ResponseEntity<String>("Successfully Deleted Review for ID: " + reviewID, HttpStatusCode.valueOf(200));
         } catch (Exception error) {
             return new ResponseEntity<String>(error.getMessage(), HttpStatusCode.valueOf(500));
         }
