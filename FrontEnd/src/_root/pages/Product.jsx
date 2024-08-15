@@ -1,12 +1,14 @@
-import { Button } from '@/components/ui/button'
-import React, {useState, useEffect, useContext} from 'react'
+import React, { useState, useEffect, useContext} from 'react';
+import { Button } from '@/components/ui/button';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from "@/components/ui/breadcrumb"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { NavLink } from 'react-router-dom'
-import { useParams } from 'react-router-dom'
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { NavLink } from 'react-router-dom';
+import { Textarea } from "@/components/ui/textarea";
 import axios from 'axios';
+import { List } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import { CartContext } from "@/components/shared/CartContext"
 import { useNavigate } from 'react-router-dom';
@@ -48,6 +50,62 @@ function handleAddToCart(product) {
       navigate('/user_auth')
     }
   }
+
+const [description, setDescription] = useState('');
+const [reviews, setReviews] = useState([]);
+    
+
+const handleChange = (event) => {
+    setDescription(event.target.value);
+};
+
+useEffect(() => {
+// ⬇ This calls my get request from the server
+    getReview();
+}, []);
+
+const createReview = () => {
+    let payload = {
+        description: description,
+        rating: 5,
+        user: {
+            userId: user.userId,
+        },
+        product: {
+            productId: productId,
+        },
+    };
+    axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
+        console.log(response.data);
+        window.location.reload();
+    })
+    .catch((error) => {
+        console.error('Error creating review:', error);
+    });
+};
+ 
+const deleteReview = (reviewId) => {
+    axios.delete(`http://localhost:8080/api/review/delete?reviewID=${reviewId}`).then((response) => {
+            console.log(response.message);
+            window.location.reload();
+            // Update the state to remove the deleted review
+            //setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
+        })
+        .catch((error) => {
+            console.error(`Error deleting review with ID ${reviewId}:`, error);
+        });
+};
+
+function getReview() {
+    axios.get(`http://localhost:8080/api/review/get?productID=${productId}`).then((response) => {
+        console.log(response.data)
+
+        setReviews(response.data);
+    })
+    .catch((error) => {
+        console.error(`Error getting reviews:`, error);
+    })
+}
 
 const products = [
     {
@@ -116,9 +174,9 @@ const products = [
             <img 
                 src={product.imageUrl} 
                 alt={'No picture'} 
-                className="w-full h-96 object-contain my-4"
+                className="w-full h-72 object-contain my-4"
             /> :
-            <div className="w-full h-96 object-contain my-4"></div>
+            <div className="w-full h-72 object-contain my-4"></div>
             }
         </div>
         
@@ -151,12 +209,33 @@ const products = [
             ))}
             </div>
         </div>
-        <div className='col-span-3 w-full'>
-            <h1 className='text-2xl font-semibold'>Reviews</h1>
-            
+        <div className='col-span-3 w-full h-96'>
+                <h1 className='text-2xl font-semibold'>Reviews</h1>
+                <Textarea
+                    placeholder="Type your message here."
+                    value={description}
+                    onChange={handleChange}
+                />
+                <Button onClick={createReview}>Submit Review</Button>
+                {reviews.map((review) => (
+                    <Card key={review.id}>
+                        <CardHeader>
+                            <CardTitle>{review.user?.userName}</CardTitle>
+                            <CardDescription>Rating {review.rating}/5</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <p>{review.description}</p>
+                        </CardContent>
+                        <Button type="button" variant="destructive" onClick={() => deleteReview(review.id)}>Delete Review</Button>
+                    </Card>
+                ))}
         </div>
     </div>
-  )
-}
+    
+    );
+};
 
-export default ProductDetails
+export default ProductDetails;
+
+
+

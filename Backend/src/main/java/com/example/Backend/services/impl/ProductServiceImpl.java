@@ -63,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
     public String updatePrice(int productId, Double price) {
         Optional<Product> opt = productRepo.findById(productId);
         if(opt.isPresent()){
-           opt.get().setPrice(price);
+            opt.get().setPrice(price);
             productRepo.save(opt.get());
             return "Product Price Updated";
         }

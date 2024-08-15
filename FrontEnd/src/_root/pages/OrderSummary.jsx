@@ -136,7 +136,7 @@ useEffect(() => {
     <div className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% max-w-4xl mx-auto p-6 border bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
       <div className="mb-6">
-        <table className=" bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% min-w-full bg-white">
+        <table className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% min-w-full bg-white">
           <thead>
             <tr>
               <th className="py-2 px-4 border-b">Item No</th>

@@ -49,7 +49,19 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+import { AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger } from "@/components/ui/alert-dialog"
+
+
 const STATUS_ENUM = ['NEW', 'PROCESSING', 'SHIPPED', 'DELIVERED'];
+
 
 
 const Orders = () => {
@@ -183,7 +195,7 @@ const [adminOrderDto, setAdminOrderDto] = useState({
   
   return (
     <main className=" grid flex-1 items-start gap-4 p-4 sm:px-0 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-          <div className=" grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+          <div className=" grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-3">
             
             <Tabs defaultValue="week">
               <div className="flex items-center">
@@ -257,11 +269,123 @@ const [adminOrderDto, setAdminOrderDto] = useState({
                           <TableRow key={index}>
 
                               <TableCell className="font-medium">
-                              <Link onClick = {()=>handleOrderIdClick(order.orderId)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                              {order.orderId}</Link>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Link onClick = {()=>handleOrderIdClick(order.orderId)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                    {order.orderId}
+                                  </Link>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className='rounded-none p-0 border-none max-h-screen overflow-y-scroll'>
+                                <div ref={cardRef2}>
+                                  <Card 
+                                    className="rounded-none overflow-hidden" x-chunk="dashboard-05-chunk-4"
+                                  >
+                                    <CardHeader  className="flex flex-row items-start bg-muted/50">
+                                      <div className="grid gap-0.5">
+                                        <CardTitle className="group flex items-center gap-2 text-lg">
+                                          Order : {orderTrackingId}
+                                          <Button
+                                            size="icon"
+                                            variant="outline"
+                                            className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+                                          >
+                                            <Copy className="h-3 w-3" />
+                                            <span className="sr-only">Copy Order ID</span>
+                                          </Button>
+                                        </CardTitle>
+                                        <CardDescription>                  
+                                          Date: {orderDate}</CardDescription>
+                                      </div>
+                                      <div className="ml-auto flex items-center gap-1">
+                                      
+                                        <DropdownMenu>
+                                          <DropdownMenuTrigger asChild>
+                                            <Button size="icon" variant="outline" className="h-8 w-8">
+                                              <MoreVertical className="h-3.5 w-3.5" />
+                                              <span className="sr-only">More</span>
+                                            </Button>
+                                          </DropdownMenuTrigger>
+                                          <DropdownMenuContent align="end">                      
+                                            <DropdownMenuItem onClick={() => exportPDF(cardRef2, 'Order_Details_2')}>Export</DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem>Trash</DropdownMenuItem>
+                                          </DropdownMenuContent>
+                                        </DropdownMenu>
+                                      </div>
+                                    </CardHeader>
+                                    <CardContent className="p-6 text-sm">
+                                      <div className="grid gap-3">
+                                        <div className="font-semibold">Order Details</div>
+                                        <ul className="grid gap-3">
+                                          {orderDetails.map((item) => (
+                                              <li key={item.orderId} className="flex items-center justify-between">
+                                                <span className="text-muted-foreground">
+                                                  {item.productName} (x{item.quantity})</span>
+                                                <span>${(item.price * item.quantity)}</span>
+                                              </li>
+                                            ))}                  
+                                        </ul>
+                                        <Separator className="my-2" />
+                                        <ul className="grid gap-3">
+                                          
+                                          <li className="flex items-center justify-between font-semibold">
+                                            <span className="text-muted-foreground">Total</span>
+                                            <span>${totalPrice.toFixed(2)}</span>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      <Separator className="my-4" />
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid gap-3">
+                                          <div className="font-semibold">Shipping Information</div>
+                                          <address className="grid gap-0.5 not-italic text-muted-foreground">
+                                            <span>{shippingAddress.fullName}</span>
+                                            <span>{shippingAddress.addressLine}</span>
+                                            <span>{shippingAddress.city}, {shippingAddress.state} {shippingAddress.zipCode}</span>
+                                            <span>{shippingAddress.country}</span>
+                                          </address>
+                                        </div>
+                                        <div className="grid auto-rows-max gap-3">
+                                        <div className="font-semibold">Billing Information</div>
+                                          <address className="grid gap-0.5 not-italic text-muted-foreground">
+                                            <span>{billingAddress.fullName}</span>
+                                            <span>{billingAddress.addressLine}</span>
+                                            <span>{billingAddress.city}, {billingAddress.state} {billingAddress.zipCode}</span>
+                                            <span>{billingAddress.country}</span>
+                                          </address>
+                                        </div>                  
+                                      </div>
+                                      <Separator className="my-4" />
+                                      <div className="grid gap-3">
+                                        <div className="font-semibold">Customer Information</div>
+                                        <dl className="grid gap-3">
+                                          <div className="flex items-center justify-between">
+                                            <dt className="text-muted-foreground">Customer</dt>
+                                            <dd>{customerName}</dd>
+                                          </div>
+                                          <div className="flex items-center justify-between">
+                                            <dt className="text-muted-foreground">Email</dt>
+                                            <dd>
+                                              <a href="mailto:">{email}</a>
+                                            </dd>
+                                          </div>
+                                          <div className="flex items-center justify-between">
+                                            <dt className="text-muted-foreground">Phone</dt>
+                                            <dd>
+                                              <a href="tel:">+1 {phone}</a>
+                                            </dd>
+                                          </div>
+                                        </dl>
+                                      </div>
+                                      <AlertDialogFooter className='pt-4'>
+                                        <AlertDialogCancel>Close</AlertDialogCancel>
+                                      </AlertDialogFooter>
+                                    </CardContent>
+                                  </Card>
+                                </div>
+                                </AlertDialogContent>
+                              </AlertDialog>
                               </TableCell>                    
-
-                          
                               <TableCell className="font-medium">
                               {order.customerName.toUpperCase()}
                               </TableCell>                    
@@ -319,111 +443,7 @@ const [adminOrderDto, setAdminOrderDto] = useState({
               </TabsContent>
             </Tabs>
           </div>
-          <div ref={cardRef2} >
-            <Card 
-              className="overflow-hidden" x-chunk="dashboard-05-chunk-4"
-            >
-              <CardHeader  className="flex flex-row items-start bg-muted/50">
-                <div className="grid gap-0.5">
-                  <CardTitle className="group flex items-center gap-2 text-lg">
-                    Order : {orderTrackingId}
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-                    >
-                      <Copy className="h-3 w-3" />
-                      <span className="sr-only">Copy Order ID</span>
-                    </Button>
-                  </CardTitle>
-                  <CardDescription>                  
-                    Date: {orderDate}</CardDescription>
-                </div>
-                <div className="ml-auto flex items-center gap-1">
-                 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="outline" className="h-8 w-8">
-                        <MoreVertical className="h-3.5 w-3.5" />
-                        <span className="sr-only">More</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">                      
-                      <DropdownMenuItem onClick={() => exportPDF(cardRef2, 'Order_Details_2')}>Export</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Trash</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </CardHeader>
-              <CardContent className="p-6 text-sm">
-                <div className="grid gap-3">
-                  <div className="font-semibold">Order Details</div>
-                  <ul className="grid gap-3">
-                     {orderDetails.map((item) => (
-                        <li key={item.orderId} className="flex items-center justify-between">
-                          <span className="text-muted-foreground">
-                            {item.productName} (x{item.quantity})</span>
-                          <span>${(item.price * item.quantity)}</span>
-                        </li>
-                      ))}                  
-                  </ul>
-                  <Separator className="my-2" />
-                  <ul className="grid gap-3">
-                    
-                    <li className="flex items-center justify-between font-semibold">
-                      <span className="text-muted-foreground">Total</span>
-                      <span>${totalPrice}</span>
-                    </li>
-                  </ul>
-                </div>
-                <Separator className="my-4" />
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-3">
-                    <div className="font-semibold">Shipping Information</div>
-                    <address className="grid gap-0.5 not-italic text-muted-foreground">
-                      <span>{shippingAddress.fullName}</span>
-                      <span>{shippingAddress.addressLine}</span>
-                      <span>{shippingAddress.city}, {shippingAddress.state} {shippingAddress.zipCode}</span>
-                      <span>{shippingAddress.country}</span>
-                    </address>
-                  </div>
-                  <div className="grid auto-rows-max gap-3">
-                  <div className="font-semibold">Billing Information</div>
-                    <address className="grid gap-0.5 not-italic text-muted-foreground">
-                      <span>{billingAddress.fullName}</span>
-                      <span>{billingAddress.addressLine}</span>
-                      <span>{billingAddress.city}, {billingAddress.state} {billingAddress.zipCode}</span>
-                      <span>{billingAddress.country}</span>
-                    </address>
-                  </div>                  
-                </div>
-                <Separator className="my-4" />
-                <div className="grid gap-3">
-                  <div className="font-semibold">Customer Information</div>
-                  <dl className="grid gap-3">
-                    <div className="flex items-center justify-between">
-                      <dt className="text-muted-foreground">Customer</dt>
-                      <dd>{customerName}</dd>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <dt className="text-muted-foreground">Email</dt>
-                      <dd>
-                        <a href="mailto:">{email}</a>
-                      </dd>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <dt className="text-muted-foreground">Phone</dt>
-                      <dd>
-                        <a href="tel:">+1 {phone}</a>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-                
-              </CardContent>
-             </Card>
-          </div>
+          
         </main>
   )
 }
