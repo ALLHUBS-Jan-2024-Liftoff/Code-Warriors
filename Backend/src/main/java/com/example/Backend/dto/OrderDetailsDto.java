@@ -23,4 +23,5 @@ public class OrderDetailsDto {
     private String email;
     private String phone;
     private OrderStatus status;
+    private String orderId;
 }

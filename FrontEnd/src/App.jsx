@@ -19,8 +19,7 @@ import UserPrivateRoute from './utils/UserPrivateRoute';
 import OrderSummary from './_root/pages/OrderSummary';
 import OrderConfirmation from './_root/pages/OrderConfirmation';
 import OrderDetails from './_root/pages/OrderDetails';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import OrderTracking from './_root/pages/OrderTracking';
 
 function App() {
 
@@ -37,6 +36,7 @@ function App() {
               
               <Route path='/order-confirmation/:orderId' element={<OrderConfirmation/>} />
               <Route path='/order-details/:orderTrackingId' element={<OrderDetails/>} />
+              <Route path='/order-tracking/:userId' element={<OrderTracking/>}/>
             </Route>
           </Route>
           <Route element={<AdminPrivateRoute />}>

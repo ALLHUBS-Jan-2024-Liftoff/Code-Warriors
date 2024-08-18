@@ -267,4 +267,19 @@ public class OrderServiceImpl implements OrderService {
         return "Status updated successfully";
     }
 
+    @Override
+    public List<OrderDetailsDto> getOrdersByUserId(Integer userId){
+        List<OrderDetailsDto> orderDetailsDtoList = new ArrayList<>();
+        List<UserOrder> orderList = orderRepo.findOrdersByUserId(userId);
+        for(UserOrder order : orderList){
+            OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
+            orderDetailsDto.setOrderId(order.getOrderId());
+            orderDetailsDto.setStatus(order.getOrderStatus());
+            orderDetailsDto.setTotal(order.getTotal());
+            orderDetailsDto.setOrderDto(getOrderDtoList(order));
+            orderDetailsDtoList.add(orderDetailsDto);
+        }
+        return orderDetailsDtoList;
+    }
+
 }
