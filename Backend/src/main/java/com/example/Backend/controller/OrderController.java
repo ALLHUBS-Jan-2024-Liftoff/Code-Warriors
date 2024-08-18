@@ -63,5 +63,18 @@ public class OrderController {
         return new ResponseEntity<>(orderService.updateStatusForOrderId(orderId, adminOrderDto), HttpStatus.OK);
     }
 
+    @GetMapping("/average-cost-last-7-days")
+    public List<AverageOrderCostDTO> getAverageOrderCostLast7Days() {
+        return orderService.getAverageOrderCostLast7Days();
+    }
 
+    @GetMapping("/revenue/last7days")
+    public List<SalesRevenueDTO> getTotalRevenueLast7Days() {
+        return orderService.getTotalRevenueLast7Days();
+    }
+
+    @GetMapping("/products-sold/last7days")
+    public List<ProductsSoldDTO> getTotalProductsSoldLast7Days() {
+        return orderService.getTotalProductsSoldLast7Days();
+    }
 }

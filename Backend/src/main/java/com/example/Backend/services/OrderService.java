@@ -1,9 +1,6 @@
 package com.example.Backend.services;
 
-import com.example.Backend.dto.AddressDto;
-import com.example.Backend.dto.AdminOrderDto;
-import com.example.Backend.dto.OrderDetailsDto;
-import com.example.Backend.dto.OrderDto;
+import com.example.Backend.dto.*;
 import com.example.Backend.entity.OrderStatus;
 import com.example.Backend.entity.UserOrder;
 
@@ -25,4 +22,10 @@ public interface OrderService {
     List<OrderDto> getAllOrdersByAdmin();
 
     String updateStatusForOrderId(String orderId, AdminOrderDto adminOrderDto);
+
+    List<AverageOrderCostDTO> getAverageOrderCostLast7Days();
+
+    List<SalesRevenueDTO> getTotalRevenueLast7Days();
+
+    List<ProductsSoldDTO> getTotalProductsSoldLast7Days();
 }
