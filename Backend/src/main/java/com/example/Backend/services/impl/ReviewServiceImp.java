@@ -38,7 +38,7 @@ public class ReviewServiceImp implements ReviewService {
                 dto -> new ReviewDto(dto.getId(),
                         dto.getRating(),
                         dto.getDescription(),
-                        dto.getUser(),
+                        dto.getUser().getUsername(),
                         dto.getProduct())).collect(Collectors.toList());
     }
 
