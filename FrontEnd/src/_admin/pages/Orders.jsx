@@ -275,7 +275,7 @@ const [adminOrderDto, setAdminOrderDto] = useState({
                                     {order.orderId}
                                   </Link>
                                 </AlertDialogTrigger>
-                                <AlertDialogContent className='rounded-none p-0 border-none max-h-screen overflow-y-scroll'>
+                                <AlertDialogContent className='rounded-none p-0 border-none max-h-screen overflow-y-auto'>
                                 <div ref={cardRef2}>
                                   <Card 
                                     className="rounded-none overflow-hidden" x-chunk="dashboard-05-chunk-4"

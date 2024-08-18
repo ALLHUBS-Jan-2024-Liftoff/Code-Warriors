@@ -32,6 +32,9 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { useParams } from 'react-router-dom'
+import { Toaster } from "@/components/ui/toaster"
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 
 const ListPage = () => {
@@ -132,10 +135,15 @@ const [quantities, setQuantities] = useState({})
 
 const quantityOptions = Array.from({ length: 10 }, (_, i) => i + 1);
 
+const { toast } = useToast()
+
 function handleAddToCart(product , quantity) {
   if(user) {
     addToCart(product, quantity)
-    
+    toast({
+      title: "Product Added!",
+      description: "The product has been successfully added to your cart."
+  });
   } else {
     localStorage.setItem('pendingCartItem', JSON.stringify({ product, quantity }));
     navigate('/user_auth')
@@ -189,6 +197,7 @@ useEffect(() => {
 
   return (
     <div className='flex flex-col items-center w-full'>
+      <Toaster />
       <div className='w-full h-14 flex items-center pl-6 py-4'>
         <h1 className='text-xl font-semibold'><span className='text-muted-foreground'>Search results for </span>"{searchTerm}" <span className='text-muted-foreground'>({filteredData.length})</span></h1>
       </div>
