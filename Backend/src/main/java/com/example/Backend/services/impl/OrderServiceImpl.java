@@ -10,8 +10,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -28,6 +30,38 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserRepo userRepo;
+
+    public List<AverageOrderCostDTO> getAverageOrderCostLast7Days() {
+        Calendar calendar = Calendar.getInstance();
+        Date endDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        Date startDate = calendar.getTime();
+
+        List<Object[]> results = orderRepo.findAverageOrderCostLast7Days(startDate, endDate);
+        return results.stream()
+                .map(result -> new AverageOrderCostDTO(
+                        (Date) result[0],
+                        ((Number) result[1]).doubleValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SalesRevenueDTO> getTotalRevenueLast7Days() {
+        Calendar calendar = Calendar.getInstance();
+        Date endDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        Date startDate = calendar.getTime();
+
+        List<Object[]> results = orderRepo.findTotalRevenueLast7Days(startDate, endDate);
+
+        List<SalesRevenueDTO> revenueDTOList = new ArrayList<>();
+        for (Object[] result : results) {
+            Date orderDate = (Date) result[0];
+            Double totalRevenue = (Double) result[1];
+            revenueDTOList.add(new SalesRevenueDTO(orderDate, totalRevenue));
+        }
+
+        return revenueDTOList;
+    }
 
     @Override
     public Integer createOrder(int userId) {
@@ -55,6 +89,24 @@ public class OrderServiceImpl implements OrderService {
         orderRepo.save(order);
 
         return order.getId();
+    }
+
+    public List<ProductsSoldDTO> getTotalProductsSoldLast7Days() {
+        Calendar calendar = Calendar.getInstance();
+        Date endDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        Date startDate = calendar.getTime();
+
+        List<Object[]> results = orderRepo.findTotalProductsSoldLast7Days(startDate, endDate);
+
+        List<ProductsSoldDTO> productsSoldDTOList = new ArrayList<>();
+        for (Object[] result : results) {
+            Date orderDate = (Date) result[0];
+            Long totalQuantity = ((Number) result[1]).longValue();
+            productsSoldDTOList.add(new ProductsSoldDTO(orderDate, totalQuantity));
+        }
+
+        return productsSoldDTOList;
     }
 
     @Override
