@@ -33,7 +33,8 @@ public class ReviewController {
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<ReviewDto>> getReviews(@RequestParam Integer productID) throws IOException {
-            return new ResponseEntity<>(this.reviewService.GetReviews(productID), HttpStatusCode.valueOf(200));
+        List<ReviewDto> reviews = reviewService.GetReviews(productID);
+        return ResponseEntity.ok(reviews);
     }
 
     @DeleteMapping("/delete")

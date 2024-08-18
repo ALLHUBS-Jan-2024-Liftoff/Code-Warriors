@@ -77,7 +77,6 @@ const createReview = () => {
     };
     axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
         console.log(response.data);
-        window.location.reload();
     })
     .catch((error) => {
         console.error('Error creating review:', error);
