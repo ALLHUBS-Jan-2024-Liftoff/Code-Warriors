@@ -133,8 +133,9 @@ useEffect(() => {
 
 
   return (
+  <main className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% max-w-4xl mx-auto bg-white shadow-md rounded-lg"> 
     <div className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% max-w-4xl mx-auto p-6 border bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
+       <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
       <div className="mb-6">
         <table className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% min-w-full bg-white">
           <thead>
@@ -313,7 +314,7 @@ useEffect(() => {
 )}       
         
       </form>
-      <div className="max-w-4xl mx-auto p-6 border bg-white shadow-md rounded-lg">
+      <div className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% max-w-4xl mx-auto p-6 border bg-white shadow-md rounded-lg">
             <h1 className="text-2xl font-bold mb-6">Stripe Payment Option</h1>
             <div className="mt-6">
                 <button
@@ -348,6 +349,7 @@ useEffect(() => {
             </div>
         </div>
     </div>
+    </main>
   );
 };
 

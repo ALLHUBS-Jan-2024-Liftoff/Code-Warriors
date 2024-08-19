@@ -36,4 +36,9 @@ public interface OrderRepo extends JpaRepository<UserOrder, Integer> {
                 "GROUP BY DATE(uo.order_date) " +
                 "ORDER BY DATE(uo.order_date)", nativeQuery = true)
         List<Object[]> findTotalProductsSoldLast7Days(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+
+
+        @Query("SELECT o FROM UserOrder o WHERE o.user.userId = :userId")
+        List<UserOrder> findOrdersByUserId(@Param("userId") Integer userId);
 }

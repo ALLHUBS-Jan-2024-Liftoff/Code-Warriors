@@ -28,4 +28,6 @@ public interface OrderService {
     List<SalesRevenueDTO> getTotalRevenueLast7Days();
 
     List<ProductsSoldDTO> getTotalProductsSoldLast7Days();
+
+    List<OrderDetailsDto> getOrdersByUserId(Integer userId);
 }

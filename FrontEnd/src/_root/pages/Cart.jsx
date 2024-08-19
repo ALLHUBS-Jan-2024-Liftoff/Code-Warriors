@@ -32,7 +32,7 @@ import { CartContext } from '@/components/shared/CartContext';
 
 const Cart = () => {
 
-  const { products, setProducts, cartTotal, setCartTotal, fetchProducts } = useContext(CartContext);
+  const { products, setProducts, cartTotal, setCartTotal, fetchProducts, removeItemFromCart, clearCartCount } = useContext(CartContext);
 
   const navigate = useNavigate();
   
@@ -49,6 +49,7 @@ const Cart = () => {
     };
 
     setTotalPrice(calculateTotalPrice());
+    
   }, [products]);
   
   const [updateDone, setUpdateDone] = useState(false);  
@@ -59,7 +60,8 @@ const Cart = () => {
         apiClient.post('orders/create'), 
         apiClient.delete('cart/clear')
       ]);
-      const orderId = response1.data;      
+      const orderId = response1.data;
+      clearCartCount();      
       navigate(`/orderSummary/${orderId}`);
                
     } catch (error) {
@@ -103,6 +105,7 @@ const Cart = () => {
       setProducts((prevProducts) => prevProducts.filter(product => product.productId !== productId));
       setCartTotal(response2.data);     
       setUpdateDone(prev => !prev);
+      removeItemFromCart();
 
     } catch (error) {
       console.error('Error deleting the products:', error);
