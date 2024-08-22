@@ -55,8 +55,11 @@ const Topbar = () => {
     navigate('/admin');
   };
 
-  const handleTrackOrder = () => {  
-    console.log("handle Track order method"+userId) ;
+  const handleGoToUser = () => {
+    navigate ('/user_auth');
+  }
+
+  const handleTrackOrder = () => {     
     navigate(`/order-tracking/${userId}`); 
  };
 
@@ -209,7 +212,7 @@ const Topbar = () => {
         </ul>
         <Search onMouseEnter={() => handleMouseEnter(searchItemsNull)} className="h-4 w-4 hover:scale-102" />
         <CartIcon handleGoToCart={handleGoToCart} className="h-4 w-4 hover:scale-102" />        
-        <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
+        <UserRound onClick={handleGoToUser} className="h-4 w-4 hover:scale-102" />
         {user &&
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

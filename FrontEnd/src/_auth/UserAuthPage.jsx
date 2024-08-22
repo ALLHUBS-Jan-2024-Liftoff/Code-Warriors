@@ -92,13 +92,13 @@ export default function UserAuthPage() {
       fetchProducts();
     }
 
-    handleGoToCart();
+    handleGoToHero();
   };
 
   const handleRegisterSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submit action
     await registerUser(event);
-    handleGoToCart();
+    handleGoToHero();
   };
 
   return (

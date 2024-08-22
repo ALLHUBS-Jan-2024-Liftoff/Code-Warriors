@@ -20,6 +20,7 @@ import OrderSummary from './_root/pages/OrderSummary';
 import OrderConfirmation from './_root/pages/OrderConfirmation';
 import OrderDetails from './_root/pages/OrderDetails';
 import OrderTracking from './_root/pages/OrderTracking';
+import GenerativeAIChatbot from './components/chat/GenerativeAIChatbot';
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
             <Route index element={<Hero />} />
             <Route path='/results/:searchTerm' element={<Results />} />
             <Route path='/product/:productId' element={<Product />} />
+            
             <Route element={<UserPrivateRoute />}>
               <Route path='/cart' element={<Cart />} />    
                        
@@ -37,6 +39,7 @@ function App() {
               <Route path='/order-confirmation/:orderId' element={<OrderConfirmation/>} />
               <Route path='/order-details/:orderTrackingId' element={<OrderDetails/>} />
               <Route path='/order-tracking/:userId' element={<OrderTracking/>}/>
+              <Route path='/generativeAIChatbot' element ={<GenerativeAIChatbot/>}/>
             </Route>
           </Route>
           <Route element={<AdminPrivateRoute />}>
