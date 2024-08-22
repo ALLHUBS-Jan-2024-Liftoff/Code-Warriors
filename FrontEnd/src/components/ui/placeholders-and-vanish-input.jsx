@@ -25,7 +25,6 @@ export function PlaceholdersAndVanishInput({
       startAnimation(); // Restart the interval when the tab becomes visible
     }
   };
-
   useEffect(() => {
     startAnimation();
     document.addEventListener("visibilitychange", handleVisibilityChange);

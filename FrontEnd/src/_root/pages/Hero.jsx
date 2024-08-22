@@ -10,8 +10,15 @@ import {
   } from "@/components/ui/card"
 import FlipWords from "@/components/ui/flip-words"
 import { useNavigate } from 'react-router-dom';
+import GenerativeAIChatbot from '@/components/chat/GenerativeAIChatbot'
+import Modal from '@/components/chat/Modal'
 
 const Hero = () => {
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
     const navigate = useNavigate();
 
@@ -212,6 +219,17 @@ const Hero = () => {
             
             {/* <h1 className='text-2xl font-semibold'>Items you've viewed</h1> */}
         </div>
+
+        <div className="fixed bottom-5 right-5 z-50">
+            <button
+              onClick={openModal}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md">
+              Open Chatbot
+            </button>
+            <Modal isOpen={isModalOpen} closeModal={closeModal}>
+               <GenerativeAIChatbot />
+            </Modal> 
+      </div>
     </div>
   )
 }
