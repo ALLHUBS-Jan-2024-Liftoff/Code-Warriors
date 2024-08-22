@@ -48,46 +48,6 @@ const ProductDetails = () => {
         );
       };
 
-const data = [
-    {
-        category: "Artificial Intelligence",
-        title: "You can do more with AI.",
-        src: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?q=80&w=3556&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        content: <DummyContent />,
-    },
-    {
-        category: "Productivity",
-        title: "Enhance your productivity.",
-        src: "https://images.unsplash.com/photo-1531554694128-c4c6665f59c2?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        content: <DummyContent />,
-    },
-    {
-        category: "Product",
-        title: "Launching the new Apple Vision Pro.",
-        src: "https://images.unsplash.com/photo-1713869791518-a770879e60dc?q=80&w=2333&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        content: <DummyContent />,
-    },
-    
-    {
-        category: "Product",
-        title: "Maps for your iPhone 15 Pro Max.",
-        src: "https://images.unsplash.com/photo-1599202860130-f600f4948364?q=80&w=2515&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        content: <DummyContent />,
-    },
-    {
-        category: "iOS",
-        title: "Photography just got better.",
-        src: "https://images.unsplash.com/photo-1602081957921-9137a5d6eaee?q=80&w=2793&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        content: <DummyContent />,
-    },
-    {
-        category: "Hiring",
-        title: "Hiring for a Staff Software Engineer",
-        src: "https://images.unsplash.com/photo-1511984804822-e16ba72f5848?q=80&w=2048&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        content: <DummyContent />,
-    },
-    ];
-
 const { productId } = useParams()
 
 const [product, setProduct] = useState({})
@@ -169,6 +129,7 @@ const createReview = () => {
     };
     axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
         console.log(response.data);
+        getReview();
     })
     .catch((error) => {
         console.error('Error creating review:', error);
@@ -199,51 +160,6 @@ function getReview() {
         console.error(`Error getting reviews:`, error);
     })
 }
-
-const products = [
-    {
-        id: 1,
-        name: 'Mac Book',
-        imageUrl: 'https://i5.walmartimages.com/asr/7fc4c11c-6d65-4240-b390-ab776fb82171.15567f6644e83dc7597c024523be4264.jpeg',
-        price: '$999.99',
-    },
-    {
-        id: 2,
-        name: 'iPhone',
-        imageUrl: 'https://th.bing.com/th/id/OIP.VVI4zwfN-uw7qvq8o_DY3wAAAA?rs=1&pid=ImgDetMain',
-        price: '$499.99',
-    },
-    {
-        id: 3,
-        name: 'AirPods',
-        imageUrl: 'https://cdn.macrumors.com/article-new/2019/10/airpodsprodesigncase.jpg?retina',
-        price: '$199.99',
-    },
-    {
-        id: 4,
-        name: 'AirPods Max',
-        imageUrl: 'https://th.bing.com/th/id/OIP.SOKCpzEwAjedh7QdXcvQ6AAAAA?rs=1&pid=ImgDetMain',
-        price: '$999.99',
-    },
-    {
-        id: 5,
-        name: 'Desktop',
-        imageUrl: 'https://i5.walmartimages.com/asr/e5577ed9-bbb3-405b-8ae2-7adab5ecd608_1.8554861ff8b294cc2b1038b59c950879.jpeg',
-        price: '$499.99',
-    },
-    {
-        id: 6,
-        name: 'Headphones',
-        imageUrl: 'https://via.placeholder.com/250',
-        price: '$199.99',
-    },
-    {
-        id: 7,
-        name: 'Phone',
-        imageUrl: 'https://via.placeholder.com/250',
-        price: '$499.99',
-    },
-];
 
   return (
     <div className='w-full grid grid-cols-3 px-20'>
@@ -282,18 +198,23 @@ const products = [
         <div className='col-span-3 w-full pt-16'>
             <h1 className='text-center text-3xl font-semibold'>Recommended</h1>
             <div className='w-full'>
-                <Carousel items={cards} />
+            {recommendations.length > 0 ? (
+              <Carousel items={cards} />
+              ) : (
+                <p>Loading recommendations...</p>
+              )}
             </div>
         </div>
-        <div className='col-span-3 w-60 h-96'>
+        <div className='col-span-3 h-96'>
                 <h1 className='text-2xl font-semibold'>Reviews</h1>
                 <Textarea
                     placeholder="Type your message here."
                     value={description}
                     onChange={handleChange}
+                    className='w-full'
                 />
                 <Button onClick={createReview}>Submit Review</Button>
-                {reviews.map((review) => (
+                {reviews.slice().reverse().map((review) => (
                     <Card key={review.id}>
                     
                         <CardHeader>

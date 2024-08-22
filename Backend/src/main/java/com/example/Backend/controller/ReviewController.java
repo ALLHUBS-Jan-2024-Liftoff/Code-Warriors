@@ -21,9 +21,9 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @PostMapping(value = "/create")
-    public ResponseEntity<String> createReviews(@RequestBody ReviewDto reviewDto) throws IOException {
+    public ResponseEntity<String> createReviews(@RequestBody Review review) throws IOException {
         try {
-            this.reviewService.CreateReview(reviewDto);
+            this.reviewService.CreateReview(review);
 
             return new ResponseEntity<String>("Successfully Added Review...", HttpStatusCode.valueOf(200));
         } catch (Exception error) {

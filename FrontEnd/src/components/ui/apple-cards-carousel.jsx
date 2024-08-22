@@ -7,6 +7,15 @@ import React, {
   useContext,
 } from "react";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import {
   IconArrowNarrowLeft,
   IconArrowNarrowRight,
   IconX,
@@ -14,6 +23,7 @@ import {
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "@/hooks/use-outside-click";
+import { useNavigate } from 'react-router-dom';
 
 export const CarouselContext = createContext({
   onCardClose: () => {},
@@ -89,7 +99,7 @@ export const Carousel = ({ items, initialScroll = 0 }) => {
           <div
             className={cn(
               "flex flex-row justify-start gap-4 pl-4",
-              "max-w-7xl mx-auto"
+              "mx-auto"
             )}
           >
             {items.map((item, index) => (
@@ -138,6 +148,7 @@ export const Carousel = ({ items, initialScroll = 0 }) => {
 };
 
 export const CustomCard = ({ card, index, layout = false }) => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
   const { onCardClose, currentIndex } = useContext(CarouselContext);
@@ -211,32 +222,32 @@ export const CustomCard = ({ card, index, layout = false }) => {
           </div>
         )}
       </AnimatePresence>
-      <motion.button
+      <motion.div
         layoutId={layout ? `card-${card.productName}` : undefined}
-        onClick={handleOpen}
-        className="rounded-3xl bg-gray-100 dark:bg-neutral-900 h-80 w-56 md:h-[40rem] md:w-96 overflow-hidden flex flex-col items-start justify-start relative z-10"
-      >
-        <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
-        <div className="relative z-40 p-8">
-          <motion.p
+        className="h-96">
+        <Card className='relative h-96 w-72'>
+            <CardContent className='p-0'>
+            <motion.p
             layoutId={layout ? `category-${card.category}` : undefined}
-            className="text-white text-sm md:text-base font-medium font-sans text-left"
+            className="pl-4 text-sm pt-4 md:text-base font-medium font-sans text-left"
           >
             {card.category}
           </motion.p>
-          <motion.p
-            layoutId={layout ? `title-${card.productName}` : undefined}
-            className="text-white text-xl md:text-3xl font-semibold max-w-xs text-left [text-wrap:balance] font-sans mt-2"
-          >
-            {card.productName}
-          </motion.p>
-        </div>
-        <img
-          src={card.imageUrl}
-          alt={card.productName}
-          className="object-cover"
-        />
-      </motion.button>
+            <img 
+                src={card.imageUrl}
+                alt={'No picture'} 
+                className="w-full h-36 object-contain my-4"
+            />
+            </CardContent>
+            <CardFooter className='flex flex-col items-center justify-center pb-2'>
+              <motion.p className='text-base font-semibold'>{card.productName}</motion.p>
+              <Button className='absolute bottom-2' onClick={() => {
+                navigate(`/product/${card.productId}`)
+                window.location.reload();
+            }}>View</Button>
+            </CardFooter>
+        </Card>
+      </motion.div>
     </>
   );
 };

@@ -6,7 +6,7 @@ import com.example.Backend.entity.Review;
 import java.util.List;
 
 public interface ReviewService {
-    void CreateReview(ReviewDto review);
+    void CreateReview(Review newReview);
     List<ReviewDto> GetReviews(Integer productId);
     void DeleteReview(Long reviewID);
 
