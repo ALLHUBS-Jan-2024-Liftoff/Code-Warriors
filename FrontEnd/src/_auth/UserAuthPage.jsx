@@ -98,7 +98,7 @@ export default function UserAuthPage() {
   const handleRegisterSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submit action
     await registerUser(event);
-    handleGoToCart();
+    handleGoToHero();
   };
 
   return (

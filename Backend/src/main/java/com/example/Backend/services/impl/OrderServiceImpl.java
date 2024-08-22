@@ -244,14 +244,17 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDto> orderDtoList = new ArrayList<>();
         List<UserOrder> orderList = orderRepo.findAll();
         for (UserOrder order : orderList){
-            OrderDto orderDto = new OrderDto();
-            orderDto.setOrderId(order.getOrderId());
-            orderDto.setOrderStatus(order.getOrderStatus());
-            orderDto.setTotal(order.getTotal());
-            orderDto.setCustomerName(order.getUser().getUsername());
-            orderDto.setOrderDate(order.getOrderDate());
-            orderDto.setWorkOrderDate(order.getWorkOrderDate());
-            orderDtoList.add(orderDto);
+            if(order.getOrderId() != null && !order.getOrderId().isEmpty()){
+                OrderDto orderDto = new OrderDto();
+                orderDto.setOrderId(order.getOrderId());
+                orderDto.setOrderStatus(order.getOrderStatus());
+                orderDto.setTotal(order.getTotal());
+                orderDto.setCustomerName(order.getUser().getUsername());
+                orderDto.setOrderDate(order.getOrderDate());
+                orderDto.setWorkOrderDate(order.getWorkOrderDate());
+                orderDtoList.add(orderDto);
+            }
+
         }
 
         return orderDtoList;
@@ -272,12 +275,14 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDetailsDto> orderDetailsDtoList = new ArrayList<>();
         List<UserOrder> orderList = orderRepo.findOrdersByUserId(userId);
         for(UserOrder order : orderList){
-            OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
-            orderDetailsDto.setOrderId(order.getOrderId());
-            orderDetailsDto.setStatus(order.getOrderStatus());
-            orderDetailsDto.setTotal(order.getTotal());
-            orderDetailsDto.setOrderDto(getOrderDtoList(order));
-            orderDetailsDtoList.add(orderDetailsDto);
+            if(order.getOrderId() != null && !order.getOrderId().isEmpty()) {
+                OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
+                orderDetailsDto.setOrderId(order.getOrderId());
+                orderDetailsDto.setStatus(order.getOrderStatus());
+                orderDetailsDto.setTotal(order.getTotal());
+                orderDetailsDto.setOrderDto(getOrderDtoList(order));
+                orderDetailsDtoList.add(orderDetailsDto);
+            }
         }
         return orderDetailsDtoList;
     }
