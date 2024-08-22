@@ -3,8 +3,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 import pandas as pd
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+# Enable CORS for all routes
+CORS(app)
 
 def fetch_products():
     response = requests.get('http://localhost:8080/product/')
