@@ -9,7 +9,7 @@ const RootLayout = () => {
   return (
     <div className='h-screen w-full flex flex-col'>
        <Topbar />        
-        <div className='flex w-full flex-1 min-h-0 overflow-y-auto py-14'>
+        <div className='scrollable-container flex w-full flex-1 min-h-0 overflow-y-auto py-14'>
           <Outlet />
         </div>
     </div>

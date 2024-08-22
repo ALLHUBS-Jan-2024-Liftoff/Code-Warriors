@@ -9,6 +9,7 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import FlipWords from "@/components/ui/flip-words"
+import { useNavigate } from 'react-router-dom';
 import GenerativeAIChatbot from '@/components/chat/GenerativeAIChatbot'
 import Modal from '@/components/chat/Modal'
 
@@ -18,6 +19,8 @@ const Hero = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+    const navigate = useNavigate();
 
     const categories = [
         {
@@ -39,7 +42,7 @@ const Hero = () => {
           "price": "$999"
         },
         {
-          "category": "Audio",
+          "category": "Headphones",
           "img": "https://www.bose.com.au/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-B02.png/jcr:content/renditions/cq5dam.web.1000.1000.png",
           "productName": "Bose Quiet Comfort II",
           "price": "$299"
@@ -184,7 +187,7 @@ const Hero = () => {
                         />
                       </CardContent>
                       <CardFooter className="flex justify-center pb-4">
-                        <Button variant="secondary">Shop</Button>
+                        <Button variant="secondary" onClick={() => navigate(`/results/${category.category}`)}>Shop</Button>
                       </CardFooter>
                     </Card>
                   );

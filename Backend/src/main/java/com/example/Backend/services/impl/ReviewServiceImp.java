@@ -23,10 +23,8 @@ public class ReviewServiceImp implements ReviewService {
     private ReviewRepo reviewRepo;
 
     @Override
-    public void CreateReview(ReviewDto reviewDto) {
-        Review review = this.modelMapper.map(reviewDto,Review.class);
-
-        this.reviewRepo.save(review);
+    public void CreateReview(Review newReview) {
+        this.reviewRepo.save(newReview);
     }
 
     @Override

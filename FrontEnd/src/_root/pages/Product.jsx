@@ -12,12 +12,50 @@ import { useParams } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import { CartContext } from "@/components/shared/CartContext"
 import { useNavigate } from 'react-router-dom';
+import { Carousel, CustomCard} from "@/components/ui/apple-cards-carousel";
 
 const ProductDetails = () => {
+
+    const DummyContent = () => {
+        return (
+          <>
+            {[...new Array(3).fill(1)].map((_, index) => {
+              return (
+                <div
+                  key={"dummy-content" + index}
+                  className="bg-[#F5F5F7] dark:bg-neutral-800 p-8 md:p-14 rounded-3xl mb-4"
+                >
+                  <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-2xl font-sans max-w-3xl mx-auto">
+                    <span className="font-bold text-neutral-700 dark:text-neutral-200">
+                      The first rule of Apple club is that you boast about Apple club.
+                    </span>{" "}
+                    Keep a journal, quickly jot down a grocery list, and take amazing
+                    class notes. Want to convert those notes to text? No problem.
+                    Langotiya jeetu ka mara hua yaar is ready to capture every
+                    thought.
+                  </p>
+                  <img
+                    src="https://assets.aceternity.com/macbook.png"
+                    alt="Macbook mockup from Aceternity UI"
+                    height="500"
+                    width="500"
+                    className="md:w-1/2 md:h-1/2 h-full w-full mx-auto object-contain"
+                  />
+                </div>
+              );
+            })}
+          </>
+        );
+      };
 
 const { productId } = useParams()
 
 const [product, setProduct] = useState({})
+const [recommendations, setRecommendations] = useState([])
+
+const cards = recommendations.map((card, index) => (
+    <CustomCard key={card.src} card={card} index={index} />
+  ));
 
 useEffect(() => {
     const fetchProduct = async () => {
@@ -31,6 +69,20 @@ useEffect(() => {
     };
 
     fetchProduct();
+  }, []);
+
+useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:5000/recommend/${productId}`);
+        setRecommendations(response.data);
+        console.log(response.data)
+      } catch (error) {
+        console.error('Error fetching the products:', error);
+      }
+    };
+
+    fetchRecommendations();
   }, []);
 
   
@@ -77,7 +129,7 @@ const createReview = () => {
     };
     axios.post('http://localhost:8080/api/review/create', payload).then((response) => {
         console.log(response.data);
-        window.location.reload();
+        getReview();
     })
     .catch((error) => {
         console.error('Error creating review:', error);
@@ -109,66 +161,21 @@ function getReview() {
     })
 }
 
-const products = [
-    {
-        id: 1,
-        name: 'Mac Book',
-        imageUrl: 'https://i5.walmartimages.com/asr/7fc4c11c-6d65-4240-b390-ab776fb82171.15567f6644e83dc7597c024523be4264.jpeg',
-        price: '$999.99',
-    },
-    {
-        id: 2,
-        name: 'iPhone',
-        imageUrl: 'https://th.bing.com/th/id/OIP.VVI4zwfN-uw7qvq8o_DY3wAAAA?rs=1&pid=ImgDetMain',
-        price: '$499.99',
-    },
-    {
-        id: 3,
-        name: 'AirPods',
-        imageUrl: 'https://cdn.macrumors.com/article-new/2019/10/airpodsprodesigncase.jpg?retina',
-        price: '$199.99',
-    },
-    {
-        id: 4,
-        name: 'AirPods Max',
-        imageUrl: 'https://th.bing.com/th/id/OIP.SOKCpzEwAjedh7QdXcvQ6AAAAA?rs=1&pid=ImgDetMain',
-        price: '$999.99',
-    },
-    {
-        id: 5,
-        name: 'Desktop',
-        imageUrl: 'https://i5.walmartimages.com/asr/e5577ed9-bbb3-405b-8ae2-7adab5ecd608_1.8554861ff8b294cc2b1038b59c950879.jpeg',
-        price: '$499.99',
-    },
-    {
-        id: 6,
-        name: 'Headphones',
-        imageUrl: 'https://via.placeholder.com/250',
-        price: '$199.99',
-    },
-    {
-        id: 7,
-        name: 'Phone',
-        imageUrl: 'https://via.placeholder.com/250',
-        price: '$499.99',
-    },
-];
-
   return (
     <div className='w-full grid grid-cols-3 px-20'>
-        <div className='col-span-2 flex flex-col items-center justify-center relative'>
+        <div className='col-span-2 flex flex-col items-center justify-center relative pt-24 pb-16'>
             <Breadcrumb className="absolute top-3 left-0"> 
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                    <BreadcrumbLink className='text-primary' href="/">Home</BreadcrumbLink>
+                    <BreadcrumbLink className='text-blue-500' href="/">Home</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                    <BreadcrumbLink className='text-primary' href="/results">Results</BreadcrumbLink>
+                    <BreadcrumbLink className='text-blue-500' href="/results">Results</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                    <BreadcrumbPage>{product?.productName}</BreadcrumbPage>
+                    <BreadcrumbPage className='text-blue-500'>{product?.productName}</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
@@ -176,9 +183,9 @@ const products = [
             <img 
                 src={product.imageUrl} 
                 alt={'No picture'} 
-                className="w-full h-72 object-contain my-4"
+                className="w-full h-96 object-contain"
             /> :
-            <div className="w-full h-72 object-contain my-4"></div>
+            <div className="w-full h-96 object-contain my-4"></div>
             }
         </div>
         
@@ -188,38 +195,26 @@ const products = [
             <p className='pb-2 text-base font-semibold'>{product?.description}</p>
             <Button className='w-2/3 mt-12 flex items-center justify-center p-8 rounded-full text-lg' onClick = {() => handleAddToCart(product)} ><FontAwesomeIcon className='mr-2' icon={faCartShopping} />Add to Cart</Button>
         </div>
-        <div className='col-span-3 w-full'>
-            <h1 className='text-2xl font-semibold'>Recommended</h1>
-            <div className='flex gap-2 p-4'>
-            {products.map(product => (
-                <Card key={product.id} className="w-[250px] h-60">
-                <CardContent>
-                    <img 
-                    src={product.imageUrl} 
-                    alt={product.name} 
-                    className="w-full h-24 object-contain my-4"
-                    />
-                    <p className='text-md font-medium'>{product.name}</p>
-                    <p className='text-xl font-bold'>{product.price}</p>
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                    <NavLink  to="/product">
-                    <Button className='w-full h-6'>Add to cart</Button>
-                    </NavLink>
-                </CardFooter>
-                </Card>
-            ))}
+        <div className='col-span-3 w-full pt-16'>
+            <h1 className='text-center text-3xl font-semibold'>Recommended</h1>
+            <div className='w-full'>
+            {recommendations.length > 0 ? (
+              <Carousel items={cards} />
+              ) : (
+                <p>Loading recommendations...</p>
+              )}
             </div>
         </div>
-        <div className='col-span-3 w-60 h-96'>
+        <div className='col-span-3 h-96'>
                 <h1 className='text-2xl font-semibold'>Reviews</h1>
                 <Textarea
                     placeholder="Type your message here."
                     value={description}
                     onChange={handleChange}
+                    className='w-full'
                 />
                 <Button onClick={createReview}>Submit Review</Button>
-                {reviews.map((review) => (
+                {reviews.slice().reverse().map((review) => (
                     <Card key={review.id}>
                     
                         <CardHeader>

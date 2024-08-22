@@ -86,7 +86,7 @@ const Topbar = () => {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setDropdownVisible(false);
-    }, 100); // Adjust the delay as needed
+    }, 300); // Adjust the delay as needed
   };
 
   useEffect(() => {

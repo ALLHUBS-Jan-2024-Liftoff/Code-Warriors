@@ -8,7 +8,6 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-
         name: 'Digital Delight',
         short_name: 'Digital Delight',
         theme_color: '#030712',
