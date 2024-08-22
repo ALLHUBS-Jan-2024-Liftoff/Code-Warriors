@@ -77,4 +77,10 @@ public class OrderController {
     public List<ProductsSoldDTO> getTotalProductsSoldLast7Days() {
         return orderService.getTotalProductsSoldLast7Days();
     }
+
+    // Order Tracking
+    @GetMapping("/trackOrder/{userId}")
+    public ResponseEntity<List<OrderDetailsDto>> getAllOrdersByUserId(@PathVariable("userId") Integer userId) {
+        return new ResponseEntity<>(orderService.getOrdersByUserId(userId), HttpStatus.OK);
+    }
 }

@@ -188,9 +188,11 @@ const deleteReview = (reviewId) => {
 };
 
 function getReview() {
-    axios.get(`http://localhost:8080/api/review/get?productID=${productId}`).then((response) => {
+    
+    //axios.get(`http://localhost:8080/api/review/get?productID=${productId}`).then((response) => {
+        axios.get(`http://localhost:8080/api/review/get?productID=${productId}`).then((response) => {
         console.log(response.data)
-
+        
         setReviews(response.data);
     })
     .catch((error) => {
@@ -283,7 +285,7 @@ const products = [
                 <Carousel items={cards} />
             </div>
         </div>
-        <div className='col-span-3 w-full h-96'>
+        <div className='col-span-3 w-60 h-96'>
                 <h1 className='text-2xl font-semibold'>Reviews</h1>
                 <Textarea
                     placeholder="Type your message here."
@@ -293,6 +295,7 @@ const products = [
                 <Button onClick={createReview}>Submit Review</Button>
                 {reviews.map((review) => (
                     <Card key={review.id}>
+                    
                         <CardHeader>
                             <CardTitle>{review.user?.userName}</CardTitle>
                             <CardDescription>Rating {review.rating}/5</CardDescription>

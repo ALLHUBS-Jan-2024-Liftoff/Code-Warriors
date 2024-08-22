@@ -19,15 +19,20 @@ import {
 import { useContext } from 'react';
 import AuthContext from '../../context/AuthContext';
 import { CartContext } from './CartContext';
+import {
+  Truck,
+} from "lucide-react";
 
 const Topbar = () => {
 
   
   const navigate = useNavigate();
 
-  const { fetchProducts } = useContext(CartContext);
+  const { fetchProducts, clearCartCount } = useContext(CartContext);
 
-  let { user, logoutUser } = useContext(AuthContext)
+  let { user, logoutUser } = useContext(AuthContext);
+
+  const userId = user ? user.userId : null;
 
   const handleGoToCart = () => {
     
@@ -50,9 +55,17 @@ const Topbar = () => {
     navigate('/admin');
   };
 
+  const handleTrackOrder = () => {  
+    console.log("handle Track order method"+userId) ;
+    navigate(`/order-tracking/${userId}`); 
+ };
+
+
   function handleLogoutUser() {
     logoutUser();
+    clearCartCount();
     fetchProducts();
+    
   }
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -222,6 +235,18 @@ const Topbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           }
+      </div>
+      <div className="gap-15 text-sm">
+      {user && (
+                <Button onClick={handleTrackOrder} size="sm" variant="outline" className="absolute top-0 right-0 mt-4 mr-4 py-2 px-4">
+                <Truck className="h-3.5 w-3.5" />
+                <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                  Track Order
+                </span>
+                </Button>
+            )}
+
+      
       </div>
       <AnimatePresence>
         {dropdownVisible && (
