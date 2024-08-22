@@ -92,7 +92,7 @@ export default function UserAuthPage() {
       fetchProducts();
     }
 
-    handleGoToCart();
+    handleGoToHero();
   };
 
   const handleRegisterSubmit = async (event) => {
