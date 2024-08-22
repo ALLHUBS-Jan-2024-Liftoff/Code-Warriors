@@ -38,6 +38,9 @@ import { useToast } from "@/components/ui/use-toast"
 
 
 const ListPage = () => {
+
+
+
 const [filteredData, setFilteredData] = useState([]);
 
 const [currentPage, setCurrentPage] = React.useState(1);
@@ -48,6 +51,17 @@ const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+const scrollToTop = () => {
+  const scrollableContainer = document.querySelector('.scrollable-container');
+  if (scrollableContainer) {
+    scrollableContainer.scrollTo({ top: 0});
+  }
+};
+
+useEffect(() => {
+  scrollToTop();
+}, [currentPage]);
 
 const handleNextPage = () => {
   if (currentPage < totalPages) {
@@ -64,6 +78,7 @@ const handlePreviousPage = () => {
 const handlePageClick = (pageNumber) => {
   setCurrentPage(pageNumber);
 };
+
 
 const renderPaginationItems = () => {
   const pages = [];

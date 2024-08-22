@@ -170,7 +170,7 @@ const OrderTracking = () => {
                     </TableCell>
                     
                     <TableCell className="font-medium">
-                    {(orderDetailsDto.total).toFixed(2)}
+                    {(orderDetailsDto.total)?.toFixed(2)}
                     </TableCell>
                    
                     </TableRow>

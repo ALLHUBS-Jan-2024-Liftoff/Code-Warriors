@@ -83,7 +83,7 @@ const Topbar = () => {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setDropdownVisible(false);
-    }, 100); // Adjust the delay as needed
+    }, 300); // Adjust the delay as needed
   };
 
   useEffect(() => {
@@ -209,7 +209,6 @@ const Topbar = () => {
         </ul>
         <Search onMouseEnter={() => handleMouseEnter(searchItemsNull)} className="h-4 w-4 hover:scale-102" />
         <CartIcon handleGoToCart={handleGoToCart} className="h-4 w-4 hover:scale-102" />        
-        <UserRound onClick={handleGoToAdmin} className="h-4 w-4 hover:scale-102" />
         {user &&
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
